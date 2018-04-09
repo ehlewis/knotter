@@ -11,4 +11,3 @@ PLAID_ENV=sandbox \
 node server.js
 # Go to http://localhost:8000
 ```
-test
