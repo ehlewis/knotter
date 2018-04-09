@@ -10,11 +10,6 @@
     </style>
 </head>
 <body>
-<div class="container">
-
-<div class="col-sm-6 col-sm-offset-3">
-
-    <h1><span class="fa fa-sign-in"></span> Login</h1>
 
     <!-- show any messages that come back with authentication -->
     <% if (message.length > 0) { %>
@@ -22,6 +17,11 @@
     <% } %>
 
     <!-- LOGIN FORM -->
+    <body>
+    <div id="banner" style="margin: auto;width: 50%; padding: 3% 0 0;">
+        <img style="max-width: 50%; display: block;margin-left: auto;margin-right: auto;" src="assets/LucidityWhite.png">
+    </div>
+    <!--<div class="container">-->
     <div class="login-page">
         <form action="/login" method="post" class="login-form">
             <div class="form">
@@ -37,12 +37,7 @@
 
         </form>
     </div>
+</body>
 
-    <!--<hr>-->
-
-
-</div>
-
-</div>
 </body>
 </html>

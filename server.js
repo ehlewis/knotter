@@ -50,12 +50,9 @@ require('./config/passport')(passport);
 
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-// routes ======================================================================
-/*require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-*/
 app.use(express.static('public')); //Serves resources from public folder
 
-
+//************************************BEGIN PLAID API**********************************
 // Initialize the Plaid client
 var client = new plaid.Client(
   PLAID_CLIENT_ID,
@@ -64,7 +61,6 @@ var client = new plaid.Client(
   plaid.environments[PLAID_ENV]
 );
 
-app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
   extended: false
 }));
@@ -180,7 +176,7 @@ app.post('/transactions', function(request, response, next) {
   });
 });
 
-
+//**************************************END PLAID API**********************************
 // =====================================
 // HOME PAGE (with login links) ========
 // =====================================
