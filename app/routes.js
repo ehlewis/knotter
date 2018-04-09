@@ -46,6 +46,17 @@ module.exports = function(app, passport) {
     });
 
     // =====================================
+    // DASHBOARD ==============================
+    // =====================================
+    // show the signup form
+    app.get('/dashboard', function(req, res) {
+        // render the page and pass in api keys
+        res.render('dashboard.ejs', {
+            PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+            PLAID_ENV: PLAID_ENV});
+    });
+
+    // =====================================
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
