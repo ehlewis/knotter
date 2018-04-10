@@ -55,9 +55,9 @@ a{
   background: gold;
   padding-top: 7px;
   padding-bottom: 7px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border: none;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid black;
   color:black;
   position: absolute;
   right: 10px;
@@ -65,7 +65,9 @@ a{
 }
 
 #pro-button:hover{
-  background-color: #e6c300;
+  background-color: #ffdd1a;
+  color: white;
+  border: 1px solid white;
 }
 
 
@@ -102,7 +104,9 @@ a{
 }
 
 .button:hover{
-  background-color: #6fb54a;
+  border: 1px solid black;
+  background-color: #DCDCDC;
+  color: black;
 }
 
 #sign-up-button{
@@ -110,7 +114,7 @@ a{
   width: 110px;
   height: 30px;
   padding-top: 5px;
-  color: #76b852;
+  color: #8DC26F;
   text-align: center;
   text
   text-decoration: none;
