@@ -42,22 +42,20 @@ a{
 }
 
 #pro-button{
-  background: gold;
+  background: inherit;
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 20px;
   padding-right: 20px;
-  border: 1px solid black;
-  color:black;
+  border: 1px solid white;
+  color:white;
   position: absolute;
   right: 10px;
   top: -10px;
 }
 
 #pro-button:hover{
-  background-color: #ffdd1a;
-  color: white;
-  border: 1px solid white;
+  background-color: #4dc3ff;
 }
 
 
