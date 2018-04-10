@@ -15,9 +15,11 @@ a{
 }
 
 .nav-bar{
+  margin-left: 230px;
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+
 }
 
 /* .pro-button{
@@ -153,8 +155,8 @@ a{
 
 .info-section{
   padding-top: 100px;
-  padding-left: 170px;
-  padding-right: 170px;
+  padding-left: 10%;
+  padding-right: 10%;
   display: flex;
   justify-content: space-between;
 
