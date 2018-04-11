@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Welcome to Lucidity</title>
+    <link rel="icon" href="../public/assets/LucidityIcon.png">
     <link rel="stylesheet" type="text/css" href="../public/assets/css/landing.css">
 </head>
 <body>
@@ -29,12 +30,12 @@
   </div>
   <div class="center-text">
     <p>Manage all your personal and business finances in one place</p>
-  </div>
-  <div class="action-buttons">
+    <div class="action-buttons">
     <button id="login-button" class="button" style="float: left;">Login</a>
     <button id="sign-up-button" class="button" style="float: right; ">Sign Up</a>
     <!-- <button class="button" type="button">Login</button> -->
     <!-- <button class="button" type="button" style="float: right;">Sign Up</button> -->
+    </div>
   </div>
 
   <div class="info-section">
@@ -52,19 +53,31 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Login modal -->
   <div id="login-modal" class="login-modal">
     <div class="login-modal-content">
       <div class="login-form">
-        <p>something</p>
+        <form action="/login" method="post" class="login-form">
+          <input type="text" class="form-control" name="email" placeholder="Email">
+          <input type="password" class="form-control" name="password" placeholder="Password">
+          <button type="submit" class="btn btn-warning btn-lg">Login</button>
+          <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+        </form>
       </div>
     </div>
   </div>
 
+  <!-- Sign up modal -->
   <div id="sign-up-modal" class="sign-up-modal">
     <div class="sign-up-modal-content">
       <div class="sign-up-form">
-        <p>something</p>
+        <form class="register-form">
+          <input type="text" placeholder="Name"/>
+          <input type="password" placeholder="Password"/>
+          <input type="text" placeholder="Email"/>
+          <button>Create</button>
+          <p class="message">Already registered? <a href="#">Sign In</a></p>
+        </form>
       </div>
     </div>
   </div>
