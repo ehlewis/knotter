@@ -98,6 +98,10 @@ a{
   color: black;
 }
 
+.button:focus {
+  outline: 0;
+}
+
 #sign-up-button{
   border: 1px solid white;
   padding-bottom: 10px;
@@ -156,7 +160,7 @@ a{
   font-size: 16px;
 }
 
-.modal{
+.login-modal{
   position: fixed;
   display: none;
   z-index: 1;
@@ -167,11 +171,39 @@ a{
   width: 100%;
   overflow: auto;
   background-color: black;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.5);
 
 }
 
-.modal-content{
+.login-modal-content{
+  position: relative;
+  background-color: white;
+  margin: auto;
+  padding: 0;
+  width: 30%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+.sign-up-modal{
+  position: fixed;
+  display: none;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: black;
+  background-color: rgba(0,0,0,0.5);
+
+}
+
+.sign-up-modal-content{
   position: relative;
   background-color: white;
   margin: auto;

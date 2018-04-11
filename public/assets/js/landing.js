@@ -1,12 +1,20 @@
-var modal = document.getElementById('login-modal');
-var btn = document.getElementById('login-button');
+var loginBtn = document.getElementById('login-button');
+var loginModal = document.getElementById('login-modal');
 
-btn.onclick = function() {
-  modal.style.display = "block";
+var signupBtn = document.getElementById('sign-up-button');
+var signupModal = document.getElementById('sign-up-modal');
+
+loginBtn.onclick = function() {
+  loginModal.style.display = "block";
 }
 
 window.onclick = function(event) {
-  if (event.target == modal){
-    modal.style.display = "none";
+  if (event.target == loginModal || event.target == signupModal){
+    signupModal.style.display = "none";
+    loginModal.style.display = "none";
   }
+}
+
+signupBtn.onclick = function() {
+  signupModal.style.display = "block";
 }
