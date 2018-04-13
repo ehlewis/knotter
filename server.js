@@ -19,6 +19,11 @@ var session      = require('express-session');
 
 var configDB = require('./config/database.js');
 
+var MongoClient = require('mongodb').MongoClient;
+var Schema = mongoose.Schema;
+//var User = mongoose.model('User');
+var mongo_url = "mongodb://localhost:27017/lucidity";
+
 
 var APP_PORT = envvar.number('APP_PORT', 8000);
 var PLAID_CLIENT_ID = envvar.string('PLAID_CLIENT_ID');
@@ -67,7 +72,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/', function(request, response, next) {
-  response.render('index.ejs', {
+  response.render('landing.ejs', {
     PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
     PLAID_ENV: PLAID_ENV,
   });
@@ -269,6 +274,30 @@ function isLoggedIn(req, res, next) {
 
 //!!!!!!!API IMPLEMENT!!!!!!!!!!!!!!!!!!!!
 
+app.get('/name', function(request, response, next) {
+  response.render('name.ejs', {
+    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+    PLAID_ENV: PLAID_ENV,
+  });
+});
+
+var nameSchema = new Schema({
+    name: String
+});
+
+var userName = mongoose.model('name', nameSchema);
+
+app.post('/name', function(request, response){
+
+    user.name = request.body.name;
+
+    u.save(function(err) {
+        if (err)
+           throw err;
+        else
+           console.log('save user successfully...');
+    });
+});
 
 
 // launch ======================================================================
