@@ -2,13 +2,13 @@
 <html>
 <head>
     <title>Welcome to Lucidity</title>
-    <link rel="icon" href="../public/assets/LucidityIcon.png">
-    <link rel="stylesheet" type="text/css" href="../public/assets/css/landing.css">
+    <link rel="icon" href="assets/LucidityIcon.png">
+    <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
 </head>
 <body>
   <div class="top-bar">
     <div class="logo">
-      <a href="http://google.com"><img src="../public/assets/LucidityWhite.png" width="200px" style="float: left; padding-right: 20px;"></a>
+      <a href="http://google.com"><img src="assets/LucidityWhite.png" width="200px" style="float: left; padding-right: 20px;"></a>
     </div class>
     <div class="nav-bar">
       <a href="http://google.com">Change</a>
@@ -67,14 +67,15 @@
     </div>
   </div>
 
+
   <!-- Sign up modal -->
   <div id="sign-up-modal" class="sign-up-modal">
     <div class="sign-up-modal-content">
       <div class="sign-up-form">
-        <form class="register-form">
-          <input type="text" placeholder="Name"/>
-          <input type="password" placeholder="Password"/>
-          <input type="text" placeholder="Email"/>
+        <form action="/signup" method="post" class="register-form">
+          <input type="text" name="name" placeholder="Name"/>
+          <input type="password" name="password" placeholder="Password"/>
+          <input type="text" name="email" placeholder="Email"/>
           <button>Create</button>
           <p class="message">Already registered? <a href="#">Sign In</a></p>
         </form>
@@ -83,7 +84,7 @@
   </div>
 
 
-<script src="../public/assets/js/landing.js"></script>
+<script src="assets/js/landing.js"></script>
 
 </body>
 </html>
