@@ -19,6 +19,7 @@ var session      = require('express-session');
 
 var configDB = require('./config/database.js');
 
+var mongodb     = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
@@ -281,24 +282,47 @@ app.get('/name', function(request, response, next) {
   });
 });
 
-var nameSchema = new Schema({
+/*var nameSchema = new Schema({
     name: String
 });
 
-var userName = mongoose.model('name', nameSchema);
+var userName = mongoose.model('name', nameSchema);*/
 
-app.post('/name', function(request, response){
+app.post('/name', function(req, res, next) {
+    MongoClient.connect(mongo_url, function (err, client) {
+        if (err) throw err;
 
-    user.name = request.body.name;
+        var db = client.db('lucidity');
+        var collection = db.collection('users');
 
-    u.save(function(err) {
-        if (err)
-           throw err;
-        else
-           console.log('save user successfully...');
+          /* var product = {  name: "A" };
+
+           collection.insert(product, function(err, result) {
+
+           if(err) { throw err; }
+
+             client.close();
+         });*/ //Inserts new attribute
+
+         console.log(req.body.name);
+        console.log(req.user);
+           var product = {  name: "v" };
+
+           collection.update({'_id' : req.user._id},
+                     {'$set' : {'name' : req.body.name }});
+
+           /*collection.update(product, function(err, result) {
+
+           if(err) { throw err; }
+
+             client.close();
+         });*/
+           console.log("inserted username" + req.body.name);
+           client.close();
+
     });
+    res.redirect('/profile');
 });
-
 
 // launch ======================================================================
 app.listen(port);
