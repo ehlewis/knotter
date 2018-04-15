@@ -223,7 +223,9 @@ app.get('/signup', function(req, res) {
 // we will use route middleware to verify this (the isLoggedIn function)
 app.get('/profile', isLoggedIn, function(req, res) {
     res.render('profile.ejs', {
-        user : req.user // get the user out of session and pass to template
+        user : req.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
     });
 });
 
@@ -282,11 +284,6 @@ app.get('/name', function(request, response, next) {
   });
 });
 
-/*var nameSchema = new Schema({
-    name: String
-});
-
-var userName = mongoose.model('name', nameSchema);*/
 
 app.post('/name', function(req, res, next) {
     MongoClient.connect(mongo_url, function (err, client) {
@@ -295,7 +292,7 @@ app.post('/name', function(req, res, next) {
         var db = client.db('lucidity');
         var collection = db.collection('users');
 
-          /* var product = {  name: "A" };
+        /* var product = {  name: "A" };
 
            collection.insert(product, function(err, result) {
 
@@ -304,21 +301,14 @@ app.post('/name', function(req, res, next) {
              client.close();
          });*/ //Inserts new attribute
 
-         console.log(req.body.name);
+        console.log(req.body.name);
         console.log(req.user);
-           var product = {  name: "v" };
+        var product = {  name: "v" };
 
-           collection.update({'_id' : req.user._id},
-                     {'$set' : {'name' : req.body.name }});
+        collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
 
-           /*collection.update(product, function(err, result) {
-
-           if(err) { throw err; }
-
-             client.close();
-         });*/
-           console.log("inserted username" + req.body.name);
-           client.close();
+        console.log("inserted username: " + req.body.name + " for user " + req.user);
+        client.close();
 
     });
     res.redirect('/profile');

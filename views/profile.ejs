@@ -8,6 +8,8 @@
     <style>
         body        { padding-top:80px; word-wrap:break-word; }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 </head>
 <body>
 <div class="container">
@@ -15,6 +17,11 @@
     <div class="page-header text-center">
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        <a href="/name" class="btn btn-default btn-sm">Change name</a>
+        <button id="get-transactions-btn" class="btn btn-default btn-sm">Get Transactions</button>
+        <button id="link-btn" class="btn btn-default btn-sm">Link Account</button>
+        <button id="get-accounts-btn" class="btn btn-default btn-sm">Get Accounts</button>
+        <button id="get-item-btn" class="btn btn-default btn-sm">Get Item</button>
     </div>
 
     <div class="row">
@@ -38,4 +45,66 @@
 
 </div>
 </body>
+
+<script>
+
+var handler = Plaid.create({
+    apiVersion: 'v2',
+    clientName: 'Plaid Walkthrough Demo',
+    env: '<%= PLAID_ENV %>',
+    product: ['transactions'],
+    key: '<%= PLAID_PUBLIC_KEY %>',
+    onSuccess: function(public_token) {
+      $.post('/get_access_token', {
+        public_token: public_token
+      }, function() {
+        $('#container').fadeOut('fast', function() {
+          $('#intro').hide();
+          $('#app, #steps').fadeIn('slow');
+        });
+      });
+    },
+});
+
+$('#link-btn').on('click', function(e) {
+    handler.open();
+});
+
+$('#get-accounts-btn').on('click', function(e) {
+    $.get('/accounts', function(data) {
+        console.log(data.accounts);
+    });
+});
+
+$('#get-item-btn').on('click', function(e) {
+    $.post('/item', function(data) {
+        if (data.error)
+          console.log(data.error);
+        else {
+          console.log(data.institution);
+          /*data.institution.name
+          data.item.billed_products
+          data.item.available_products*/
+        }
+    });
+});
+
+
+
+$('#get-transactions-btn').on('click', function(e) {
+      $.post('/transactions', function(data) {
+        if (data.error != null) {
+          console.log(data.error.error_code + ' ' +
+           data.error.error_message);
+          }
+         else {
+          console.log(data.transactions);
+      }});
+      });
+
+
+</script>
+
+
+
 </html>
