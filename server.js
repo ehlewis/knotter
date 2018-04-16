@@ -146,31 +146,32 @@ app.post('/get_access_token', function(request, response, next) {
 app.get('/accounts', function(request, response, next) {
   // Retrieve high-level account information and account and routing numbers
   // for each account associated with the Item.
-  //for (var i = 0; i < request.user.accounts.length; i++) {
-      client.getAuth(request.user.accounts[0].access_token, function(error, authResponse) {
-        if (error != null) {
-          var msg = 'Unable to pull accounts from the Plaid API.';
-          console.log(msg + '\n' + error);
-          return response.json({
-            error: msg
-          });
-        }
-
-        console.log(authResponse.accounts);
-        response.json({
-          error: false,
-          accounts: authResponse.accounts,
-          numbers: authResponse.numbers,
-        });
+  var i = request.query.params.var_i;
+  console.log(i);
+  client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
+    if (error != null) {
+      var msg = 'Unable to pull accounts from the Plaid API.';
+      console.log(msg + '\n' + error);
+      return response.json({
+        error: msg
       });
-  //}
+    }
+
+    console.log(authResponse.accounts);
+    response.json({
+      error: false,
+      accounts: authResponse.accounts,
+      numbers: authResponse.numbers,
+    });
+  });
 });
 
 app.post('/item', function(request, response, next) {
   // Pull the Item - this includes information about available products,
   // billed products, webhook information, and more.
-  //for (var i = 0; i < request.user.accounts.length; i++) {
-      client.getItem(request.user.accounts[0].access_token, function(error, itemResponse) {
+  var i = request.body.params.var_i;
+  console.log(i);
+      client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
         if (error != null) {
           console.log(JSON.stringify(error));
           return response.json({
@@ -194,15 +195,15 @@ app.post('/item', function(request, response, next) {
           }
         });
       });
-  //}
 });
 
 app.post('/transactions', function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
-  //for (var i = 0; i < request.user.accounts.length; i++) {
+      var i = request.body.params.var_i;
+      console.log(i);
       var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
       var endDate = moment().format('YYYY-MM-DD');
-      client.getTransactions(request.user.accounts[0].access_token, startDate, endDate, {
+      client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
         count: 250,
         offset: 0,
       }, function(error, transactionsResponse) {
@@ -354,6 +355,21 @@ app.post('/name', function(req, res, next) {
 
     res.redirect('/profile');
 });
+
+
+app.get('/api/user_data', function(req, res) {
+
+            if (req.user === undefined) {
+                // The user is not logged in
+                res.json({});
+            } else {
+                res.json({
+                    username: req.user,
+                    num_of_accounts : req.user.accounts.length
+                });
+            }
+        });
+
 
 // launch ======================================================================
 app.listen(port);

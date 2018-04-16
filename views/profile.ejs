@@ -18,10 +18,13 @@
         <h1><span class="fa fa-anchor"></span> Profile Page</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
         <a href="/name" class="btn btn-default btn-sm">Change name</a>
-        <button id="get-transactions-btn" class="btn btn-default btn-sm">Get Transactions</button>
         <button id="link-btn" class="btn btn-default btn-sm">Link Account</button>
+        <button id="get-transactions-btn" class="btn btn-default btn-sm">Get Transactions</button>
+        <button id="get-all-transactions-btn" class="btn btn-default btn-sm">Get All Transactions</button>
         <button id="get-accounts-btn" class="btn btn-default btn-sm">Get Accounts</button>
+        <button id="get-all-accounts-btn" class="btn btn-default btn-sm">Get All Accounts</button>
         <button id="get-item-btn" class="btn btn-default btn-sm">Get Item</button>
+        <button id="get-all-item-btn" class="btn btn-default btn-sm">Get All Items</button>
     </div>
 
     <div class="row">
@@ -36,10 +39,6 @@
                         <strong>Name</strong>: <%= user.name %><br>
                         <strong>email</strong>: <%= user.email %><br>
                         <strong>password</strong>: <%= user.password %><br>
-                        <!--<strong>item_id</strong>: <%= user.item_id %><br>
-                        <strong>access_token</strong>: <%= user.access_token %><br>-->
-                        <!--<strong>accounts[0] -> access_token</strong>: <%= user.accounts[0].access_token %><br>
-                        <strong>accounts[0] -> item_id</strong>: <%= user.accounts[0].item_id %><br>-->
 
                     </p>
 
@@ -52,6 +51,20 @@
 </body>
 
 <script>
+
+
+//user.accounts[0].access_token
+//user.accounts[0].item_id
+
+var NUM_ACCTS = null;
+$.getJSON("api/user_data", function(data) {
+    // Make sure the data contains the username as expected before using it
+    if (data.hasOwnProperty('username')) {
+        console.log('Username: ' + data.username);
+        console.log('Num of accounts: ' + data.num_of_accounts);
+        NUM_ACCTS = data.num_of_accounts;
+    }
+});
 
 var handler = Plaid.create({
     apiVersion: 'v2',
@@ -75,39 +88,74 @@ $('#link-btn').on('click', function(e) {
     handler.open();
 });
 
-$('#get-accounts-btn').on('click', function(e) {
-    $.get('/accounts', function(data) {
-        console.log(data.accounts);
-    });
+$('#get-all-accounts-btn').on('click', function(e) {
+    for (var i = 0; i < NUM_ACCTS; i++) {
+        $.get('/accounts', {params: {var_i: i}}).success(
+            function(success){
+                console.log(success)
+        }).error(
+            function(error){
+                console.log(error)
+        });
+    }
 });
 
-$('#get-item-btn').on('click', function(e) {
-    $.post('/item', function(data) {
-        if (data.error)
-          console.log(data.error);
-        else {
-          console.log(data.institution);
-          /*data.institution.name
-          data.item.billed_products
-          data.item.available_products*/
-        }
-    });
+// $('#get-accounts-btn').on('click', function(e) {
+//     $.get('/accounts', function(data) {
+//         console.log(data.accounts);
+//     });
+// });
+
+$('#get-all-item-btn').on('click', function(e) {
+    for (var i = 0; i < NUM_ACCTS; i++) {
+        $.post('/item',{params: {var_i: i}}).success(
+        function(success){
+            console.log(success)
+        }).error(
+        function(error){
+            console.log(error)
+        });
+
+    }
 });
 
+// $('#get-item-btn').on('click', function(e) {
+//     $.post('/item',function(data) {
+//         if (data.error)
+//           console.log(data.error);
+//         else {
+//           console.log(data.institution);
+//           /*data.institution.name
+//           data.item.billed_products
+//           data.item.available_products*/
+//         }
+//     });
+// });
 
 
-$('#get-transactions-btn').on('click', function(e) {
-      $.post('/transactions', function(data) {
-
-        if (data.error != null) {
-          console.log(data.error.error_code + ' ' +
-           data.error.error_message);
-          }
-         else {
-
-          console.log(data.transactions);
-      }});
-  });
+$('#get-all-transactions-btn').on('click', function(e) {
+    for (var i = 0; i < NUM_ACCTS; i++) {
+      $.post('/transactions', {params: {var_i: i}}).success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+  }
+});
+// $('#get-transactions-btn').on('click', function(e) {
+//     $.post('/transactions', function(data) {
+//
+//       if (data.error != null) {
+//         console.log(data.error.error_code + ' ' +
+//          data.error.error_message);
+//         }
+//        else {
+//
+//         console.log(data.transactions);
+//     }});
+// });
 
 
 </script>
