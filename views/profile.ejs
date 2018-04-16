@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Node Authentication</title>
+    <title>Lucidity Dev Page</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
@@ -38,6 +38,9 @@
                         <strong>password</strong>: <%= user.password %><br>
                         <strong>item_id</strong>: <%= user.item_id %><br>
                         <strong>access_token</strong>: <%= user.access_token %><br>
+                        <strong>accounts[0] -> access_token</strong>: <%= user.accounts[0].access_token %><br>
+                        <strong>accounts[0] -> item_id</strong>: <%= user.accounts[0].item_id %><br>
+
                     </p>
 
             </div>
@@ -95,14 +98,16 @@ $('#get-item-btn').on('click', function(e) {
 
 $('#get-transactions-btn').on('click', function(e) {
       $.post('/transactions', function(data) {
+
         if (data.error != null) {
           console.log(data.error.error_code + ' ' +
            data.error.error_message);
           }
          else {
+
           console.log(data.transactions);
       }});
-      });
+  });
 
 
 </script>

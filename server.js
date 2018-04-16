@@ -124,10 +124,18 @@ app.post('/get_access_token', function(request, response, next) {
     //Inserts this data into our db
 
 
-    collection.update({'_id' : request.user._id}, {'$set' : {'access_token' : ACCESS_TOKEN, 'item_id' : ITEM_ID }});
+    /*collection.update({'_id' : request.user._id}, {'$set' : {'access_token' : ACCESS_TOKEN, 'item_id' : ITEM_ID }});*/
+    
+    //This needs to append not overwrite
+    collection.update({'_id' : request.user._id}, {'$set' : {'accounts' : [{"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }]}});
 
     console.log("inserted access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-    client.close();
+    console.log("access_token " + request.user.accounts[0]);
+
+    /*var cursor = collection.collection('accounts').find({
+        tags: "access_token"
+    });
+    console.log(cursor);*/
 
     response.json({
       'error': false
@@ -187,6 +195,7 @@ app.post('/item', function(request, response, next) {
 
 app.post('/transactions', function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
+
   var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
   var endDate = moment().format('YYYY-MM-DD');
   client.getTransactions(request.user.access_token, startDate, endDate, {
