@@ -25,6 +25,8 @@ var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
 var mongo_url = "mongodb://localhost:27017/lucidity";
 
+var colors = require('colors');
+
 
 var APP_PORT = envvar.number('APP_PORT', 8000);
 var PLAID_CLIENT_ID = envvar.string('PLAID_CLIENT_ID');
@@ -118,16 +120,22 @@ app.post('/get_access_token', function(request, response, next) {
     }
     ACCESS_TOKEN = tokenResponse.access_token;
     ITEM_ID = tokenResponse.item_id;
-    console.log('Access Token: ' + ACCESS_TOKEN);
-    console.log('Item ID: ' + ITEM_ID);
+    console.log('Exchanged'.green + ' tokens');
+    console.log('   Access Token: ' + ACCESS_TOKEN);
+    console.log('   Item ID: ' + ITEM_ID);
 
     //Inserts this data into our db
 
+    //This needs to append not overwrite
+    if(request.user.accounts == null){
+        collection.update({'_id' : request.user._id}, {'$set' : {'accounts' : [{"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }]}});
+    }
+    else{
+        collection.update({'_id' : request.user._id}, {'$push' : {'accounts' : {"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }}});
+    }
 
-    collection.update({'_id' : request.user._id}, {'$set' : {'access_token' : ACCESS_TOKEN, 'item_id' : ITEM_ID }});
-
-    console.log("inserted access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-    client.close();
+    console.log("Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
+    console.log("Length of accounts is now: " + request.user.accounts.length);
 
     response.json({
       'error': false
@@ -138,7 +146,9 @@ app.post('/get_access_token', function(request, response, next) {
 app.get('/accounts', function(request, response, next) {
   // Retrieve high-level account information and account and routing numbers
   // for each account associated with the Item.
-  client.getAuth(request.user.access_token, function(error, authResponse) {
+  var i = request.query.params.var_i;
+  console.log(i);
+  client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
     if (error != null) {
       var msg = 'Unable to pull accounts from the Plaid API.';
       console.log(msg + '\n' + error);
@@ -159,49 +169,54 @@ app.get('/accounts', function(request, response, next) {
 app.post('/item', function(request, response, next) {
   // Pull the Item - this includes information about available products,
   // billed products, webhook information, and more.
-  client.getItem(request.user.access_token, function(error, itemResponse) {
-    if (error != null) {
-      console.log(JSON.stringify(error));
-      return response.json({
-        error: error
-      });
-    }
+  var i = request.body.params.var_i;
+  console.log(i);
+      client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+        if (error != null) {
+          console.log(JSON.stringify(error));
+          return response.json({
+            error: error
+          });
+        }
 
-    // Also pull information about the institution
-    client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
-      if (err != null) {
-        var msg = 'Unable to pull institution information from the Plaid API.';
-        console.log(msg + '\n' + error);
-        return response.json({
-          error: msg
+        // Also pull information about the institution
+        client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
+          if (err != null) {
+            var msg = 'Unable to pull institution information from the Plaid API.';
+            console.log(msg + '\n' + error);
+            return response.json({
+              error: msg
+            });
+          } else {
+            response.json({
+              item: itemResponse.item,
+              institution: instRes.institution,
+            });
+          }
         });
-      } else {
-        response.json({
-          item: itemResponse.item,
-          institution: instRes.institution,
-        });
-      }
-    });
-  });
+      });
 });
 
 app.post('/transactions', function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
-  var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
-  var endDate = moment().format('YYYY-MM-DD');
-  client.getTransactions(request.user.access_token, startDate, endDate, {
-    count: 250,
-    offset: 0,
-  }, function(error, transactionsResponse) {
-    if (error != null) {
-      console.log(JSON.stringify(error));
-      return response.json({
-        error: error
+      var i = request.body.params.var_i;
+      console.log(i);
+      var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+      var endDate = moment().format('YYYY-MM-DD');
+      client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+        count: 250,
+        offset: 0,
+      }, function(error, transactionsResponse) {
+        if (error != null) {
+          console.log(JSON.stringify(error));
+          return response.json({
+            error: error
+          });
+        }
+        console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
+        response.json(transactionsResponse);
       });
-    }
-    console.log('pulled ' + transactionsResponse.transactions.length + ' transactions');
-    response.json(transactionsResponse);
-  });
+  //}
 });
 
 //**************************************END PLAID API**********************************
@@ -270,6 +285,18 @@ app.get('/logout', function(req, res) {
     res.redirect('/');
 });
 
+//??
+//Create blank name and accounts field on signup so we can append and not create later on
+/*app.post('/signup', function(req, res) {
+    passport.authenticate('local-signup', {
+        successRedirect : '/profile', // redirect to the secure profile section
+        failureRedirect : '/signup', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    });
+    collection.update({'_id' : req.user._id}, {'$set' : {'accounts' : []}});
+    collection.update({'_id' : req.user._id}, {'$set' : {'name' : ""}});
+});*/
+
 app.post('/signup', passport.authenticate('local-signup', {
 successRedirect : '/profile', // redirect to the secure profile section
 failureRedirect : '/signup', // redirect back to the signup page if there is an error
@@ -328,6 +355,21 @@ app.post('/name', function(req, res, next) {
 
     res.redirect('/profile');
 });
+
+
+app.get('/api/user_data', function(req, res) {
+
+            if (req.user === undefined) {
+                // The user is not logged in
+                res.json({});
+            } else {
+                res.json({
+                    username: req.user,
+                    num_of_accounts : req.user.accounts.length
+                });
+            }
+        });
+
 
 // launch ======================================================================
 app.listen(port);
