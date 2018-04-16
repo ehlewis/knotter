@@ -107,6 +107,25 @@ app.post('/get_access_token', function(request, response, next) {
     ITEM_ID = tokenResponse.item_id;
     console.log('Access Token: ' + ACCESS_TOKEN);
     console.log('Item ID: ' + ITEM_ID);
+
+    //Inserts this data into our db
+    MongoClient.connect(mongo_url, function (err, client) {
+        if (err) throw err;
+
+        var db = client.db('lucidity');
+        var collection = db.collection('users');
+
+        collection.update({'_id' : request.user._id}, {'$set' : {'access_token' : ACCESS_TOKEN, 'item_id' : ITEM_ID }});
+
+        console.log("inserted access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
+        client.close();
+
+    });
+
+
+
+
+
     response.json({
       'error': false
     });
@@ -116,7 +135,7 @@ app.post('/get_access_token', function(request, response, next) {
 app.get('/accounts', function(request, response, next) {
   // Retrieve high-level account information and account and routing numbers
   // for each account associated with the Item.
-  client.getAuth(ACCESS_TOKEN, function(error, authResponse) {
+  client.getAuth(request.user.access_token, function(error, authResponse) {
     if (error != null) {
       var msg = 'Unable to pull accounts from the Plaid API.';
       console.log(msg + '\n' + error);
@@ -137,7 +156,7 @@ app.get('/accounts', function(request, response, next) {
 app.post('/item', function(request, response, next) {
   // Pull the Item - this includes information about available products,
   // billed products, webhook information, and more.
-  client.getItem(ACCESS_TOKEN, function(error, itemResponse) {
+  client.getItem(request.user.access_token, function(error, itemResponse) {
     if (error != null) {
       console.log(JSON.stringify(error));
       return response.json({
@@ -167,7 +186,7 @@ app.post('/transactions', function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
   var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
   var endDate = moment().format('YYYY-MM-DD');
-  client.getTransactions(ACCESS_TOKEN, startDate, endDate, {
+  client.getTransactions(request.user.access_token, startDate, endDate, {
     count: 250,
     offset: 0,
   }, function(error, transactionsResponse) {
@@ -223,7 +242,9 @@ app.get('/signup', function(req, res) {
 // we will use route middleware to verify this (the isLoggedIn function)
 app.get('/profile', isLoggedIn, function(req, res) {
     res.render('profile.ejs', {
-        user : req.user // get the user out of session and pass to template
+        user : req.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
     });
 });
 
@@ -282,11 +303,6 @@ app.get('/name', function(request, response, next) {
   });
 });
 
-/*var nameSchema = new Schema({
-    name: String
-});
-
-var userName = mongoose.model('name', nameSchema);*/
 
 app.post('/name', function(req, res, next) {
     MongoClient.connect(mongo_url, function (err, client) {
@@ -295,7 +311,7 @@ app.post('/name', function(req, res, next) {
         var db = client.db('lucidity');
         var collection = db.collection('users');
 
-          /* var product = {  name: "A" };
+        /* var product = {  name: "A" };
 
            collection.insert(product, function(err, result) {
 
@@ -304,21 +320,13 @@ app.post('/name', function(req, res, next) {
              client.close();
          });*/ //Inserts new attribute
 
-         console.log(req.body.name);
+        console.log(req.body.name);
         console.log(req.user);
-           var product = {  name: "v" };
 
-           collection.update({'_id' : req.user._id},
-                     {'$set' : {'name' : req.body.name }});
+        collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
 
-           /*collection.update(product, function(err, result) {
-
-           if(err) { throw err; }
-
-             client.close();
-         });*/
-           console.log("inserted username" + req.body.name);
-           client.close();
+        console.log("inserted username: " + req.body.name + " for user " + req.user);
+        client.close();
 
     });
     res.redirect('/profile');

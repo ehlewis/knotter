@@ -10,8 +10,10 @@ var userSchema = mongoose.Schema({
         email        : String,
         password     : String,
         name         : String,
+        /*accounts{*/
         access_token : String,
         item_id      : String
+        /*}*/
 /*    }*/
 
 });
