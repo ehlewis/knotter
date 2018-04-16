@@ -25,6 +25,8 @@ var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
 var mongo_url = "mongodb://localhost:27017/lucidity";
 
+var colors = require('colors');
+
 
 var APP_PORT = envvar.number('APP_PORT', 8000);
 var PLAID_CLIENT_ID = envvar.string('PLAID_CLIENT_ID');
@@ -118,8 +120,9 @@ app.post('/get_access_token', function(request, response, next) {
     }
     ACCESS_TOKEN = tokenResponse.access_token;
     ITEM_ID = tokenResponse.item_id;
-    console.log('Access Token: ' + ACCESS_TOKEN);
-    console.log('Item ID: ' + ITEM_ID);
+    console.log('Exchanged'.green + ' tokens');
+    console.log('   Access Token: ' + ACCESS_TOKEN);
+    console.log('   Item ID: ' + ITEM_ID);
 
     //Inserts this data into our db
 
@@ -128,12 +131,11 @@ app.post('/get_access_token', function(request, response, next) {
         collection.update({'_id' : request.user._id}, {'$set' : {'accounts' : [{"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }]}});
     }
     else{
-        collection.update({'_id' : request.user._id}, {'$push' : {'accounts' : [{"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }]}});
+        collection.update({'_id' : request.user._id}, {'$push' : {'accounts' : {"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }}});
     }
 
-    console.log("inserted access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-    console.log("access_token " + request.user.accounts[0]);
-    console.log("accounts length " + request.user.accounts.length);
+    console.log("Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
+    console.log("Length of accounts is now: " + request.user.accounts.length);
 
     response.json({
       'error': false
@@ -144,8 +146,8 @@ app.post('/get_access_token', function(request, response, next) {
 app.get('/accounts', function(request, response, next) {
   // Retrieve high-level account information and account and routing numbers
   // for each account associated with the Item.
-  for (var i = 0; i < request.user.accounts.length; i++) {
-      client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
+  //for (var i = 0; i < request.user.accounts.length; i++) {
+      client.getAuth(request.user.accounts[0].access_token, function(error, authResponse) {
         if (error != null) {
           var msg = 'Unable to pull accounts from the Plaid API.';
           console.log(msg + '\n' + error);
@@ -161,14 +163,14 @@ app.get('/accounts', function(request, response, next) {
           numbers: authResponse.numbers,
         });
       });
-  }
+  //}
 });
 
 app.post('/item', function(request, response, next) {
   // Pull the Item - this includes information about available products,
   // billed products, webhook information, and more.
-  for (var i = 0; i < request.user.accounts.length; i++) {
-      client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+  //for (var i = 0; i < request.user.accounts.length; i++) {
+      client.getItem(request.user.accounts[0].access_token, function(error, itemResponse) {
         if (error != null) {
           console.log(JSON.stringify(error));
           return response.json({
@@ -192,15 +194,15 @@ app.post('/item', function(request, response, next) {
           }
         });
       });
-  }
+  //}
 });
 
 app.post('/transactions', function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
-  for (var i = 0; i < request.user.accounts.length; i++) {
+  //for (var i = 0; i < request.user.accounts.length; i++) {
       var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
       var endDate = moment().format('YYYY-MM-DD');
-      client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+      client.getTransactions(request.user.accounts[0].access_token, startDate, endDate, {
         count: 250,
         offset: 0,
       }, function(error, transactionsResponse) {
@@ -210,10 +212,10 @@ app.post('/transactions', function(request, response, next) {
             error: error
           });
         }
-        console.log('pulled ' + transactionsResponse.transactions.length + ' transactions');
+        console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
         response.json(transactionsResponse);
       });
-  }
+  //}
 });
 
 //**************************************END PLAID API**********************************
