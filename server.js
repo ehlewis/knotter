@@ -38,8 +38,21 @@ var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
 var ITEM_ID = null;
 
+
+var db = null;
+var collection = null;
+
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
+
+MongoClient.connect(mongo_url, function (err, client) {
+    if (err) throw err;
+
+    db = client.db('lucidity');
+    collection = db.collection('users');
+
+    console.log("Connected to db!");
+});
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
@@ -109,22 +122,12 @@ app.post('/get_access_token', function(request, response, next) {
     console.log('Item ID: ' + ITEM_ID);
 
     //Inserts this data into our db
-    MongoClient.connect(mongo_url, function (err, client) {
-        if (err) throw err;
-
-        var db = client.db('lucidity');
-        var collection = db.collection('users');
-
-        collection.update({'_id' : request.user._id}, {'$set' : {'access_token' : ACCESS_TOKEN, 'item_id' : ITEM_ID }});
-
-        console.log("inserted access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-        client.close();
-
-    });
 
 
+    collection.update({'_id' : request.user._id}, {'$set' : {'access_token' : ACCESS_TOKEN, 'item_id' : ITEM_ID }});
 
-
+    console.log("inserted access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
+    client.close();
 
     response.json({
       'error': false
@@ -305,30 +308,24 @@ app.get('/name', function(request, response, next) {
 
 
 app.post('/name', function(req, res, next) {
-    MongoClient.connect(mongo_url, function (err, client) {
-        if (err) throw err;
 
-        var db = client.db('lucidity');
-        var collection = db.collection('users');
+    /* var product = {  name: "A" };
 
-        /* var product = {  name: "A" };
+       collection.insert(product, function(err, result) {
 
-           collection.insert(product, function(err, result) {
+       if(err) { throw err; }
 
-           if(err) { throw err; }
+         client.close();
+     });*/ //Inserts new attribute
 
-             client.close();
-         });*/ //Inserts new attribute
+    console.log(req.body.name);
+    console.log(req.user);
 
-        console.log(req.body.name);
-        console.log(req.user);
+    collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
 
-        collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
+    console.log("inserted username: " + req.body.name + " for user " + req.user);
+    client.close();
 
-        console.log("inserted username: " + req.body.name + " for user " + req.user);
-        client.close();
-
-    });
     res.redirect('/profile');
 });
 
