@@ -3,5 +3,5 @@ On host machine:
     Mongodb (all of them)
 Node packages:
 ```
-    npm install express mongoose passport connect-flash envvar moment plaid morgan cookie-parser body-parser express-session mongodb colors passport-local bcrypt-nodejs
+npm install express mongoose passport connect-flash envvar moment plaid morgan cookie-parser body-parser express-session mongodb colors passport-local bcrypt-nodejs
 ```
