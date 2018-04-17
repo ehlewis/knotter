@@ -157,7 +157,7 @@ app.get('/accounts', function(request, response, next) {
       });
     }
 
-    console.log(authResponse.accounts);
+    //console.log(authResponse.accounts);
     response.json({
       error: false,
       accounts: authResponse.accounts,
@@ -351,7 +351,6 @@ app.post('/name', function(req, res, next) {
     collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
 
     console.log("inserted username: " + req.body.name + " for user " + req.user);
-    client.close();
 
     res.redirect('/profile');
 });
