@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+      <title>Lucidity Accounts</title>
+      <link rel="stylesheet" href="assets/css/mainPage.css" type="text/css" />
+      <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+   </head>
+   <script>
+      function populateAccounts() {
+          $.ajax({
+              dataType: "json",
+              url: 'assets/data.json',
+              beforeSend: function(xhr){
+                  if (xhr.overrideMimeType) {
+                      xhr.overrideMimeType("application/json");
+                  }
+              },
+              success: function(data) {
+                  console.log(data);
+                  if (typeof data !== "undefined") {
+                    $('#transactions-data').slideUp(function() {
+                      var html = '';
+                      html += '<table>';
+                      html += '<tr><th>Type</th><th>Name</th><th>Amount</th></tr>'
+                      data.accounts.forEach(function(acct, idx) {
+                        html += '<tr>';
+                        html += '<td>'+acct.subtype+'</td>';
+                        html += '<td>'+acct.official_name+'</td>';
+                        html += '<td>$ '+acct.balances.available+' available out of '+ acct.balances.limit +'</td>';
+                        html += '</tr>';
+                      });
+                      html += '</table>';
+                      $(this).slideUp(function() {
+                        $(this).html(html).slideDown();
+                      });
+                    });
+
+                  }
+                }
+            });
+        }
+   </script>
+   <body>
+      <section id="body" class="width">
+          <div id="leftBar">
+             <aside id="sidebar" class="column-left">
+                <header>
+                   <img style='max-width: 100%; margin-left: 5%;' src="assets/LucidityWhite.png"></img>
+                </header>
+                <nav id="mainnav">
+                   <ul>
+                      <li><a href="/dashboard.ejs">Home</a></li>
+                      <li class="selected-item"><a href="/accounts.ejs">Accounts</a></li>
+                      <li><a href="#">Bills</a></li>
+                      <li><a href="#">Expenses</a></li>
+                      <li><a href="#">Lucidity Pro</a></li>
+                   </ul>
+                </nav>
+             </aside>
+         </div>
+         <section id="content">
+            <article>
+               <h3>Your Accounts</h3>
+              <!-- <p>Mauris sit amet tortor in urna tincidunt aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestasMauris sit amet tortor in urna tincidunt aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas</p>-->
+               <div style='display: inline-block;'>
+                  <!--<canvas id="myChart" width="800" height="400"></canvas>-->
+                  <!--<canvas id="pieChart" width="400" height="400"></canvas>-->
+               </div>
+               <p>&nbsp;</p>
+               <h4>Linked Accounts</h4>
+               <div id="transactions-data"  style='font-size: 16px;'>
+                  <script>populateAccounts();</script>
+               </div>
+            </article>
+            <footer class="clear">
+               <!--<p>&copy; 2018 sitename.</p>-->
+            </footer>
+         </section>
+         <div class="clear"></div>
+      </section>
+   </body>
+</html>

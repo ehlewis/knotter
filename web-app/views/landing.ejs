@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+    <title>Welcome to Lucidity</title>
+    <link rel="icon" href="assets/LucidityIcon.png">
+    <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="logo">
+      <a href="http://google.com"><img src="assets/LucidityWhite.png" width="200px" style="float: left; padding-right: 20px;"></a>
+    </div class>
+    <div class="nav-bar">
+      <a href="http://google.com">Change</a>
+      <a href="http://google.com">These</a>
+      <a href="http://google.com">To</a>
+      <a href="http://google.com">Whatever</a>
+      <a href="http://google.com">You</a>
+      <a href="http://google.com">Want</a>
+      <a id="pro-button" href="http://google.com">Lucidity Pro</a>
+    </div>
+    <!-- <div class="pro-button">
+      <a href="http://google.com" style="float:right">Lucidity Pro</a>
+    </div> -->
+    <!-- <div class="top-buttons">
+      <button class="button" type="button">Login</button>
+      <div class="vertical-line"></div>
+      <button class="button" type="button">Sign Up</button>
+    </div> -->
+  </div>
+  <div class="center-text">
+    <p>Manage all your personal and business finances in one place</p>
+    <div class="action-buttons">
+    <button id="login-button" class="button" style="float: left;">Login</a>
+    <button id="sign-up-button" class="button" style="float: right; ">Sign Up</a>
+    <!-- <button class="button" type="button">Login</button> -->
+    <!-- <button class="button" type="button" style="float: right;">Sign Up</button> -->
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-box">
+      <h2> Feature </h1>
+      <p> Lorem ipsum dolor sit amet, vis ex solum discere referrentur, sanctus debitis eleifend te mea, his probo ponderum ut. Pro ad alia commodo. Id enim aperiam nam, ne mea sanctus blandit interesset. Illum ignota cum in.</p>
+    </div>
+    <div class="info-box">
+      <h2> Feature </h1>
+      <p> Solet animal ornatus vix at, quo gubergren intellegam in, porro ludus te cum. Ne probo prodesset dissentiunt per. Ut essent dictas perpetua duo. Eos liber apeirian platonem no. Aperiam omnesque vel et, quando sanctus vis at.</p>
+    </div>
+    <div class="info-box">
+      <h2> Feature </h1>
+      <p>Ut ridens molestie menandri eam. No sale timeam iisque qui. Semper impetus vulputate mei ut. Per ex quidam aperiri, vis quidam molestiae percipitur ad, ad iuvaret omnesque officiis his. Assueverit omittantur vim ex, alii discere ea sed. Ut vim illud indoctum.</p>
+    </div>
+  </div>
+
+  <!-- Login modal -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <div class="login-form">
+        <form action="/login" method="post" class="login-form">
+          <input type="text" class="form-control" name="email" placeholder="Email">
+          <input type="password" class="form-control" name="password" placeholder="Password">
+          <button type="submit" class="btn btn-warning btn-lg">Login</button>
+          <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Sign up modal -->
+  <div id="sign-up-modal" class="modal">
+    <div class="modal-content">
+      <div class="sign-up-form">
+        <form action="/signup" method="post" class="register-form">
+          <input type="text" name="name" placeholder="Name"/>
+          <input type="password" name="password" placeholder="Password"/>
+          <input type="text" name="email" placeholder="Email"/>
+          <button>Create</button>
+          <p class="message">Already registered? <a href="#">Sign In</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+<script src="assets/js/landing.js"></script>
+
+</body>
+</html>
