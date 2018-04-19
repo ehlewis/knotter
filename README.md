@@ -1,4 +1,4 @@
-### Lucidity
+### Link
 
 Run the following commands to start the website
 ```
