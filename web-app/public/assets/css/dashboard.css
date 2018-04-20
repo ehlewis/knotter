@@ -1,0 +1,50 @@
+html{
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body{
+  margin: 0px;
+  height: 100%;
+}
+.sidebar{
+  display: block;
+  width: 200px;
+  background: linear-gradient(to bottom right, #00b09b, #96d03d);
+  height: 100%;
+}
+
+.sidebar img{
+  padding-left: 65px;
+  padding-top: 10px;
+  width: 120px;
+}
+
+.sidebar nav{
+  width: 100%;
+  font-size: 20px;
+}
+
+.sidebar nav ul{
+  list-style: none;
+  padding: 0px;
+}
+
+.sidebar nav ul li{
+  text-align: right;
+}
+
+.sidebar nav ul li a{
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition-duration: 0.2s;
+}
+
+.sidebar nav ul li a:hover{
+    background-color: #ffffff33;
+}
