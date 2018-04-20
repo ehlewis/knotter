@@ -23,7 +23,7 @@ var mongodb     = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
-var mongo_url = "mongodb://localhost:27017/lucidity";
+var mongo_url = "mongodb://localhost:27017/link";
 
 var colors = require('colors');
 
@@ -50,7 +50,7 @@ mongoose.connect(configDB.url); // connect to our database
 MongoClient.connect(mongo_url, function (err, client) {
     if (err) throw err;
 
-    db = client.db('lucidity');
+    db = client.db('link');
     collection = db.collection('users');
 
     console.log("Connected to db!");
@@ -64,7 +64,7 @@ app.use(bodyParser()); // get information from html forms
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(session({ secret: 'fun' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/passport')(passport);
