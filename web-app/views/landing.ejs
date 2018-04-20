@@ -15,7 +15,7 @@
       <a href="http://google.com">Business</a>
       <a href="http://google.com">About</a>
       <a href="http://google.com">Contact Us</a>
-      <a id="pro-button" href="http://google.com">Lucidity Pro</a>
+      <a id="pro-button" href="http://google.com">Link Pro</a>
     </div>
     <!-- <div class="pro-button">
       <a href="http://google.com" style="float:right">Lucidity Pro</a>
@@ -54,14 +54,12 @@
   <!-- Login modal -->
   <div id="login-modal" class="modal">
     <div class="modal-content">
-      <div class="form">
-        <form action="/login" method="post" class="login-form">
-          <input type="text" class="form-control" name="email" placeholder="Email">
-          <input type="password" class="form-control" name="password" placeholder="Password">
+        <form action="/login" method="post" class="form">
+          <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
+          <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
           <button type="submit" class="btn btn-warning btn-lg">Login</button>
-          <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+          <p class="message">Not registered? <a id="already-sign-up">Sign Up</a></p>
         </form>
-      </div>
     </div>
   </div>
 
@@ -71,11 +69,11 @@
     <div class="modal-content">
       <div class="form">
         <form action="/signup" method="post" class="register-form">
-          <input type="text" name="name" placeholder="Name"/>
-          <input type="password" name="password" placeholder="Password"/>
-          <input type="text" name="email" placeholder="Email"/>
+          <input id="sign-up-email" type="text" name="email" placeholder="Email"/>
+          <input id="sign-up-name" type="text" name="name" placeholder="Name"/>
+          <input id="sign-up-pass" type="password" name="password" placeholder="Password"/>
           <button>Create</button>
-          <p class="message">Already registered? <a href="#">Sign In</a></p>
+          <p class="message">Already registered? <a id="already-login">Login</a></p>
         </form>
       </div>
     </div>

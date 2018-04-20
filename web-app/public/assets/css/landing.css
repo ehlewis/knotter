@@ -189,7 +189,7 @@ a{
 
 .form{
   padding: 30px;
-  padding-bottom: 5px;
+  padding-bottom: 20px;
   padding-top: 35px;
   text-align: center;
 }
@@ -230,4 +230,9 @@ a{
   margin: 0;
   color: lightgrey;
   padding-top: 30px;
+}
+
+.form a{
+  color: blue;
+  cursor: pointer;
 }
