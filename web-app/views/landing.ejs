@@ -54,7 +54,7 @@
   <!-- Login modal -->
   <div id="login-modal" class="modal">
     <div class="modal-content">
-        <form action="/login" method="post" class="form">
+        <form id="login-form" action="/login" method="post" class="form">
           <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
           <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
           <button type="submit" class="btn btn-warning btn-lg">Login</button>
@@ -68,11 +68,11 @@
   <div id="sign-up-modal" class="modal">
     <div class="modal-content">
       <div class="form">
-        <form action="/signup" method="post" class="register-form">
-          <input id="sign-up-email" type="text" name="email" placeholder="Email"/>
-          <input id="sign-up-name" type="text" name="name" placeholder="Name"/>
-          <input id="sign-up-pass" type="password" name="password" placeholder="Password"/>
-          <button>Create</button>
+        <form id="sign-up-form" action="/signup" method="post" class="form">
+          <input id="sign-up-name" onfocusout="validateName();" type="text" name="name" placeholder="Name" required/>
+          <input id="sign-up-email" onfocusout="validateEmail();" type="email" name="email" placeholder="Email" required/>
+          <input id="sign-up-pass" onfocusout="validatePassword();" type="password" name="password" placeholder="Password" required/>
+          <button id="create-button" disabled>Create</button>
           <p class="message">Already registered? <a id="already-login">Login</a></p>
         </form>
       </div>
