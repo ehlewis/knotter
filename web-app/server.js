@@ -273,6 +273,7 @@ app.get('/profile', isLoggedIn, function(req, res) {
 app.get('/dashboard', function(req, res) {
     // render the page and pass in api keys
     res.render('dashboard.ejs', {
+        user : req.user, // get the user out of session and pass to template
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV});
 });
