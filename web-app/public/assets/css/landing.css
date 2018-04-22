@@ -223,6 +223,7 @@ a{
   font-size: 20px;
   background-color: #00b09b;
   transition-duration: 0.4s;
+  cursor: pointer;
 }
 
 .form p{
@@ -236,3 +237,7 @@ a{
   color: blue;
   cursor: pointer;
 }
+
+/* input:invalid{
+  border: 1px solid red;
+} */
