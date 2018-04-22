@@ -94,8 +94,11 @@ app.get('/', function(request, response, next) {
   });
 });
 
-app.get('/dashboard', function(request, response, next) {
+
+
+app.get('/dashboard', isLoggedIn, function(request, response, next) {
   response.render('dashboard.ejs', {
+    user : request.user, // get the user out of session and pass to template
     PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
     PLAID_ENV: PLAID_ENV,
   });
@@ -270,12 +273,13 @@ app.get('/profile', isLoggedIn, function(req, res) {
 // DASHBOARD ==============================
 // =====================================
 // show the signup form
-app.get('/dashboard', function(req, res) {
-    // render the page and pass in api keys
-    res.render('dashboard.ejs', {
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV});
-});
+// app.get('/dashboard', function(req, res) {
+//     // render the page and pass in api keys
+//     res.render('dashboard.ejs', {
+//         user : req.user, // get the user out of session and pass to template
+//         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+//         PLAID_ENV: PLAID_ENV});
+// });
 
 // =====================================
 // LOGOUT ==============================
