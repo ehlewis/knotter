@@ -8,7 +8,9 @@ body{
   margin: 0px;
   height: 100%;
 }
+
 .sidebar{
+  float: left;
   display: block;
   width: 200px;
   background: linear-gradient(to bottom right, #00b09b, #96d03d);
@@ -47,4 +49,43 @@ body{
 
 .sidebar nav ul li a:hover{
     background-color: #ffffff33;
+}
+
+.profile{
+  width: 200px;
+  position: absolute;
+  bottom: 0px;
+}
+
+#profile-links{
+  position: absolute;
+  padding-top: 15px;
+}
+
+#profile-links a{
+  display: inline;
+  text-decoration: none;
+  color: white;
+  font-size: 12px;
+}
+
+.profile a img{
+  float: right;
+  padding: 0;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  width: 50px;
+}
+
+.vl {
+  display: inline;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-left: 1px solid white;
+  height: 1px;
+}
+
+#logout-button{
+  padding-left: 20px;
+  padding-right: 3px;
 }
