@@ -66,7 +66,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 // required for passport
 app.use(session({
     secret: 'fun',
-    cookie: {_expires : 60000000}
+    cookie: {_expires : 3600000}
 })); // session secret and cookie timeout
 
 app.use(passport.initialize());
