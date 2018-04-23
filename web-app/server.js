@@ -338,8 +338,8 @@ app.get('/name', function(request, response, next) {
 });
 
 
-app.get('/nvm', isLoggedIn, function(request, response, next) {
-  response.render('nvm.ejs', {
+app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
+  response.render('old_dash_api.ejs', {
     PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
     PLAID_ENV: PLAID_ENV,
   });
