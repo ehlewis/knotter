@@ -64,7 +64,11 @@ app.use(bodyParser()); // get information from html forms
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
-app.use(session({ secret: 'fun' })); // session secret
+app.use(session({
+    secret: 'fun',
+    cookie: {_expires : 60000000}
+})); // session secret and cookie timeout
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 require('./config/passport')(passport);
@@ -340,6 +344,7 @@ app.get('/name', function(request, response, next) {
 
 app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
   response.render('old_dash_api.ejs', {
+    user : request.user,
     PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
     PLAID_ENV: PLAID_ENV,
   });

@@ -2,7 +2,7 @@
 <html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-      <title>Lucidity Dashboard</title>
+      <title>Link Dashboard</title>
       <link rel="stylesheet" href="assets/css/mainPage.css" type="text/css" />
       <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
@@ -80,96 +80,151 @@
    var accounts_array = [];
 
     function getNumAccts() {
-      var quote;
-
-      return new Promise(function(resolve, reject) {
-          $.getJSON("api/user_data", function(data) {
-              // Make sure the data contains the username as expected before using it
-              if (data.hasOwnProperty('username')) {
-                  console.log('Username: ' + data.username);
-                  console.log('Num of accounts: ' + data.num_of_accounts);
-                  NUM_ACCTS = data.num_of_accounts;
-                  resolve(NUM_ACCTS);
-              }
-          });
+        return new Promise(function(resolve, reject) {
+            $.getJSON("api/user_data", function(data) {
+                // Make sure the data contains the username as expected before using it
+                if (data.hasOwnProperty('username')) {
+                    console.log('Username: ' + data.username);
+                    console.log('Num of accounts: ' + data.num_of_accounts);
+                    NUM_ACCTS = data.num_of_accounts;
+                    resolve(NUM_ACCTS);
+                }
+            });
         });
     }
-    function getPost(i) {
-
-      return new Promise(function(resolve, reject) {
-        $.post('/item',{params: {var_i: i}}).success(
-        function(success){
-            console.log("returning");
-            resolve(success);
-        }).error(
-        function(error){
-            console.log(error);
+    function getItems(i) {
+        return new Promise(function(resolve, reject) {
+            $.post('/item',{params: {var_i: i}}).success(
+            function(success){
+                console.log("returning");
+                resolve(success);
+            }).error(
+            function(error){
+                console.log(error);
+            });
         });
-    });
+    }
+    function getTransactions(i){
+        return new Promise(function(resolve, reject) {
+            for (var i = 0; i < NUM_ACCTS; i++) {
+                $.post('/transactions', {params: {var_i: i}}).success(
+                    function(success){
+                        console.log(success);
+                        resolve(success);
+                    }).error(
+                    function(error){
+                        console.log(error);
+                    });
+            }
+        });
     }
 
-    async function getData() {
-      var quote;
+    async function getTransactionData() {
+        return new Promise(async function(resolve, reject) {
+            console.log("Numaccts aaaa: " + NUM_ACCTS);
+            accounts_array = [];
+            for (var i = 0; i < NUM_ACCTS; i++) {
+                var account = await getTransactions(i);
+                accounts_array.push(account);
+            }
+            //console.log("array " + accounts_array);
+            resolve(accounts_array);
+        });
+    }
 
-      return new Promise(async function(resolve, reject) {
-          console.log("Numaccts aaaa: " + NUM_ACCTS);
-          accounts_array = [];
-          for (var i = 0; i < NUM_ACCTS; i++) {
-              var account = await getPost(i);
-                  accounts_array.push(account);
+    function populate(dataArray){
+        return new Promise(function(resolve, reject) {
+            var data = dataArray[0];
+            console.log("kkkkkk" + dataArray);
+            console.log("LENGTH "+dataArray.length);
 
-          }
-          console.log("array " + accounts_array);
-          resolve(accounts_array);
+            $('#transactions-data').slideUp(function() {
+                var html = '';
+                html += '<table>';
+                html += '<tr><th>Date</th><th>Name</th><th>Account</th><th>Amount</th></tr>'
+                console.log(data.transactions.length);
+                for (var j = 0; j < dataArray.length; j++) {
+                    data = dataArray[j];
+                    for (var i = 0; i < data.transactions.length; i++) {
+                        console.log("hello");
+                    }
+
+
+                }
+                    //console.log(dataArray.length);
+                    //console.log(j);
+                    //data = dataArray[j];
+                    for (var i = 0; i < data.transactions.length; i++) {
+                        //console.log(data.transactions[i]);
+                        var transaction = data.transactions[i];
+                        console.log(i);
+                        var account = "hold Account";
+                        for (var j = 0; j < data.accounts.length; j++) {
+                            if (data.accounts[j].account_id == transaction.account_id){
+                                console.log(data.accounts[j].name);
+                                account = data.accounts[j].name;
+                                break;
+                            }
+                        }
+                        html += '<tr>';
+                        html += '<td>'+data.transactions[i].date+'</td>';
+                        html += '<td>'+data.transactions[i].name+'</td>';
+                        html += '<td>'+account+'</td>';
+                        html += '<td>$ '+data.transactions[i].amount+'</td>';
+                        html += '</tr>';
+                    }
+                //}
+                html += '</table>';
+                $(this).slideUp(function() {
+                    $(this).html(html).slideDown();
+                });
+                resolve();
+                });
         });
     }
 
     async function main() {
       var accts = await getNumAccts();
-      var data = await getData();
-
+      var data = await getTransactionData();
+      //var temp = await populate(data);
+      populate(data);
       console.log("data" + data);
       console.log(accts);
     }
 
     main();
 
+/*  console.log(data);
+    $('#transactions-data').slideUp(function() {
+      var html = '';
+      html += '<table>';
+      html += '<tr><th>Date</th><th>Name</th><th>Account</th><th>Amount</th></tr>'
+      console.log(data.transactions.length);
+      for (var i = 0; i < data.transactions.length; i++) {
+          //console.log(data.transactions[i]);
+          var transaction = data.transactions[i];
+          console.log(i);
+            var account = "hold Account";
+            for (var j = 0; j < data.accounts.length; j++) {
+                if (data.accounts[j].account_id == transaction.account_id){
+                    console.log("AAAAAAAA" + data.accounts[j].name);
+                    account = data.accounts[j].name;
+                    break;
+                }
+            }
+            html += '<tr>';
+            html += '<td>'+data.transactions[i].date+'</td>';
+            html += '<td>'+data.transactions[i].name+'</td>';
+            html += '<td>'+account+'</td>';
+            html += '<td>$ '+data.transactions[i].amount+'</td>';
+            html += '</tr>';
+    }
+          html += '</table>';
+          $(this).slideUp(function() {
+            $(this).html(html).slideDown();
+          });
 
-
-
-
-
-/*                  console.log(data);
-                    $('#transactions-data').slideUp(function() {
-                      var html = '';
-                      html += '<table>';
-                      html += '<tr><th>Date</th><th>Name</th><th>Account</th><th>Amount</th></tr>'
-                      console.log(data.transactions.length);
-                      for (var i = 0; i < data.transactions.length; i++) {
-                          //console.log(data.transactions[i]);
-                          var transaction = data.transactions[i];
-                          console.log(i);
-                            var account = "hold Account";
-                            for (var j = 0; j < data.accounts.length; j++) {
-                                if (data.accounts[j].account_id == transaction.account_id){
-                                    console.log("AAAAAAAA" + data.accounts[j].name);
-                                    account = data.accounts[j].name;
-                                    break;
-                                }
-                            }
-                            html += '<tr>';
-                            html += '<td>'+data.transactions[i].date+'</td>';
-                            html += '<td>'+data.transactions[i].name+'</td>';
-                            html += '<td>'+account+'</td>';
-                            html += '<td>$ '+data.transactions[i].amount+'</td>';
-                            html += '</tr>';
-                    }
-                          html += '</table>';
-                          $(this).slideUp(function() {
-                            $(this).html(html).slideDown();
-                          });
-
-                    });*/
+    });*/
    </script>
    <script>
   // populateTransactions();
@@ -198,25 +253,4 @@
           }
       });
    </script>
-   <!--<script>
-      var ctx = document.getElementById('pieChart').getContext('2d');
-      var myDoughnutChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-              datasets: [{
-                  data: [10, 20, 30]
-              }],
-
-              // These labels appear in the legend and in the tooltips when hovering different arcs
-              labels: [
-                  'Red',
-                  'Yellow',
-                  'Blue'
-              ]
-          },
-          options: {
-              responsive: false
-          }
-      });
-   </script>-->
 </html>
