@@ -8,7 +8,10 @@ body{
   margin: 0px;
   height: 100%;
 }
+
+
 .sidebar{
+  float: left;
   display: block;
   width: 200px;
   background: linear-gradient(to bottom right, #00b09b, #96d03d);
@@ -47,4 +50,110 @@ body{
 
 .sidebar nav ul li a:hover{
     background-color: #ffffff33;
+}
+
+.profile{
+  width: 200px;
+  position: absolute;
+  bottom: 0px;
+}
+
+#profile-links{
+  position: absolute;
+  padding-top: 15px;
+}
+
+#profile-links a{
+  display: inline;
+  text-decoration: none;
+  color: white;
+  font-size: 12px;
+}
+
+.profile a img{
+  float: right;
+  padding: 0;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  width: 50px;
+}
+
+.vl {
+  display: inline;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-left: 1px solid white;
+  height: 1px;
+}
+
+#logout-button{
+  padding-left: 20px;
+  padding-right: 3px;
+}
+
+.dash-sections{
+  display: block;
+  margin-left: 230px;
+  height: 30%;
+  width: 80%;
+  padding-bottom: 10px;
+	overflow-x: auto;
+  white-space: nowrap;
+}
+
+.section-header{
+  margin-left: 220px;
+  padding: 10px;
+  padding-bottom: 20px;
+  font-weight: bold;
+}
+
+.card {
+  display: inline-block;
+  margin-right: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 250px;
+  height: 235px;
+  border-radius: 10px;
+}
+
+.card img{
+  border-radius: 10px 10px 0px 0px;
+  width: 100%;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+
+.balance{
+  font-weight: bold;
+}
+
+/* width */
+.dash-sections::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    padding-left: 10px;
+}
+
+/* Track */
+.dash-sections::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+
+/* Handle */
+.dash-sections::-webkit-scrollbar-thumb {
+    background: lightgrey;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.dash-sections::-webkit-scrollbar-thumb:hover {
+    background: grey;
 }
