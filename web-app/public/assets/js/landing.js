@@ -18,7 +18,7 @@ var createButton = document.getElementById('create-button')
 function enableButton(){
   var reEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   var rePassword = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-  var reName = /^[a-z]+$/;
+  var reName = /^[a-zA-Z '-]+$/;
 
   if(reName.test(String(signupName.value).toLowerCase()) && reEmail.test(String(signupEmail.value).toLowerCase()) && rePassword.test(String(signupPass.value).toLowerCase())){
     createButton.disabled = false;
@@ -26,7 +26,7 @@ function enableButton(){
 }
 
 function validateName() {
-    var re = /^[a-z]+$/;
+    var re = /^[a-zA-Z '-]+$/;
     if (!(re.test(String(signupName.value).toLowerCase()))){
       signupName.style.border = "1px solid red";
     }
