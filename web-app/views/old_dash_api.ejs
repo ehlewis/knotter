@@ -132,48 +132,45 @@
         });
     }
 
-    function populate(dataArray){
+/*    function addToTransactionsTable(data){
+        html = '';
+        for (var i = 0; i < data.transactions.length; i++) {
+            var transaction = data.transactions[i];
+            console.log(i);
+            var account = "hold Account";
+            for (var j = 0; j < data.accounts.length; j++) {
+                if (data.accounts[j].account_id == transaction.account_id){
+                    console.log(data.accounts[j].name);
+                    account = data.accounts[j].name;
+                    break;
+                }
+            }
+            html += '<tr>';
+            html += '<td>'+data.transactions[i].date+'</td>';
+            html += '<td>'+data.transactions[i].name+'</td>';
+            html += '<td>'+account+'</td>';
+            html += '<td>$ '+data.transactions[i].amount+'</td>';
+            html += '</tr>';
+        }
+    }*/
+
+    /*function populate(dataArray){
         return new Promise(function(resolve, reject) {
             var data = dataArray[0];
             console.log("kkkkkk" + dataArray);
-            console.log("LENGTH "+dataArray.length);
+            console.log("LENGTH "+ dataArray.length);
 
             $('#transactions-data').slideUp(function() {
                 var html = '';
                 html += '<table>';
                 html += '<tr><th>Date</th><th>Name</th><th>Account</th><th>Amount</th></tr>'
-                console.log(data.transactions.length);
+                console.log(" sdwefewef" + data.transactions.length);
                 for (var j = 0; j < dataArray.length; j++) {
                     data = dataArray[j];
-                    for (var i = 0; i < data.transactions.length; i++) {
-                        console.log("hello");
-                    }
-
-
+                    html = html + addToTransactionsTable(data);
+                    console.log("added" + html);
                 }
-                    //console.log(dataArray.length);
-                    //console.log(j);
-                    //data = dataArray[j];
-                    for (var i = 0; i < data.transactions.length; i++) {
-                        //console.log(data.transactions[i]);
-                        var transaction = data.transactions[i];
-                        console.log(i);
-                        var account = "hold Account";
-                        for (var j = 0; j < data.accounts.length; j++) {
-                            if (data.accounts[j].account_id == transaction.account_id){
-                                console.log(data.accounts[j].name);
-                                account = data.accounts[j].name;
-                                break;
-                            }
-                        }
-                        html += '<tr>';
-                        html += '<td>'+data.transactions[i].date+'</td>';
-                        html += '<td>'+data.transactions[i].name+'</td>';
-                        html += '<td>'+account+'</td>';
-                        html += '<td>$ '+data.transactions[i].amount+'</td>';
-                        html += '</tr>';
-                    }
-                //}
+
                 html += '</table>';
                 $(this).slideUp(function() {
                     $(this).html(html).slideDown();
@@ -181,7 +178,7 @@
                 resolve();
                 });
         });
-    }
+    }*/
 
     async function main() {
       var accts = await getNumAccts();
