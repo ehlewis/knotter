@@ -9,6 +9,7 @@ body{
   height: 100%;
 }
 
+
 .sidebar{
   float: left;
   display: block;
@@ -88,4 +89,71 @@ body{
 #logout-button{
   padding-left: 20px;
   padding-right: 3px;
+}
+
+.dash-sections{
+  display: block;
+  margin-left: 230px;
+  height: 30%;
+  width: 80%;
+  padding-bottom: 10px;
+	overflow-x: auto;
+  white-space: nowrap;
+}
+
+.section-header{
+  margin-left: 230px;
+  padding: 10px;
+  padding-bottom: 20px;
+  font-weight: bold;
+}
+
+.card {
+  display: inline-block;
+  margin-right: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 250px;
+  height: 235px;
+  border-radius: 10px;
+}
+
+.card img{
+  border-radius: 10px 10px 0px 0px;
+  width: 100%;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+
+.balance{
+  font-weight: bold;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    padding-left: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: lightgrey;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: grey;
 }

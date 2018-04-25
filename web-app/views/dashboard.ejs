@@ -6,24 +6,67 @@
     <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
 </head>
 <body>
-    <aside class="sidebar">
-      <img src="assets/link_brand_white.png">
-      <nav>
-        <ul>
-          <li><a href="/dashboard">Home</a></li>
-          <li><a href="/dashboard">Accounts</a></li>
-          <li><a href="/dashboard">Bills</a></li>
-          <li><a href="/dashboard">Expenses</a></li>
-          <li><a href="/dashboard">Link+</a></li>
-        </ul>
-      </nav>
-      <div class="profile">
-        <div id="profile-links">
-          <a id="logout-button" href="/logout">Logout</a>
-          <div class="vl"></div>
-          <a href="/profile">My Account</a>
-        </div>
-          <a href="/profile"><img src="assets/profile_pic_default.svg"/></a>
+  <aside class="sidebar">
+    <img src="assets/link_brand_white.png">
+    <nav>
+      <ul>
+        <li><a href="/dashboard">Home</a></li>
+        <li><a href="/dashboard">Accounts</a></li>
+        <li><a href="/dashboard">Bills</a></li>
+        <li><a href="/dashboard">Expenses</a></li>
+        <li><a href="/dashboard">Link+</a></li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <div id="profile-links">
+        <a id="logout-button" href="/logout">Logout</a>
+        <div class="vl"></div>
+        <a href="/profile">My Account</a>
       </div>
-    </aside>
+        <a href="/profile"><img src="assets/profile_pic_default.svg"/></a>
+    </div>
+  </aside>
+
+    <!-- Dashboard content starts here  -->
+    <div class="dash-sections">
+      <div class="chart-container">
+        insert chart here
+      </div>
+    </div>
+    <div class="dash-sections">
+      <div class="card-container">
+        insert recent transactions here
+      </div>
+    </div>
+    <header class="section-header">Most Active Accounts</header>
+    <div class="dash-sections">
+      <div class="card">
+        <img src="assets/BOAcard.svg" style="width:100%">
+        <div class="container">
+          <p class="balance">$1,275.52<p>
+          <p>Bank of America Savings</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/chase_logo.svg">
+        <div class="container">
+          <p class="balance">-$549.03<p>
+          <p>Chase Credit Card</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/capital_one_card.svg">
+        <div class="container">
+          <p class="balance">-$76.12<p>
+          <p>Capital One Credit Card</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="assets/fidelity_card.svg">
+        <div class="container">
+          <p class="balance">$11,023.45<p>
+          <p>Fidelity Brokerage Account</p>
+        </div>
+      </div>
+    </div>
 </body>
