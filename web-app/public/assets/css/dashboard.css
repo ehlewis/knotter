@@ -55,6 +55,10 @@ a{
     background-color: #ffffff33;
 }
 
+.selected{
+  background-color: #ffffff33;
+}
+
 .profile{
   width: 200px;
   position: absolute;
