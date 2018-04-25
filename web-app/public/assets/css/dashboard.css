@@ -102,7 +102,7 @@ body{
 }
 
 .section-header{
-  margin-left: 230px;
+  margin-left: 220px;
   padding: 10px;
   padding-bottom: 20px;
   font-weight: bold;
@@ -136,24 +136,24 @@ body{
 }
 
 /* width */
-::-webkit-scrollbar {
+.dash-sections::-webkit-scrollbar {
     width: 5px;
     height: 5px;
     padding-left: 10px;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+.dash-sections::-webkit-scrollbar-track {
     border-radius: 5px;
 }
 
 /* Handle */
-::-webkit-scrollbar-thumb {
+.dash-sections::-webkit-scrollbar-thumb {
     background: lightgrey;
     border-radius: 10px;
 }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+.dash-sections::-webkit-scrollbar-thumb:hover {
     background: grey;
 }
