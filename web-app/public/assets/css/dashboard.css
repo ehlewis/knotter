@@ -9,6 +9,9 @@ body{
   height: 100%;
 }
 
+a{
+  text-decoration: none;
+}
 
 .sidebar{
   float: left;
@@ -106,6 +109,11 @@ body{
   padding: 10px;
   padding-bottom: 20px;
   font-weight: bold;
+}
+
+.dash-sections a{
+  text-decoration: none;
+  color: black;
 }
 
 .card {
