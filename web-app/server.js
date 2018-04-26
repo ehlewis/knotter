@@ -108,7 +108,7 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
   });
 });
 
-app.get('/accounts', isLoggedIn, function(request, response, next) {
+app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
   response.render('accounts.ejs', {
     user : request.user,
     PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,

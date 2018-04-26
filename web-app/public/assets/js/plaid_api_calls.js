@@ -1,5 +1,6 @@
 var NUM_ACCTS = null;
-var accounts_array = [];
+var transaction_post_array = [];
+var transaction_data = [];
 
 //------- These functions get all accounts (institution) transaction data
 function getNumAccts() {
@@ -48,10 +49,10 @@ async function getTransactionData() {
      accounts_array = [];
      for (var i = 0; i < NUM_ACCTS; i++) {
          var account = await getTransactions(i);
-         accounts_array.push(account);
+         transaction_post_array.push(account);
      }
      //console.log("array " + accounts_array);
-     resolve(accounts_array);
+     resolve(transaction_post_array);
  });
 }
 
