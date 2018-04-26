@@ -93,8 +93,8 @@ app.use(bodyParser.json());
 
 app.get('/', function(request, response, next) {
   response.render('landing.ejs', {
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
+    /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+    PLAID_ENV: PLAID_ENV,*/
   });
 });
 
@@ -374,17 +374,6 @@ app.post('/name', function(req, res, next) {
     res.redirect('/profile');
 });
 
-app.get('/api/plaid_user_data', function(req, res) {
-        if (req.user === undefined) {
-            // The user is not logged in
-            res.json({});
-        } else {
-            res.json({
-                username: req.user,
-                num_of_accounts : req.user.accounts.length
-            });
-        }
-    });
 
 app.get('/api/user_data', function(req, res) {
 
