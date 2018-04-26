@@ -9,6 +9,9 @@ body{
   height: 100%;
 }
 
+a{
+  text-decoration: none;
+}
 
 .sidebar{
   float: left;
@@ -50,6 +53,10 @@ body{
 
 .sidebar nav ul li a:hover{
     background-color: #ffffff33;
+}
+
+.selected{
+  background-color: #ffffff33;
 }
 
 .profile{
@@ -106,6 +113,11 @@ body{
   padding: 10px;
   padding-bottom: 20px;
   font-weight: bold;
+}
+
+.dash-sections a{
+  text-decoration: none;
+  color: black;
 }
 
 .card {

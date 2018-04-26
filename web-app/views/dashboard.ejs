@@ -8,14 +8,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 </head>
 <body>
+
   <aside class="sidebar">
-    <img src="assets/link_brand_white.png">
+    <a href="/dashboard"><img src="assets/link_brand_white.png"></a>
     <nav>
       <ul>
-        <li><a href="/dashboard">Home</a></li>
-        <li><a href="/dashboard">Accounts</a></li>
+        <li><a href="/dashboard" class="selected">Dashboard</a></li>
+        <li><a href="/accounts.ejs">Accounts</a></li>
         <li><a href="/dashboard">Bills</a></li>
-        <li><a href="/dashboard">Expenses</a></li>
+        <li><a href="/dashboard">Analytics</a></li>
         <li><a href="/dashboard">Link+</a></li>
       </ul>
     </nav>
@@ -43,34 +44,42 @@
     </div>
     <header class="section-header">Most Active Accounts</header>
     <div class="dash-sections">
-      <div class="card">
-        <img src="assets/BOAcard.svg" style="width:100%">
-        <div class="container">
-          <p class="balance">$1,275.52<p>
-          <p>Bank of America Savings</p>
+      <a href="/accounts.ejs">
+        <div class="card">
+          <img src="assets/BOAcard.svg" style="width:100%">
+          <div class="container">
+            <p class="balance">$1,275.52<p>
+            <p>Bank of America Savings</p>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <img src="assets/chase_logo.svg">
-        <div class="container">
-          <p class="balance">-$549.03<p>
-          <p>Chase Credit Card</p>
+      </a>
+      <a href="/accounts.ejs">
+        <div class="card">
+          <img src="assets/chase_logo.svg">
+          <div class="container">
+            <p class="balance">-$549.03<p>
+            <p>Chase Credit Card</p>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <img src="assets/capital_one_card.svg">
-        <div class="container">
-          <p class="balance">-$76.12<p>
-          <p>Capital One Credit Card</p>
+      </a>
+      <a href="/accounts.ejs">
+        <div class="card">
+          <img src="assets/capital_one_card.svg">
+          <div class="container">
+            <p class="balance">-$76.12<p>
+            <p>Capital One Credit Card</p>
+          </div>
         </div>
-      </div>
-      <div class="card">
-        <img src="assets/fidelity_card.svg">
-        <div class="container">
-          <p class="balance">$11,023.45<p>
-          <p>Fidelity Brokerage Account</p>
+      </a>
+      <a href="/accounts.ejs">
+        <div class="card">
+          <img src="assets/fidelity_card.svg">
+          <div class="container">
+            <p class="balance">$11,023.45<p>
+            <p>Fidelity Brokerage Account</p>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
 
 <script>

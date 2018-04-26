@@ -3,7 +3,7 @@
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
       <title>Lucidity Accounts</title>
-      <link rel="stylesheet" href="assets/css/mainPage.css" type="text/css" />
+      <link rel="stylesheet" href="assets/css/dashboard.css" type="text/css" />
       <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
@@ -45,26 +45,27 @@
         }
    </script>
    <body>
-      <section id="body" class="width">
-          <div id="leftBar">
-             <aside id="sidebar" class="column-left">
-                <header>
-                   <img style='max-width: 100%; margin-left: 5%;' src="assets/LucidityWhite.png"></img>
-                </header>
-                <nav id="mainnav">
-                   <ul>
-                      <li><a href="/dashboard.ejs">Home</a></li>
-                      <li class="selected-item"><a href="/accounts.ejs">Accounts</a></li>
-                      <li><a href="#">Bills</a></li>
-                      <li><a href="#">Expenses</a></li>
-                      <li><a href="#">Lucidity Pro</a></li>
-                   </ul>
-                </nav>
-             </aside>
-         </div>
-         <section id="content">
+        <aside class="sidebar">
+          <a href="/dashboard"><img src="assets/link_brand_white.png"></a>
+          <nav>
+            <ul>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><a href="/accounts.ejs"  class="selected">Accounts</a></li>
+              <li><a href="/dashboard">Bills</a></li>
+              <li><a href="/dashboard">Analytics</a></li>
+              <li><a href="/dashboard">Link+</a></li>
+            </ul>
+          </nav>
+          <div class="profile">
+            <div id="profile-links">
+              <a id="logout-button" href="/logout">Logout</a>
+              <div class="vl"></div>
+              <a href="/profile">My Account</a>
+            </div>
+              <a href="/profile"><img src="assets/profile_pic_default.svg"/></a>
+          </div>
+        </aside>
             <article>
-               <h3>Your Accounts</h3>
               <!-- <p>Mauris sit amet tortor in urna tincidunt aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestasMauris sit amet tortor in urna tincidunt aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas</p>-->
                <div style='display: inline-block;'>
                   <!--<canvas id="myChart" width="800" height="400"></canvas>-->
@@ -81,6 +82,5 @@
             </footer>
          </section>
          <div class="clear"></div>
-      </section>
    </body>
 </html>
