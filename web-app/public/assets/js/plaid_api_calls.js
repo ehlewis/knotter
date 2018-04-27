@@ -217,6 +217,13 @@ function makeChart(){
 
             // Configuration options go here
             options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            display: false
+                        }
+                    }]
+                },
                 legend: {
                     display: false,
                     labels: {
