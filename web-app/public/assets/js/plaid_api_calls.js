@@ -3,6 +3,7 @@ var transaction_array = [];
 var all_transactions = [];
 var account_array = [];
 var transactions_loaded = false;
+var accounts_loaded = false;
 var graphDataLoaded = false;
 var graphData = [0,0,0,0,0,0,0,0,0,0,0,0];
 
@@ -83,9 +84,11 @@ async function getAllAccounts() {
      accounts_array = [];
      for (var i = 0; i < NUM_ACCTS; i++) {
          var account = await getAccount(i);
+         console.log(account);
          account_array.push(account);
      }
      //console.log("array " + accounts_array);
+     accounts_loaded = true;
      resolve(account_array);
  });
 }
@@ -96,7 +99,7 @@ async function get_user_accounts() {
     //var temp = await populate(data);
     //populate(data);
     //console.log("Num accts: " + accts);
-    //console.log("accounts " + data);
+    //console.log("accounts " + account_array[0]);
 
 }
 //--------------------------------------------------
@@ -131,7 +134,7 @@ function transactionArraytoCSV() {
 }
 
 function transactionCSVtoFrequencyGraph() {
-   if (transactions_loaded == true) {
+    if (transactions_loaded == true) {
        var transDate = new Date();
        var temp = -1;
        for(var i = 0; i < transaction_array.length; i++){
@@ -234,6 +237,38 @@ function makeChart(){
             }
         });
     }
+}
+
+function createAccountCards(){
+    //if (accounts_loaded == true) {
+        return new Promise(function(resolve, reject) {
+            var html = '';
+            console.log("making account cards " + account_array.length);
+            for (var i = 0; i < account_array.length; i++) {
+                //account_array[i]
+                html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
+                var account_picture = 'fidelity_card.svg';
+                html += account_picture;
+                html+='"><div class="container"><p class="balance">$';
+                var account_balance = 11023.45;
+                html += account_balance;
+                html += '<p><p>';
+                var account_name = 'Fidelity Brokerage Account';
+                html += account_name;
+                html += '</p></div></div></a>';
+            }
+            console.log(html);
+            resolve(html);
+        });
+    //}
+}
+async function callCreateAccountCards(){
+    var cardHTML = await createAccountCards();
+
+    console.log("KKJJJ " + cardHTML);
+
+    //return cardHTML;
+
 }
 
 //------------------------
