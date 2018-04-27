@@ -87,7 +87,8 @@
 <script>
     get_user_transactions();
     get_user_accounts();
-    console.log(transaction_post_array);
+    console.log(transaction_array);
+    console.log(setTimeout(transactionArraytoCSV, 1000));
 
     var ctx = document.getElementById('myChart').getContext('2d');
     var chart = new Chart(ctx, {

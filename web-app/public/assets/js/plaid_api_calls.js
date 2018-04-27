@@ -1,6 +1,6 @@
 var NUM_ACCTS = null;
-var transaction_post_array = [];
-var transaction_data = [];
+var transaction_array = [];
+var all_transactions = [];
 var account_array = [];
 var transactions_loaded = false;
 
@@ -41,11 +41,11 @@ async function getTransactionData() {
      accounts_array = [];
      for (var i = 0; i < NUM_ACCTS; i++) {
          var accountTransactions = await getTransactions(i);
-         transaction_post_array.push(accountTransactions);
+         transaction_array.push(accountTransactions);
      }
      //console.log("array " + accounts_array);
      transactions_loaded = true;
-     resolve(transaction_post_array);
+     resolve(transaction_array);
  });
 }
 
@@ -118,12 +118,15 @@ function getItems(i) {
 //-------These functions manipulate the transaction data
 
 function transactionArraytoCSV() {
-
    if (transactions_loaded == true) {
-       // Here is your next action
+       for(var i = 0; i < transaction_array.length; i++){
+           for (var j = 0; j < transaction_array[i].transactions.length; j++) {
+               all_transactions.push(transaction_array[i].transactions[j]);
+           }
+       }
+       //console.log(all_transactions);
    }
- }
+}
 
- setTimeout(checkVariable, 1000);
 
 //-----------------------------------------------------
