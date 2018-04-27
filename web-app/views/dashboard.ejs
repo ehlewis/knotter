@@ -87,34 +87,14 @@
 <script>
     get_user_transactions();
     get_user_accounts();
-    console.log(transaction_array);
-    console.log(setTimeout(transactionArraytoCSV, 1000));
+
+    setTimeout(transactionArraytoCSV, 1000);
+    setTimeout(transactionCSVtoFrequencyGraph, 1000);
 
     var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-        // The data for our dataset
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [{
-                backgroundColor: '#00b09b', /*rgb(255, 99, 132)*/
-                borderColor: '#00b09b', /*rgb(255, 99, 132)*/
-                data: [0, 10, 5, 2, 20, 30, 45],
-            }]
-        },
 
-        // Configuration options go here
-        options: {
-            legend: {
-                display: false,
-                labels: {
-                    fontColor: 'rgb(255, 99, 132)'
-                }
-            },
-            responsive: false
-        }
-    });
+    setTimeout(makeChart, 1000);
+
 </script>
 
 </body>
