@@ -74,9 +74,14 @@
             });
         }
    </script>
+   <script src="assets/js/plaid_api_calls.js"></script>
    <script>
 
-   var NUM_ACCTS = null;
+   //Almost all of whats below has been moved into that file
+   get_user_transactions();
+
+   
+   /*var NUM_ACCTS = null;
    var accounts_array = [];
 
     function getNumAccts() {
@@ -130,7 +135,7 @@
             //console.log("array " + accounts_array);
             resolve(accounts_array);
         });
-    }
+    }*/
 
 /*    function addToTransactionsTable(data){
         html = '';
@@ -180,7 +185,7 @@
         });
     }*/
 
-    async function main() {
+    /*async function main() {
       var accts = await getNumAccts();
       var data = await getTransactionData();
       //var temp = await populate(data);
@@ -189,7 +194,7 @@
       console.log(accts);
     }
 
-    main();
+    main();*/
 
 /*  console.log(data);
     $('#transactions-data').slideUp(function() {

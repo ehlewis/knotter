@@ -4,8 +4,10 @@
     <title>Link</title>
     <link rel="icon" href="assets/link_icon_w_on_g.png">
     <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!--<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <script src="assets/js/plaid_api_calls.js"></script>
 </head>
 <body>
 
@@ -83,31 +85,16 @@
     </div>
 
 <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-        // The data for our dataset
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [{
-                backgroundColor: '#00b09b', /*rgb(255, 99, 132)*/
-                borderColor: '#00b09b', /*rgb(255, 99, 132)*/
-                data: [0, 10, 5, 2, 20, 30, 45],
-            }]
-        },
+    get_user_transactions();
+    get_user_accounts();
 
-        // Configuration options go here
-        options: {
-            legend: {
-                display: false,
-                labels: {
-                    fontColor: 'rgb(255, 99, 132)'
-                }
-            },
-            responsive: false
-        }
-    });
+    setTimeout(transactionArraytoCSV, 1000);
+    setTimeout(transactionCSVtoFrequencyGraph, 1000);
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    setTimeout(makeChart, 1000);
+
 </script>
 
 </body>
