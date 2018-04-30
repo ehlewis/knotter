@@ -46,7 +46,7 @@
     </div>
     <header class="section-header">Most Active Accounts</header>
     <div class="dash-sections" id="accountCards">
-      <a href="/accounts.ejs">
+    <!--  <a href="/accounts.ejs">
         <div class="card">
           <img src="assets/BOAcard.svg" style="width:100%">
           <div class="container">
@@ -81,7 +81,7 @@
             <p>Fidelity Brokerage Account</p>
           </div>
         </div>
-      </a>
+      </a>-->
     </div>
 
 <script>
@@ -91,14 +91,14 @@
     setTimeout(transactionArraytoCSV, 1000);
     setTimeout(transactionCSVtoFrequencyGraph, 1000);
 
+
     var ctx = document.getElementById('myChart').getContext('2d');
 
     setTimeout(makeChart, 1000);
-    async function createCards(){
-        var div = document.getElementById('accountCards');
-        div.innerHTML += await callCreateAccountCards();
-    }
-    createCards();
+
+    setTimeout(createAccountCards, 1000);
+
+
 
 </script>
 

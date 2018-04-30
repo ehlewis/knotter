@@ -40,7 +40,7 @@ function getTransactions(i){
 async function getTransactionData() {
     return new Promise(async function(resolve, reject) {
         //console.log("Numaccts: " + NUM_ACCTS);
-        accounts_array = [];
+        //accounts_array = [];
         for (var i = 0; i < NUM_ACCTS; i++) {
             var accountTransactions = await getTransactions(i);
             transaction_array.push(accountTransactions);
@@ -191,8 +191,8 @@ function transactionCSVtoFrequencyGraph() {
 
 function account_id_to_name(in_id) {
     //ported but untested
-    for (var i = 0; i < accounts_array.length; i++) {
-        if(accounts_array[i].account_id === in_id){
+    for (var i = 0; i < account_array.length; i++) {
+        if(account_array[i].account_id === in_id){
             console.log(acct.name);
             return acct.name;
         }
@@ -238,43 +238,51 @@ function makeChart(){
     }
 }
 
-async function createAccountCards(){
-    if (accounts_loaded == false) {
-        console.log("waiting");
-        var tempaccts = await get_user_accounts();
-        console.log("done" + account_array + tempaccts + accounts_loaded);
-    }
-        return new Promise(function(resolve, reject) {
+
+function createAccountCards(){
+    if (accounts_loaded == true) {
+            var div = document.getElementById('accountCards');
+            //console.log(div);
             console.log("Not waiting " + account_array);
             var html = '';
             console.log("making account cards " + account_array.length);
             for (var i = 0; i < account_array.length; i++) {
-                //account_array[i]
-                html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
-                var account_picture = 'fidelity_card.svg';
-                html += account_picture;
-                html+='"><div class="container"><p class="balance">$';
-                var account_balance = 11023.45;
-                html += account_balance;
-                html += '<p><p>';
-                var account_name = 'Fidelity Brokerage Account';
-                html += account_name;
-                html += '</p></div></div></a>';
+                for (var j = 0; j < account_array[i].accounts.length; j++) {
+                    //account_array[i]
+                    html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
+                    var account_picture = 'fidelity_card.svg';
+                    html += account_picture;
+                    html+='"><div class="container"><p class="balance">$';
+                    //var account_balance = 11023.45;
+                    var account_balance = account_array[i].accounts[j].balances.available;
+                    html += account_balance;
+                    html += '<p><p>';
+                    console.log("Im trying");
+                    var account_name = account_array[i].accounts[j].name;
+                    //var account_name = 'hi';
+                    html += account_name;
+                    html += '</p></div></div></a>';
+                }
             }
-            console.log(html);
-            resolve(html);
-        });
-
-    //}
+            //console.log(html);
+            console.log("Creating Tiles");
+            div.innerHTML += html;
+    }
 }
-async function callCreateAccountCards(){
-    var cardHTML = await createAccountCards();
 
-    //console.log("KKJJJ " + cardHTML);
-    console.log("Card created");
 
-    return cardHTML;
+/*async function getJSONAsync(){
 
+    // The await keyword saves us from having to write a .then() block.
+    let json = await axios.get('https://tutorialzine.com/misc/files/example.json');
+
+    // The result of the GET request is available in the json variable.
+    // We return it just like in a regular synchronous function.
+    return json;
 }
+
+getJSONAsync().then( function(result) {
+    // Do something with result.
+});*/
 
 //------------------------
