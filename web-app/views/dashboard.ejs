@@ -94,10 +94,11 @@
     var ctx = document.getElementById('myChart').getContext('2d');
 
     setTimeout(makeChart, 1000);
-
-    var div = document.getElementById('accountCards');
-
-    div.innerHTML += callCreateAccountCards();
+    async function createCards(){
+        var div = document.getElementById('accountCards');
+        div.innerHTML += await callCreateAccountCards();
+    }
+    createCards();
 
 </script>
 

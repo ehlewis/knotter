@@ -7,7 +7,6 @@ var accounts_loaded = false;
 var graphDataLoaded = false;
 var graphData = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-
 function getNumAccts() {
  return new Promise(function(resolve, reject) {
      $.getJSON("api/user_data", function(data) {
@@ -39,17 +38,17 @@ function getTransactions(i){
 }
 
 async function getTransactionData() {
- return new Promise(async function(resolve, reject) {
-     console.log("Numaccts: " + NUM_ACCTS);
-     accounts_array = [];
-     for (var i = 0; i < NUM_ACCTS; i++) {
-         var accountTransactions = await getTransactions(i);
-         transaction_array.push(accountTransactions);
-     }
-     //console.log("array " + accounts_array);
-     transactions_loaded = true;
-     resolve(transaction_array);
- });
+    return new Promise(async function(resolve, reject) {
+        //console.log("Numaccts: " + NUM_ACCTS);
+        accounts_array = [];
+        for (var i = 0; i < NUM_ACCTS; i++) {
+            var accountTransactions = await getTransactions(i);
+            transaction_array.push(accountTransactions);
+        }
+        //console.log("array " + accounts_array);
+        transactions_loaded = true;
+        resolve(transaction_array);
+    });
 }
 
 async function get_user_transactions() {
@@ -79,18 +78,18 @@ function getAccount(i){
 }
 
 async function getAllAccounts() {
- return new Promise(async function(resolve, reject) {
-     //console.log("Numaccts: " + NUM_ACCTS);
-     accounts_array = [];
-     for (var i = 0; i < NUM_ACCTS; i++) {
-         var account = await getAccount(i);
-         console.log(account);
-         account_array.push(account);
-     }
-     //console.log("array " + accounts_array);
-     accounts_loaded = true;
-     resolve(account_array);
- });
+    return new Promise(async function(resolve, reject) {
+        //console.log("Numaccts: " + NUM_ACCTS);
+        account_array = [];
+        for (var i = 0; i < NUM_ACCTS; i++) {
+            var account = await getAccount(i);
+            console.log(account);
+            account_array.push(account);
+        }
+        console.log("array " + account_array);
+        accounts_loaded = true;
+        resolve(account_array);
+    });
 }
 
 async function get_user_accounts() {
@@ -99,7 +98,7 @@ async function get_user_accounts() {
     //var temp = await populate(data);
     //populate(data);
     //console.log("Num accts: " + accts);
-    //console.log("accounts " + account_array[0]);
+    //console.log("maaccounts " + account_array);
 
 }
 //--------------------------------------------------
@@ -129,7 +128,7 @@ function transactionArraytoCSV() {
                all_transactions.push(transaction_array[i].transactions[j]);
            }
        }
-       console.log(all_transactions);
+       //console.log(all_transactions);
    }
 }
 
@@ -180,7 +179,7 @@ function transactionCSVtoFrequencyGraph() {
                 }
            }
        }
-       console.log(graphData);
+       //console.log(graphData);
        graphDataLoaded = true;
        //return graphData;
    }
@@ -188,7 +187,7 @@ function transactionCSVtoFrequencyGraph() {
 
 //-----------------------------------------------------
 
-//------------------misc
+//------------------Graphical Manipulation
 
 function account_id_to_name(in_id) {
     //ported but untested
@@ -204,7 +203,7 @@ function account_id_to_name(in_id) {
 
 function makeChart(){
     if (graphDataLoaded == true) {
-        console.log("Making graph " + graphData);
+        //console.log("Making graph " + graphData);
         var chart = new Chart(ctx, {
             // The type of chart we want to create
             type: 'line',
@@ -239,9 +238,14 @@ function makeChart(){
     }
 }
 
-function createAccountCards(){
-    //if (accounts_loaded == true) {
+async function createAccountCards(){
+    if (accounts_loaded == false) {
+        console.log("waiting");
+        var tempaccts = await get_user_accounts();
+        console.log("done" + account_array + tempaccts + accounts_loaded);
+    }
         return new Promise(function(resolve, reject) {
+            console.log("Not waiting " + account_array);
             var html = '';
             console.log("making account cards " + account_array.length);
             for (var i = 0; i < account_array.length; i++) {
@@ -260,14 +264,16 @@ function createAccountCards(){
             console.log(html);
             resolve(html);
         });
+
     //}
 }
 async function callCreateAccountCards(){
     var cardHTML = await createAccountCards();
 
-    console.log("KKJJJ " + cardHTML);
+    //console.log("KKJJJ " + cardHTML);
+    console.log("Card created");
 
-    //return cardHTML;
+    return cardHTML;
 
 }
 
