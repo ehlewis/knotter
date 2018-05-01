@@ -3,9 +3,9 @@ var transaction_array = [];
 var all_transactions = [];
 var account_array = [];
 var transactions_loaded = false;
+var accounts_loaded = false;
 var graphDataLoaded = false;
 var graphData = [0,0,0,0,0,0,0,0,0,0,0,0];
-
 
 function getNumAccts() {
  return new Promise(function(resolve, reject) {
@@ -38,17 +38,17 @@ function getTransactions(i){
 }
 
 async function getTransactionData() {
- return new Promise(async function(resolve, reject) {
-     console.log("Numaccts: " + NUM_ACCTS);
-     accounts_array = [];
-     for (var i = 0; i < NUM_ACCTS; i++) {
-         var accountTransactions = await getTransactions(i);
-         transaction_array.push(accountTransactions);
-     }
-     //console.log("array " + accounts_array);
-     transactions_loaded = true;
-     resolve(transaction_array);
- });
+    return new Promise(async function(resolve, reject) {
+        //console.log("Numaccts: " + NUM_ACCTS);
+        //accounts_array = [];
+        for (var i = 0; i < NUM_ACCTS; i++) {
+            var accountTransactions = await getTransactions(i);
+            transaction_array.push(accountTransactions);
+        }
+        //console.log("array " + accounts_array);
+        transactions_loaded = true;
+        resolve(transaction_array);
+    });
 }
 
 async function get_user_transactions() {
@@ -78,16 +78,18 @@ function getAccount(i){
 }
 
 async function getAllAccounts() {
- return new Promise(async function(resolve, reject) {
-     //console.log("Numaccts: " + NUM_ACCTS);
-     accounts_array = [];
-     for (var i = 0; i < NUM_ACCTS; i++) {
-         var account = await getAccount(i);
-         account_array.push(account);
-     }
-     //console.log("array " + accounts_array);
-     resolve(account_array);
- });
+    return new Promise(async function(resolve, reject) {
+        //console.log("Numaccts: " + NUM_ACCTS);
+        account_array = [];
+        for (var i = 0; i < NUM_ACCTS; i++) {
+            var account = await getAccount(i);
+            console.log(account);
+            account_array.push(account);
+        }
+        console.log("array " + account_array);
+        accounts_loaded = true;
+        resolve(account_array);
+    });
 }
 
 async function get_user_accounts() {
@@ -96,7 +98,7 @@ async function get_user_accounts() {
     //var temp = await populate(data);
     //populate(data);
     //console.log("Num accts: " + accts);
-    //console.log("accounts " + data);
+    //console.log("maaccounts " + account_array);
 
 }
 //--------------------------------------------------
@@ -126,12 +128,12 @@ function transactionArraytoCSV() {
                all_transactions.push(transaction_array[i].transactions[j]);
            }
        }
-       console.log(all_transactions);
+       //console.log(all_transactions);
    }
 }
 
 function transactionCSVtoFrequencyGraph() {
-   if (transactions_loaded == true) {
+    if (transactions_loaded == true) {
        var transDate = new Date();
        var temp = -1;
        for(var i = 0; i < transaction_array.length; i++){
@@ -177,7 +179,7 @@ function transactionCSVtoFrequencyGraph() {
                 }
            }
        }
-       console.log(graphData);
+       //console.log(graphData);
        graphDataLoaded = true;
        //return graphData;
    }
@@ -185,12 +187,12 @@ function transactionCSVtoFrequencyGraph() {
 
 //-----------------------------------------------------
 
-//------------------misc
+//------------------Graphical Manipulation
 
 function account_id_to_name(in_id) {
     //ported but untested
-    for (var i = 0; i < accounts_array.length; i++) {
-        if(accounts_array[i].account_id === in_id){
+    for (var i = 0; i < account_array.length; i++) {
+        if(account_array[i].account_id === in_id){
             console.log(acct.name);
             return acct.name;
         }
@@ -201,7 +203,7 @@ function account_id_to_name(in_id) {
 
 function makeChart(){
     if (graphDataLoaded == true) {
-        console.log("Making graph " + graphData);
+        //console.log("Making graph " + graphData);
         var chart = new Chart(ctx, {
             // The type of chart we want to create
             type: 'line',
@@ -235,5 +237,52 @@ function makeChart(){
         });
     }
 }
+
+
+function createAccountCards(){
+    if (accounts_loaded == true) {
+            var div = document.getElementById('accountCards');
+            //console.log(div);
+            console.log("Not waiting " + account_array);
+            var html = '';
+            console.log("making account cards " + account_array.length);
+            for (var i = 0; i < account_array.length; i++) {
+                for (var j = 0; j < account_array[i].accounts.length; j++) {
+                    //account_array[i]
+                    html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
+                    var account_picture = 'fidelity_card.svg';
+                    html += account_picture;
+                    html+='"><div class="container"><p class="balance">$';
+                    //var account_balance = 11023.45;
+                    var account_balance = account_array[i].accounts[j].balances.available;
+                    html += account_balance;
+                    html += '<p><p>';
+                    console.log("Im trying");
+                    var account_name = account_array[i].accounts[j].name;
+                    //var account_name = 'hi';
+                    html += account_name;
+                    html += '</p></div></div></a>';
+                }
+            }
+            //console.log(html);
+            console.log("Creating Tiles");
+            div.innerHTML += html;
+    }
+}
+
+
+/*async function getJSONAsync(){
+
+    // The await keyword saves us from having to write a .then() block.
+    let json = await axios.get('https://tutorialzine.com/misc/files/example.json');
+
+    // The result of the GET request is available in the json variable.
+    // We return it just like in a regular synchronous function.
+    return json;
+}
+
+getJSONAsync().then( function(result) {
+    // Do something with result.
+});*/
 
 //------------------------
