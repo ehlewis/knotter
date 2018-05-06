@@ -80,40 +80,40 @@ app.use(express.static('public')); //Serves resources from public folder
 //************************************BEGIN PLAID API**********************************
 // Initialize the Plaid client
 var client = new plaid.Client(
-  PLAID_CLIENT_ID,
-  PLAID_SECRET,
-  PLAID_PUBLIC_KEY,
-  plaid.environments[PLAID_ENV]
+    PLAID_CLIENT_ID,
+    PLAID_SECRET,
+    PLAID_PUBLIC_KEY,
+    plaid.environments[PLAID_ENV]
 );
 
 app.use(bodyParser.urlencoded({
-  extended: false
+    extended: false
 }));
 app.use(bodyParser.json());
 
 app.get('/', function(request, response, next) {
-  response.render('landing.ejs', {
-    /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,*/
-  });
+    response.render('landing.ejs', {
+        /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,*/
+    });
 });
 
 
 
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
-  response.render('dashboard.ejs', {
-    user : request.user, // get the user out of session and pass to template
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('dashboard.ejs', {
+        user: request.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
-  response.render('accounts.ejs', {
-    user : request.user,
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('accounts.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 app.post('/get_access_token', function(request, response, next) {
@@ -152,34 +152,34 @@ app.post('/get_access_token', function(request, response, next) {
 });
 
 app.get('/accounts', function(request, response, next) {
-  // Retrieve high-level account information and account and routing numbers
-  // for each account associated with the Item.
-  var i = request.query.params.var_i;
-  console.log(i);
-  client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
-    if (error != null) {
-      var msg = 'Unable to pull accounts from the Plaid API.';
-      console.log(msg + '\n' + error);
-      return response.json({
-        error: msg
-      });
-    }
+    // Retrieve high-level account information and account and routing numbers
+    // for each account associated with the Item.
+    var i = request.query.params.var_i;
+    //console.log(i);
+    client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
+        if (error != null) {
+            var msg = 'Unable to pull accounts from the Plaid API.';
+            console.log(msg + '\n' + error);
+            return response.json({
+                error: msg
+            });
+        }
 
-    //console.log(authResponse.accounts);
-    response.json({
-      error: false,
-      accounts: authResponse.accounts,
-      numbers: authResponse.numbers,
+        //console.log(authResponse.accounts);
+        response.json({
+            error: false,
+            accounts: authResponse.accounts,
+            numbers: authResponse.numbers,
+        });
     });
-  });
 });
 
 app.post('/item', function(request, response, next) {
-  // Pull the Item - this includes information about available products,
-  // billed products, webhook information, and more.
-  var i = request.body.params.var_i;
-  console.log(i);
-      client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+    // Pull the Item - this includes information about available products,
+    // billed products, webhook information, and more.
+    var i = request.body.params.var_i;
+    //console.log(i);
+    client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
         if (error != null) {
           console.log(JSON.stringify(error));
           return response.json({
@@ -189,42 +189,43 @@ app.post('/item', function(request, response, next) {
 
         // Also pull information about the institution
         client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
-          if (err != null) {
-            var msg = 'Unable to pull institution information from the Plaid API.';
-            console.log(msg + '\n' + error);
-            return response.json({
-              error: msg
-            });
-          } else {
-            response.json({
-              item: itemResponse.item,
-              institution: instRes.institution,
-            });
-          }
+            if (err != null) {
+              var msg = 'Unable to pull institution information from the Plaid API.';
+              console.log(msg + '\n' + error);
+              return response.json({
+                error: msg
+              });
+            }
+            else {
+              response.json({
+                item: itemResponse.item,
+                institution: instRes.institution,
+              });
+            }
         });
-      });
+    });
 });
 
 app.post('/transactions', function(request, response, next) {
-  // Pull transactions for the Item for the last 30 days
-      var i = request.body.params.var_i;
-      console.log(i);
-      var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
-      var endDate = moment().format('YYYY-MM-DD');
-      client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+    // Pull transactions for the Item for the last 30 days
+    var i = request.body.params.var_i;
+    //console.log(i);
+    var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+    var endDate = moment().format('YYYY-MM-DD');
+    client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
         count: 250,
         offset: 0,
-      }, function(error, transactionsResponse) {
+    }, function(error, transactionsResponse) {
         if (error != null) {
-          console.log(JSON.stringify(error));
-          return response.json({
-            error: error
-          });
+            console.log(JSON.stringify(error));
+            return response.json({
+                error: error
+            });
         }
         console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
         response.json(transactionsResponse);
-      });
-  //}
+    });
+    //}
 });
 
 //**************************************END PLAID API**********************************
@@ -240,7 +241,6 @@ app.get('/', function(req, res) {
 // =====================================
 // show the login form
 app.get('/login', function(req, res) {
-
     // render the page and pass in any flash data if it exists
     res.render('login.ejs', { message: req.flash('loginMessage') });
 });
@@ -253,7 +253,6 @@ app.get('/login', function(req, res) {
 // =====================================
 // show the signup form
 app.get('/signup', function(req, res) {
-
     // render the page and pass in any flash data if it exists
     res.render('signup.ejs', { message: req.flash('signupMessage') });
 });
