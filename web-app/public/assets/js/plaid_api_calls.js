@@ -6,6 +6,8 @@ var transactions_loaded = false;
 var accounts_loaded = false;
 var graphDataLoaded = false;
 var graphData = [0,0,0,0,0,0,0,0,0,0,0,0];
+var graphLoaded = false;
+var cardsLoaded = false;
 
 function getNumAccts() {
  return new Promise(function(resolve, reject) {
@@ -235,6 +237,7 @@ function makeChart(){
                 responsive: false
             }
         });
+        graphLoaded = true;
     }
 }
 
@@ -259,7 +262,7 @@ function createAccountCards(){
                         var account_balance = account_array[i].accounts[j].balances.available;
                         html += account_balance;
                         html += '<p><p>';
-                        console.log("Im trying");
+                        console.log("cd");
                         var account_name = account_array[i].accounts[j].name;
                         //var account_name = 'hi';
                         html += account_name;
@@ -274,7 +277,7 @@ function createAccountCards(){
                         var account_balance = account_array[i].accounts[j].balances.current;
                         html += account_balance;
                         html += '<p><p>';
-                        console.log("Im trying");
+                        console.log("savings");
                         var account_name = account_array[i].accounts[j].name;
                         //var account_name = 'hi';
                         html += account_name;
@@ -289,7 +292,7 @@ function createAccountCards(){
                         var account_balance = account_array[i].accounts[j].balances.current;
                         html += account_balance;
                         html += '<p><p>';
-                        console.log("Im trying");
+                        console.log("credit card");
                         var account_name = account_array[i].accounts[j].name;
                         //var account_name = 'hi';
                         html += account_name;
@@ -299,7 +302,23 @@ function createAccountCards(){
             }
             //console.log(html);
             console.log("Creating Tiles");
+            cardsLoaded = true;
             div.innerHTML += html;
+    }
+}
+
+function removeGraphSpinner(){
+    if(graphLoaded == true){
+        console.log("removing graph spinner");
+        $('#chartDiv').removeClass('spinner');
+    }
+
+}
+
+function removeCardSpinner(){
+    if(cardsLoaded == true){
+        console.log("removing card spinner");
+        $('#accountCards').removeClass('spinner');
     }
 }
 
