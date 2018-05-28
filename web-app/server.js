@@ -262,6 +262,18 @@ app.get('/signup', function(req, res) {
 // app.post('/signup', do all our passport stuff here);
 
 // =====================================
+// SIGNUP2 =============================
+// =====================================
+// show the second step of the signup form
+app.get('/signup_step2', isLoggedIn, function(req, res) {
+    res.render('signup_step2.ejs', {
+        user : req.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
+    });
+});
+
+// =====================================
 // PROFILE SECTION =====================
 // =====================================
 // we will want this protected so you have to be logged in to visit
@@ -307,7 +319,7 @@ app.get('/logout', function(req, res) {
 });*/
 
 app.post('/signup', passport.authenticate('local-signup', {
-successRedirect : '/dashboard', // redirect to the secure profile section
+successRedirect : '/signup_step2', // redirect to the secure profile section
 failureRedirect : '/signup', // redirect back to the signup page if there is an error
 failureFlash : true // allow flash messages
 }));
