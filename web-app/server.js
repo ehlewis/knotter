@@ -27,12 +27,19 @@ var mongo_url = "mongodb://localhost:27017/link";
 
 var colors = require('colors');
 
+var Memcached = require('memcached');
+var memcached = new Memcached('127.0.0.1:11211');
 
-var APP_PORT = envvar.number('APP_PORT', 8000);
+
+
+/*var APP_PORT = envvar.number('APP_PORT', 8000);
 var PLAID_CLIENT_ID = envvar.string('PLAID_CLIENT_ID');
 var PLAID_SECRET = envvar.string('PLAID_SECRET');
-var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');
-var PLAID_ENV = envvar.string('PLAID_ENV', 'sandbox');
+var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
+var PLAID_CLIENT_ID = '5ac8108bbdc6a40eb40cb093';
+var PLAID_SECRET = '786c67f3c3dd820f2bf7dd37ec5bb1';
+var PLAID_PUBLIC_KEY ='201d391154bbd55ef3725c4e6baed3';
+var PLAID_ENV = 'sandbox';
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
@@ -53,7 +60,16 @@ MongoClient.connect(mongo_url, function (err, client) {
     db = client.db('link');
     collection = db.collection('users');
 
-    console.log("Connected to db!");
+    console.log("Connected to " + "db!".green);
+});
+
+memcached.connect( '127.0.0.1:11211', function( err, conn ){
+  if( err ) {
+     console.log( conn.server );
+  }
+  else{
+    console.log("Connected to "  + "memcached!".green);
+  }
 });
 
 // set up our express application
