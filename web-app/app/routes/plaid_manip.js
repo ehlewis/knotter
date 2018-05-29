@@ -102,28 +102,15 @@ module.exports = {
             });
         });
     },
-    accounts_return : async function(request, response, next, client, num) {
+    accounts_return : function(request, response, next, client, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
-
-                client.getAuth(request.user.accounts[num].access_token, function(error, authResponse) {
-                if (error != null) {
-                    console.log(error);
-                    var msg = 'Unable to pull accounts from the Plaid API.';
-                    console.log(msg + '\n' + error);
-                    return response.json({
-                        error: msg
-                    });
-                }
-
-                //console.log(authResponse.accounts);
-                response.json({
-                    error: false,
-                    accounts: authResponse.accounts,
-                    numbers: authResponse.numbers,
-                });
-            });
-
+        return new Promise(function(resolve, reject) {
+                var test = function() {
+                    return "h";
+            };
+            console.log("hgggg" + test);
+        });
     },
 
     item: function(request, response, next, client) {
