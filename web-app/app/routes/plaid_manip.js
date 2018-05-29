@@ -1,4 +1,25 @@
 var moment = require('moment');
+
+function accountTest(request, response, next, client, num){
+    console.log("DDDFFF");
+    client.getAuth(request.user.accounts[num].access_token, function(error, authResponse) {
+        if (error != null) {
+            console.log(error);
+            var msg = 'Unable to pull accounts from the Plaid API.';
+            console.log(msg + '\n' + error);
+            return response.json({
+                error: msg
+            });
+        }
+
+        //console.log(authResponse.accounts);
+        response.json({
+            error: false,
+            accounts: authResponse.accounts,
+            numbers: authResponse.numbers,
+        });
+    });
+}
 module.exports = {
     foo: function() {
         console.log("HELLO");
@@ -81,26 +102,28 @@ module.exports = {
             });
         });
     },
-    accounts_return: async function(request, response, next, client, num) {
+    accounts_return : async function(request, response, next, client, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
-        client.getAuth(request.user.accounts[num].access_token, function(error, authResponse) {
-            if (error != null) {
-                console.log(error);
-                var msg = 'Unable to pull accounts from the Plaid API.';
-                console.log(msg + '\n' + error);
-                return response.json({
-                    error: msg
-                });
-            }
 
-            //console.log(authResponse.accounts);
-            response.json({
-                error: false,
-                accounts: authResponse.accounts,
-                numbers: authResponse.numbers,
+                client.getAuth(request.user.accounts[num].access_token, function(error, authResponse) {
+                if (error != null) {
+                    console.log(error);
+                    var msg = 'Unable to pull accounts from the Plaid API.';
+                    console.log(msg + '\n' + error);
+                    return response.json({
+                        error: msg
+                    });
+                }
+
+                //console.log(authResponse.accounts);
+                response.json({
+                    error: false,
+                    accounts: authResponse.accounts,
+                    numbers: authResponse.numbers,
+                });
             });
-        });
+
     },
 
     item: function(request, response, next, client) {
