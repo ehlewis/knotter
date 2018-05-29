@@ -323,15 +323,16 @@ app.get('/api/user_data', function(req, res) {
 app.get('/api/on_login', function(request, response, next) {
             on_login.accounts(request, response, next, client);
 
-            if (request.user === undefined) {
+            /*if (request.user === undefined) {
                 // The user is not logged in
                 response.json({});
             } else {
                 response.json({
                     username: request.user,
                     num_of_accounts : request.user.accounts.length
-                });
-            }
+                }
+                );
+            }*/
         });
 
 
