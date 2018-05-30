@@ -89,7 +89,7 @@ module.exports = {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         for (var i = 0; i < num; i++) {
-            myPromises.push(client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback?
+            myPromises.push(client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback
                 if (error != null) {
                     console.log(error);
                     var msg = 'Unable to pull accounts from the Plaid API.';
@@ -97,6 +97,12 @@ module.exports = {
                     return;
                 }
 
+                //first this needs to work then it needs new logic
+                    // first get to see if the key exists
+                    // if the key exists then do .add not .set (or do we use append)
+                memcached.set(request.user._id, authResponse, 10000000, function (err) { /* stuff */ });
+
+                //Change this is ack the client that the server has cache this req
                 response.json({
                     error: false,
                     accounts: authResponse.accounts,
