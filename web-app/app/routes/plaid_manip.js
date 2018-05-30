@@ -85,7 +85,7 @@ module.exports = {
     },
 
 
-    cache_user_accounts : async function(request, response, next, client, num) {
+    cache_user_accounts : async function(request, response, next, client, redis_client, redis, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         for (var i = 0; i < num; i++) {
@@ -94,13 +94,20 @@ module.exports = {
                     console.log(error);
                     var msg = 'Unable to pull accounts from the Plaid API.';
                     console.log(msg + '\n' + error);
+                    //---------test
+                    console.log("setting key");
+                    redis_client.set(request.user._id.toString(), "string val", redis.print);
+                    //------------
                     return;
                 }
 
                 //first this needs to work then it needs new logic
                     // first get to see if the key exists
                     // if the key exists then do .add not .set (or do we use append)
-                memcached.set(request.user._id, authResponse, 10000000, function (err) { /* stuff */ });
+                //memcached.set(request.user._id, authResponse, 10000000, function (err) { /* stuff */ });
+                console.log("setting key");
+                redis_client.set(request.user._id, "string val", redis.print);
+
 
                 //Change this is ack the client that the server has cache this req
                 response.json({

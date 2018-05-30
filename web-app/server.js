@@ -27,8 +27,11 @@ var mongo_url = "mongodb://localhost:27017/link";
 
 var colors = require('colors');
 
-var Memcached = require('memcached');
-var memcached = new Memcached('127.0.0.1:11211');
+/*var Memcached = require('memcached');
+var memcached = new Memcached('127.0.0.1:11211');*/
+
+var redis = require("redis"),
+redis_client = redis.createClient();
 
 var plaid_manip = require('./app/routes/plaid_manip');
 var on_login = require('./app/routes/on_login');
@@ -66,14 +69,14 @@ MongoClient.connect(mongo_url, function (err, client) {
     console.log("Connected to " + "db!".green);
 });
 
-memcached.connect( '127.0.0.1:11211', function( err, conn ){
+/*memcached.connect( '127.0.0.1:11211', function( err, conn ){
   if( err ) {
      console.log( conn.server );
   }
   else{
     console.log("Connected to "  + "memcached!".green);
   }
-});
+});*/
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
@@ -321,7 +324,7 @@ app.get('/api/user_data', function(req, res) {
         });
 
 app.get('/api/on_login', function(request, response, next) {
-            on_login.cache_user_data(request, response, next, client);
+            on_login.cache_user_data(request, response, next, client, redis_client, redis);
 
             /*if (request.user === undefined) {
                 // The user is not logged in
