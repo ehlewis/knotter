@@ -321,7 +321,7 @@ app.get('/api/user_data', function(req, res) {
         });
 
 app.get('/api/on_login', function(request, response, next) {
-            on_login.accounts(request, response, next, client);
+            on_login.cache_user_data(request, response, next, client);
 
             /*if (request.user === undefined) {
                 // The user is not logged in

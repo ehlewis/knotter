@@ -4,59 +4,6 @@ var BPromise = require('bluebird')
 
 var myPromises = [];
 
-var globalTemp;
-
-function handleAccountsCallback(error, authResponse) { //this is a callback
-    if (error != null) {
-        console.log(error);
-        var msg = 'Unable to pull accounts from the Plaid API.';
-        console.log(msg + '\n' + error);
-        console.log("returning hello");
-        //accounts(request, response, next, client, num+1);
-        globalTemp = "teehee";
-        return "hello";
-    }
-    response.json({
-        error: false,
-        accounts: authResponse.accounts,
-        numbers: authResponse.numbers,
-    });
-}   //  THIS HAPPENS AFTER THE ANSWER COMES BACK, SO I NEED TO MAKE MY CALL INCREMENT AND REOCCUR IN HERE SOMEHOW
-
-/*function* test (request, response, next, client, num) {
-    console.log("going in");
-  var r = yield wait.for( client.getAuth, request.user.accounts[num].access_token, handleAccountsCallback);
-  return r;
-}*/
-
-/*var getUserName = function( callback ) {
-        // get the username somehow
-        var username = "Foo";
-        callback( username );
-    };
-
-    var saveUserInDatabase = function( username ) {
-        console.log("User: " + username + " is saved successfully.")
-    };
-
-    getUserName( saveUserInDatabase ); // User: Foo is saved successfully.*/
-
-function accounts(request, response, next, client, num) {
-    for (var i = 0; i < num; i++) {
-        console.log("in loop" + i);
-        myPromises.push(client.getAuth(request.user.accounts[i].access_token, handleAccountsCallback));
-    }
-    BPromise.all(myPromises).then(function(){
-        console.log("DONR " + globalTemp);// do whatever you need...
-    });
-}
-
-/*async function caller(request, response, next, client, num){
-
-    var temp = await accounts(request, response, next, client, num);
-    console.log("TEMP" + temp);
-
-}*/
 
 module.exports = {
     foo: function() {
@@ -138,29 +85,31 @@ module.exports = {
     },
 
 
-    accounts_return: async function(request, response, next, client, num) {
+    cache_user_accounts : async function(request, response, next, client, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
-        /*client.getAuth(request.user.accounts[num].access_token, function(error, authResponse) { //this is a callback?
-            if (error != null) {
-                console.log(error);
-                var msg = 'Unable to pull accounts from the Plaid API.';
-                console.log(msg + '\n' + error);
-                return response.json({
-                    error: msg
-                });
-            }
+        for (var i = 0; i < num; i++) {
+            myPromises.push(client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback?
+                if (error != null) {
+                    console.log(error);
+                    var msg = 'Unable to pull accounts from the Plaid API.';
+                    console.log(msg + '\n' + error);
+                    return;
+                }
 
-            //console.log(authResponse.accounts);
-            response.json({
-                error: false,
-                accounts: authResponse.accounts,
-                numbers: authResponse.numbers,
-            });
-        });*/
-        //wait.launchFiber(test , request, response, next, client, num);
-        console.log("calling accounts");
-        accounts(request, response, next, client, num);
+                response.json({
+                    error: false,
+                    accounts: authResponse.accounts,
+                    numbers: authResponse.numbers,
+                });
+            }));
+        }
+
+
+        BPromise.all(myPromises).then(function(){
+            console.log("DONR ");// do whatever you need...
+            return;
+        });
 
     },
 
