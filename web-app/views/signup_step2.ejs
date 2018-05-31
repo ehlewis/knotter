@@ -1,0 +1,60 @@
+<!-- views/signup.ejs -->
+<!doctype html>
+<html>
+
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="col-sm-6 col-sm-offset-3">
+
+            <h1><span class="fa fa-sign-in"></span> Signup</h1>
+
+            <button id="link-btn" class="btn btn-default btn-sm">Link An Account</button>
+            <a href="/dashboard" class="btn btn-default btn-sm">Done Adding Accounts</button>
+
+
+
+        </div>
+
+    </div>
+</body>
+<script>
+    var handler = Plaid.create({
+        apiVersion: 'v2',
+        clientName: 'Plaid Walkthrough Demo',
+        env: '<%= PLAID_ENV %>',
+        product: ['transactions'],
+        key: '<%= PLAID_PUBLIC_KEY %>',
+        onSuccess: function(public_token) {
+            $.post('/get_access_token', {
+                public_token: public_token
+            }, function() {
+                $('#container').fadeOut('fast', function() {
+                    $('#intro').hide();
+                    $('#app, #steps').fadeIn('slow');
+                });
+            });
+        },
+    });
+
+    //handler.open();
+
+    $('#link-btn').on('click', function(e) {
+        handler.open();
+    });
+</script>
+
+</html>

@@ -182,6 +182,18 @@ app.get('/signup', function(req, res) {
 // app.post('/signup', do all our passport stuff here);
 
 // =====================================
+// SIGNUP2 =============================
+// =====================================
+// show the second step of the signup form
+app.get('/signup_step2', isLoggedIn, function(req, res) {
+    res.render('signup_step2.ejs', {
+        user : req.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
+    });
+});
+
+// =====================================
 // PROFILE SECTION =====================
 // =====================================
 // we will want this protected so you have to be logged in to visit
@@ -226,6 +238,7 @@ app.get('/logout', function(req, res) { //todo clear redis cache ***
     collection.update({'_id' : req.user._id}, {'$set' : {'name' : ""}});
 });*/
 
+
 app.post('/signup', function(request, response, next) {
 
     passport.authenticate('local-signup', {
@@ -235,6 +248,7 @@ app.post('/signup', function(request, response, next) {
     });
 
 });
+
 
 // process the login form
 app.post('/login', passport.authenticate('local-login', {
