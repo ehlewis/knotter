@@ -9,9 +9,9 @@ module.exports = {
     foo: function() {
         console.log("HELLO");
     },
-    get_access_token: function(request, response, next, client) {
+    get_access_token: function(request, response, next, plaid_client) {
         PUBLIC_TOKEN = request.body.public_token;
-        client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
+        plaid_client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
             if (error != null) {
                 var msg = 'Could not exchange public_token!';
                 console.log(msg + '\n' + error);
@@ -61,12 +61,12 @@ module.exports = {
         });
     },
 
-    accounts: function(request, response, next, client) {
+    accounts: function(request, response, next, plaid_client) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         var i = request.query.params.var_i;
         console.log(i);
-        client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
+        plaid_client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
             if (error != null) {
                 var msg = 'Unable to pull accounts from the Plaid API.';
                 console.log(msg + '\n' + error);
@@ -84,11 +84,11 @@ module.exports = {
         });
     },
 
-    cache_user_accounts: async function(request, response, next, client, redis_client, redis, num) {
+    cache_user_accounts: async function(request, response, next, plaid_client, redis_client, redis, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         for (var i = 0; i < num; i++) {
-            myPromises.push(client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback
+            myPromises.push(plaid_client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback
                 if (error != null) {
                     //console.log(error);
                     var msg = 'Unable to pull accounts from the Plaid API.';
@@ -104,7 +104,7 @@ module.exports = {
                 redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(authResponse), redis.print);
 
 
-                //Change this is ack the client that the server has cache this req
+                //Change this is ack the plaid_client that the server has cache this req
                 response.json({
                     error: false,
                     accounts: authResponse.accounts,
@@ -121,12 +121,12 @@ module.exports = {
 
     },
 
-    item: function(request, response, next, client) {
+    item: function(request, response, next, plaid_client) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         var i = request.body.params.var_i;
         console.log(i);
-        client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+        plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
             if (error != null) {
                 console.log(JSON.stringify(error));
                 return response.json({
@@ -135,7 +135,7 @@ module.exports = {
             }
 
             // Also pull information about the institution
-            client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
+            plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
                 if (err != null) {
                     var msg = 'Unable to pull institution information from the Plaid API.';
                     console.log(msg + '\n' + error);
@@ -153,11 +153,11 @@ module.exports = {
     },
 
     //untested and probably something wonky here
-    cache_item: function(request, response, next, client, redis_client, redis, num) {
+    cache_item: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         for (var i = 0; i < num; i++) {
-            myPromises.push(client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+            myPromises.push(plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
                 if (error != null) {
                     console.log(JSON.stringify(error));
                     console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
@@ -166,7 +166,7 @@ module.exports = {
                 }
 
                 // Also pull information about the institution
-                client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
+                plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
                     if (err != null) {
                         var msg = 'Unable to pull institution information from the Plaid API.';
                         console.log(msg + '\n' + error);
@@ -187,13 +187,13 @@ module.exports = {
         });
     },
 
-    transactions: function(request, response, next, client) {
+    transactions: function(request, response, next, plaid_client) {
         // Pull transactions for the Item for the last 30 days
         var i = request.body.params.var_i;
         console.log(i);
         var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
         var endDate = moment().format('YYYY-MM-DD');
-        client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+        plaid_client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
             count: 250,
             offset: 0,
         }, function(error, transactionsResponse) {
@@ -210,13 +210,13 @@ module.exports = {
     },
 
     //untested
-    cache_transactions: function(request, response, next, client, redis_client, redis, num) {
+    cache_transactions: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull transactions for the Item for the last 30 days
 
         var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
         var endDate = moment().format('YYYY-MM-DD');
         for (var i = 0; i < num; i++) {
-            myPromises.push(client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+            myPromises.push(plaid_client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
                 count: 250,
                 offset: 0,
             }, function(error, transactionsResponse) {

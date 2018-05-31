@@ -90,7 +90,7 @@ app.use(express.static('public')); //Serves resources from public folder
 
 //************************************BEGIN PLAID API**********************************
 // Initialize the Plaid client
-var client = new plaid.Client(
+var plaid_client = new plaid.Client(
     PLAID_CLIENT_ID,
     PLAID_SECRET,
     PLAID_PUBLIC_KEY,
@@ -128,25 +128,25 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
 });
 
 app.post('/get_access_token', function(request, response, next) {
-    plaid_manip.get_access_token(request, response, next, client);
+    plaid_manip.get_access_token(request, response, next, plaid_client);
 });
 
 app.get('/accounts', function(request, response, next) {
 
   // Retrieve high-level account information and account and routing numbers
   // for each account associated with the Item.
-  plaid_manip.accounts(request, response, next, client);
+  plaid_manip.accounts(request, response, next, plaid_client);
 });
 
 app.post('/item', function(request, response, next) {
   // Pull the Item - this includes information about available products,
   // billed products, webhook information, and more.
-  plaid_manip.item(request, response, next, client);
+  plaid_manip.item(request, response, next, plaid_client);
 });
 
 app.post('/transactions', function(request, response, next) {
   // Pull transactions for the Item for the last 30 days
-    plaid_manip.transactions(request, response, next, client);
+    plaid_manip.transactions(request, response, next, plaid_client);
 });
 
 //**************************************END PLAID API**********************************
@@ -327,7 +327,7 @@ app.get('/api/user_data', function(req, res) {
         });
 
 app.get('/api/on_login', function(request, response, next) {
-            on_login.cache_user_data(request, response, next, client, redis_client, redis);
+            on_login.cache_user_data(request, response, next, plaid_client, redis_client, redis);
 
             /*if (request.user === undefined) {
                 // The user is not logged in
@@ -339,6 +339,7 @@ app.get('/api/on_login', function(request, response, next) {
                 }
                 );
             }*/
+            on_login.check_cache(request, response, next, redis_client, redis);
         });
 
 
