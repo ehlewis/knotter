@@ -34,7 +34,7 @@
 
     <!-- Dashboard content starts here  -->
     <div class="dash-sections">
-      <div class="chart-container">
+      <div class="chart-container" id="chartDiv">
         <!--insert chart here-->
         <canvas id="myChart" width="800" height="250"></canvas>
       </div>
@@ -46,45 +46,14 @@
     </div>
     <header class="section-header">Most Active Accounts</header>
     <div class="dash-sections" id="accountCards">
-    <!--  <a href="/accounts.ejs">
-        <div class="card">
-          <img src="assets/BOAcard.svg" style="width:100%">
-          <div class="container">
-            <p class="balance">$1,275.52<p>
-            <p>Bank of America Savings</p>
-          </div>
-        </div>
-      </a>
-      <a href="/accounts.ejs">
-        <div class="card">
-          <img src="assets/chase_logo.svg">
-          <div class="container">
-            <p class="balance">-$549.03<p>
-            <p>Chase Credit Card</p>
-          </div>
-        </div>
-      </a>
-      <a href="/accounts.ejs">
-        <div class="card">
-          <img src="assets/capital_one_card.svg">
-          <div class="container">
-            <p class="balance">-$76.12<p>
-            <p>Capital One Credit Card</p>
-          </div>
-        </div>
-      </a>
-      <a href="/accounts.ejs">
-        <div class="card">
-          <img src="assets/fidelity_card.svg">
-          <div class="container">
-            <p class="balance">$11,023.45<p>
-            <p>Fidelity Brokerage Account</p>
-          </div>
-        </div>
-      </a>-->
+
     </div>
 
 <script>
+
+    $('#chartDiv').addClass('spinner');
+    $('#accountCards').addClass('spinner');
+
 
     //call get accont data from server if its null we rerun this
     //can we run this serverside please
@@ -98,6 +67,7 @@
         });
 
     /*get_user_transactions();
+
     get_user_accounts();
 
     setTimeout(transactionArraytoCSV, 1000);
@@ -109,6 +79,10 @@
     setTimeout(makeChart, 1000);
 
     setTimeout(createAccountCards, 1000);*/
+
+
+    setTimeout(removeGraphSpinner, 1000);
+    setTimeout(removeCardSpinner, 1000);
 
 
 

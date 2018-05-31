@@ -5,7 +5,11 @@ var account_array = [];
 var transactions_loaded = false;
 var accounts_loaded = false;
 var graphDataLoaded = false;
-var graphData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+var graphData = [0,0,0,0,0,0,0,0,0,0,0,0];
+var graphLoaded = false;
+var cardsLoaded = false;
+
 
 function getNumAccts() {
     return new Promise(function(resolve, reject) {
@@ -238,68 +242,89 @@ function makeChart() {
                 responsive: false
             }
         });
+        graphLoaded = true;
     }
 }
 
 
 function createAccountCards() {
     if (accounts_loaded == true) {
-        var div = document.getElementById('accountCards');
-        //console.log(div);
-        console.log("Not waiting " + account_array);
-        var html = '';
-        console.log("making account cards " + account_array.length);
-        for (var i = 0; i < account_array.length; i++) {
-            for (var j = 0; j < account_array[i].accounts.length; j++) {
-                //account_array[i]
-                if (account_array[i].accounts[j].subtype == 'cd') {} else if (account_array[i].accounts[j].subtype == 'checking') {
-                    html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
-                    var account_picture = 'fidelity_card.svg';
-                    html += account_picture;
-                    html += '"><div class="container"><p class="balance">$';
-                    //var account_balance = 11023.45;
-                    var account_balance = account_array[i].accounts[j].balances.available;
-                    html += account_balance;
-                    html += '<p><p>';
-                    console.log("Im trying");
-                    var account_name = account_array[i].accounts[j].name;
-                    //var account_name = 'hi';
-                    html += account_name;
-                    html += '</p></div></div></a>';
-                } else if (account_array[i].accounts[j].subtype == 'savings') {
-                    html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
-                    var account_picture = 'fidelity_card.svg';
-                    html += account_picture;
-                    html += '"><div class="container"><p class="balance">$';
-                    //var account_balance = 11023.45;
-                    var account_balance = account_array[i].accounts[j].balances.current;
-                    html += account_balance;
-                    html += '<p><p>';
-                    console.log("Im trying");
-                    var account_name = account_array[i].accounts[j].name;
-                    //var account_name = 'hi';
-                    html += account_name;
-                    html += '</p></div></div></a>';
-                } else if (account_array[i].accounts[j].subtype == 'credit card') {
-                    html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
-                    var account_picture = 'fidelity_card.svg';
-                    html += account_picture;
-                    html += '"><div class="container"><p class="balance">$';
-                    //var account_balance = 11023.45;
-                    var account_balance = account_array[i].accounts[j].balances.current;
-                    html += account_balance;
-                    html += '<p><p>';
-                    console.log("Im trying");
-                    var account_name = account_array[i].accounts[j].name;
-                    //var account_name = 'hi';
-                    html += account_name;
-                    html += '</p></div></div></a>';
+            var div = document.getElementById('accountCards');
+            //console.log(div);
+            console.log("Not waiting " + account_array);
+            var html = '';
+            console.log("making account cards " + account_array.length);
+            for (var i = 0; i < account_array.length; i++) {
+                for (var j = 0; j < account_array[i].accounts.length; j++) {
+                    //account_array[i]
+                    if (account_array[i].accounts[j].subtype == 'cd'){}
+                    else if (account_array[i].accounts[j].subtype == 'checking'){
+                        html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
+                        var account_picture = 'fidelity_card.svg';
+                        html += account_picture;
+                        html+='"><div class="container"><p class="balance">$';
+                        //var account_balance = 11023.45;
+                        var account_balance = account_array[i].accounts[j].balances.available;
+                        html += account_balance;
+                        html += '<p><p>';
+                        console.log("cd");
+                        var account_name = account_array[i].accounts[j].name;
+                        //var account_name = 'hi';
+                        html += account_name;
+                        html += '</p></div></div></a>';
+                    }
+                    else if (account_array[i].accounts[j].subtype == 'savings'){
+                        html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
+                        var account_picture = 'fidelity_card.svg';
+                        html += account_picture;
+                        html+='"><div class="container"><p class="balance">$';
+                        //var account_balance = 11023.45;
+                        var account_balance = account_array[i].accounts[j].balances.current;
+                        html += account_balance;
+                        html += '<p><p>';
+                        console.log("savings");
+                        var account_name = account_array[i].accounts[j].name;
+                        //var account_name = 'hi';
+                        html += account_name;
+                        html += '</p></div></div></a>';
+                    }
+                    else if (account_array[i].accounts[j].subtype == 'credit card'){
+                        html += '<a href="/accounts.ejs"><div class="card"><img src="assets/';
+                        var account_picture = 'fidelity_card.svg';
+                        html += account_picture;
+                        html+='"><div class="container"><p class="balance">$';
+                        //var account_balance = 11023.45;
+                        var account_balance = account_array[i].accounts[j].balances.current;
+                        html += account_balance;
+                        html += '<p><p>';
+                        console.log("credit card");
+                        var account_name = account_array[i].accounts[j].name;
+                        //var account_name = 'hi';
+                        html += account_name;
+                        html += '</p></div></div></a>';
+                    }
                 }
             }
-        }
-        //console.log(html);
-        console.log("Creating Tiles");
-        div.innerHTML += html;
+            //console.log(html);
+            console.log("Creating Tiles");
+            cardsLoaded = true;
+            div.innerHTML += html;
+
+    }
+}
+
+function removeGraphSpinner(){
+    if(graphLoaded == true){
+        console.log("removing graph spinner");
+        $('#chartDiv').removeClass('spinner');
+    }
+
+}
+
+function removeCardSpinner(){
+    if(cardsLoaded == true){
+        console.log("removing card spinner");
+        $('#accountCards').removeClass('spinner');
     }
 }
 

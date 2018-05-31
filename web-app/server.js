@@ -91,40 +91,40 @@ app.use(express.static('public')); //Serves resources from public folder
 //************************************BEGIN PLAID API**********************************
 // Initialize the Plaid client
 var client = new plaid.Client(
-  PLAID_CLIENT_ID,
-  PLAID_SECRET,
-  PLAID_PUBLIC_KEY,
-  plaid.environments[PLAID_ENV]
+    PLAID_CLIENT_ID,
+    PLAID_SECRET,
+    PLAID_PUBLIC_KEY,
+    plaid.environments[PLAID_ENV]
 );
 
 app.use(bodyParser.urlencoded({
-  extended: false
+    extended: false
 }));
 app.use(bodyParser.json());
 
 app.get('/', function(request, response, next) {
-  response.render('landing.ejs', {
-    /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,*/
-  });
+    response.render('landing.ejs', {
+        /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,*/
+    });
 });
 
 
 
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
-  response.render('dashboard.ejs', {
-    user : request.user, // get the user out of session and pass to template
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('dashboard.ejs', {
+        user: request.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
-  response.render('accounts.ejs', {
-    user : request.user,
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('accounts.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 app.post('/get_access_token', function(request, response, next) {
@@ -132,6 +132,7 @@ app.post('/get_access_token', function(request, response, next) {
 });
 
 app.get('/accounts', function(request, response, next) {
+
   // Retrieve high-level account information and account and routing numbers
   // for each account associated with the Item.
   plaid_manip.accounts(request, response, next, client);
@@ -173,7 +174,6 @@ app.get('/login', function(req, res) {
 // =====================================
 // show the signup form
 app.get('/signup', function(req, res) {
-
     // render the page and pass in any flash data if it exists
     res.render('signup.ejs', { message: req.flash('signupMessage') });
 });
