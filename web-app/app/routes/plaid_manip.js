@@ -84,8 +84,7 @@ module.exports = {
         });
     },
 
-
-    cache_user_accounts : async function(request, response, next, client, redis_client, redis, num) {
+    cache_user_accounts: async function(request, response, next, client, redis_client, redis, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         for (var i = 0; i < num; i++) {
@@ -95,17 +94,14 @@ module.exports = {
                     var msg = 'Unable to pull accounts from the Plaid API.';
                     console.log(msg + '\n' + error);
                     //---------test
-                    console.log("inserting error in user key: " + request.user._id.toString()+"accounts");
-                    redis_client.lpush(request.user._id.toString()+"accounts", JSON.stringify(error), redis.print); //apply logic here too
+                    console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
+                    redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(error), redis.print); //apply logic here too
                     //------------
                     return;
                 }
 
-                //first this needs to work then it needs new logic
-                    // first get to see if the key exists
-                    // if the key exists then do .add not .set (or do we use append)
-                console.log("inserting account in user key: " + request.user._id.toString()+"accounts");
-                redis_client.set(request.user._id, JSON.stringify(response), redis.print);
+                console.log("inserting account in user key: " + request.user._id.toString() + "accounts");
+                redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(authResponse), redis.print);
 
 
                 //Change this is ack the client that the server has cache this req
@@ -118,20 +114,12 @@ module.exports = {
         }
 
 
-        BPromise.all(myPromises).then(function(){
+        BPromise.all(myPromises).then(function() {
             // do whatever you need...
             return;
         });
 
     },
-
-
-
-
-
-
-
-
 
     item: function(request, response, next, client) {
         // Pull the Item - this includes information about available products,
@@ -164,6 +152,41 @@ module.exports = {
         });
     },
 
+    //untested and probably something wonky here
+    cache_item: function(request, response, next, client, redis_client, redis, num) {
+        // Pull the Item - this includes information about available products,
+        // billed products, webhook information, and more.
+        for (var i = 0; i < num; i++) {
+            myPromises.push(client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+                if (error != null) {
+                    console.log(JSON.stringify(error));
+                    console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
+                    redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(error), redis.print); //apply logic here too
+                    return;
+                }
+
+                // Also pull information about the institution
+                client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
+                    if (err != null) {
+                        var msg = 'Unable to pull institution information from the Plaid API.';
+                        console.log(msg + '\n' + error);
+                        console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
+                        redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(err), redis.print); //apply logic here too
+                        return;
+                    } else {
+                        console.log("inserting getInstitutionById in user key: " + request.user._id.toString() + "accounts");
+                        redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(instRes), redis.print);
+                        return;
+                    }
+                });
+            }));
+        }
+        BPromise.all(myPromises).then(function() {
+            // do whatever you need...
+            return;
+        });
+    }
+
     transactions: function(request, response, next, client) {
         // Pull transactions for the Item for the last 30 days
         var i = request.body.params.var_i;
@@ -184,6 +207,36 @@ module.exports = {
             response.json(transactionsResponse);
         });
         //}
+    },
+
+    //untested
+    cache_transactions: function(request, response, next, client, redis_client, redis, num) {
+        // Pull transactions for the Item for the last 30 days
+
+        var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+        var endDate = moment().format('YYYY-MM-DD');
+        for (var i = 0; i < num; i++) {
+            myPromises.push(client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+                count: 250,
+                offset: 0,
+            }, function(error, transactionsResponse) {
+                if (error != null) {
+                    console.log(JSON.stringify(error));
+                    console.log("inserting error in user key: " + request.user._id.toString() + "transactions");
+                    redis_client.lpush(request.user._id.toString() + "transactions", JSON.stringify(error), redis.print); //apply logic here too
+                    return;
+                }
+                //console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
+
+                console.log("inserting error in user key: " + request.user._id.toString() + "transactions");
+                redis_client.lpush(request.user._id.toString() + "transactions", JSON.stringify(transactionsResponse), redis.print); //apply logic here too
+                return;
+            }));
+        }
+        BPromise.all(myPromises).then(function() {
+            // do whatever you need...
+            return;
+        });
     }
 };
 
