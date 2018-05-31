@@ -5,7 +5,8 @@ Run the following commands to start the website
 mongod
 (mongo (db.users.find().pretty();))
 
-memcached
+brew services start redis
+(redis-cli)(keys *)
 
 node server.js
 

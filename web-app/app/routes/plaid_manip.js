@@ -91,12 +91,12 @@ module.exports = {
         for (var i = 0; i < num; i++) {
             myPromises.push(client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback
                 if (error != null) {
-                    console.log(error);
+                    //console.log(error);
                     var msg = 'Unable to pull accounts from the Plaid API.';
                     console.log(msg + '\n' + error);
                     //---------test
                     console.log("setting key");
-                    redis_client.set(request.user._id.toString(), "string val", redis.print);
+                    redis_client.set(request.user._id.toString(), JSON.stringify(error), redis.print);
                     //------------
                     return;
                 }
@@ -105,8 +105,8 @@ module.exports = {
                     // first get to see if the key exists
                     // if the key exists then do .add not .set (or do we use append)
                 //memcached.set(request.user._id, authResponse, 10000000, function (err) { /* stuff */ });
-                console.log("setting key");
-                redis_client.set(request.user._id, "string val", redis.print);
+                console.log("caching users accounts");
+                redis_client.set(request.user._id, JSON.stringify(response), redis.print);
 
 
                 //Change this is ack the client that the server has cache this req
@@ -120,7 +120,7 @@ module.exports = {
 
 
         BPromise.all(myPromises).then(function(){
-            console.log("DONR ");// do whatever you need...
+            // do whatever you need...
             return;
         });
 

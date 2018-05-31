@@ -220,7 +220,7 @@ app.get('/profile', isLoggedIn, function(req, res) {
 // =====================================
 // LOGOUT ==============================
 // =====================================
-app.get('/logout', function(req, res) {
+app.get('/logout', function(req, res) { //todo clear redis cache ***
     req.logout();
     res.redirect('/');
 });
