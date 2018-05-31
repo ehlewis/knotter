@@ -6,6 +6,9 @@ var LocalStrategy   = require('passport-local').Strategy;
 // load up the user model
 var User            = require('../app/models/user');
 
+var on_login = require('../app/routes/on_login');
+
+
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
@@ -37,7 +40,7 @@ module.exports = function(passport) {
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
         passwordField : 'password',
-/*        nameField     : 'name',*/
+        nameField     : 'name',
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) {
@@ -64,9 +67,10 @@ module.exports = function(passport) {
                     // if there is no user with that email
                     // create the user
                     var newUser            = new User();
-
+                    console.log(req.body);
                     // set the user's local credentials
                     newUser.email    = email;
+                    newUser.name     = req.body.name;
                     newUser.password = newUser.generateHash(password);
 
                     // save the user
@@ -110,6 +114,12 @@ module.exports = function(passport) {
            // if the user is found but the password is wrong
            if (!user.validPassword(password))
                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+
+            //We are going to load user data to our cache here
+            //on_login.foo(req, response, next, client);
+            //no were not
+
+            //
 
            // all is well, return successful user
            return done(null, user);
