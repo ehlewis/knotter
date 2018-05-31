@@ -185,7 +185,7 @@ module.exports = {
             // do whatever you need...
             return;
         });
-    }
+    },
 
     transactions: function(request, response, next, client) {
         // Pull transactions for the Item for the last 30 days
@@ -237,7 +237,13 @@ module.exports = {
             // do whatever you need...
             return;
         });
-    }
+    },
+
+    //or should we just calculate it and send it?
+    cache_transactions_raw_array : function(data, redis_client, redis) {},
+
+    cache_graph_data : function(data, redis_client, redis, num) {}
+
 };
 
 //wont be exposed

@@ -27,11 +27,9 @@ var mongo_url = "mongodb://localhost:27017/link";
 
 var colors = require('colors');
 
-/*var Memcached = require('memcached');
-var memcached = new Memcached('127.0.0.1:11211');*/
-
 var redis = require("redis"),
 redis_client = redis.createClient();
+console.log("Connected to " + "redis".green);
 
 var plaid_manip = require('./app/routes/plaid_manip');
 var on_login = require('./app/routes/on_login');
@@ -68,15 +66,6 @@ MongoClient.connect(mongo_url, function (err, client) {
 
     console.log("Connected to " + "db!".green);
 });
-
-/*memcached.connect( '127.0.0.1:11211', function( err, conn ){
-  if( err ) {
-     console.log( conn.server );
-  }
-  else{
-    console.log("Connected to "  + "memcached!".green);
-  }
-});*/
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
