@@ -5,38 +5,44 @@ var account_array = [];
 var transactions_loaded = false;
 var accounts_loaded = false;
 var graphDataLoaded = false;
+
 var graphData = [0,0,0,0,0,0,0,0,0,0,0,0];
 var graphLoaded = false;
 var cardsLoaded = false;
 
+
 function getNumAccts() {
- return new Promise(function(resolve, reject) {
-     $.getJSON("api/user_data", function(data) {
-         // Make sure the data contains the username as expected before using it
-         if (data.hasOwnProperty('username')) {
-             console.log('Username: ' + data.username);
-             console.log('Num of accounts: ' + data.num_of_accounts);
-             NUM_ACCTS = data.num_of_accounts;
-             resolve(NUM_ACCTS);
-         }
-     });
- });
+    return new Promise(function(resolve, reject) {
+        $.getJSON("api/user_data", function(data) {
+            // Make sure the data contains the username as expected before using it
+            if (data.hasOwnProperty('username')) {
+                console.log('Username: ' + data.username);
+                console.log('Num of accounts: ' + data.num_of_accounts);
+                NUM_ACCTS = data.num_of_accounts;
+                resolve(NUM_ACCTS);
+            }
+        });
+    });
 }
 
 //------- These functions get all accounts (institution) transaction data
-function getTransactions(i){
- return new Promise(function(resolve, reject) {
-     //for (var i = 0; i < NUM_ACCTS; i++) {
-         $.post('/transactions', {params: {var_i: i}}).success(
-             function(success){
+function getTransactions(i) {
+    return new Promise(function(resolve, reject) {
+        //for (var i = 0; i < NUM_ACCTS; i++) {
+        $.post('/transactions', {
+            params: {
+                var_i: i
+            }
+        }).success(
+            function(success) {
                 //console.log(success);
                 resolve(success);
-             }).error(
-             function(error){
-                 console.log(error);
-             });
-    // }
- });
+            }).error(
+            function(error) {
+                console.log(error);
+            });
+        // }
+    });
 }
 
 async function getTransactionData() {
@@ -64,19 +70,23 @@ async function get_user_transactions() {
 //--------------------------------------------------
 
 //------- These functions get all accounts (institutions)
-function getAccount(i){
- return new Promise(function(resolve, reject) {
-     //for (var i = 0; i < NUM_ACCTS; i++) {
-         $.get('/accounts', {params: {var_i: i}}).success(
-             function(success){
-                 //console.log(success);
-                 resolve(success);
-         }).error(
-             function(error){
-                 console.log(error);
-         });
-     //}
- });
+function getAccount(i) {
+    return new Promise(function(resolve, reject) {
+        //for (var i = 0; i < NUM_ACCTS; i++) {
+        $.get('/accounts', {
+            params: {
+                var_i: i
+            }
+        }).success(
+            function(success) {
+                //console.log(success);
+                resolve(success);
+            }).error(
+            function(error) {
+                console.log(error);
+            });
+        //}
+    });
 }
 
 async function getAllAccounts() {
@@ -106,16 +116,20 @@ async function get_user_accounts() {
 //--------------------------------------------------
 //------- These functions get all items (institutions)
 function getItems(i) {
- return new Promise(function(resolve, reject) {
-     $.post('/item',{params: {var_i: i}}).success(
-     function(success){
-         //console.log("returning");
-         resolve(success);
-     }).error(
-     function(error){
-         console.log(error);
-     });
- });
+    return new Promise(function(resolve, reject) {
+        $.post('/item', {
+            params: {
+                var_i: i
+            }
+        }).success(
+            function(success) {
+                //console.log("returning");
+                resolve(success);
+            }).error(
+            function(error) {
+                console.log(error);
+            });
+    });
 }
 
 // TODO:
@@ -124,67 +138,56 @@ function getItems(i) {
 //-------These functions manipulate the transaction data
 
 function transactionArraytoCSV() {
-   if (transactions_loaded == true) {
-       for(var i = 0; i < transaction_array.length; i++){
-           for (var j = 0; j < transaction_array[i].transactions.length; j++) {
-               all_transactions.push(transaction_array[i].transactions[j]);
-           }
-       }
-       //console.log(all_transactions);
-   }
+    if (transactions_loaded == true) {
+        for (var i = 0; i < transaction_array.length; i++) {
+            for (var j = 0; j < transaction_array[i].transactions.length; j++) {
+                all_transactions.push(transaction_array[i].transactions[j]);
+            }
+        }
+        //console.log(all_transactions);
+    }
 }
 
 function transactionCSVtoFrequencyGraph() {
     if (transactions_loaded == true) {
-       var transDate = new Date();
-       var temp = -1;
-       for(var i = 0; i < transaction_array.length; i++){
-           for (var j = 0; j < transaction_array[i].transactions.length; j++) {
-               transDate = new Date(transaction_array[i].transactions[j].date);
-               //console.log(transDate.getMonth());
-               temp = transDate.getMonth();
-                if(temp == 0){
+        var transDate = new Date();
+        var temp = -1;
+        for (var i = 0; i < transaction_array.length; i++) {
+            for (var j = 0; j < transaction_array[i].transactions.length; j++) {
+                transDate = new Date(transaction_array[i].transactions[j].date);
+                //console.log(transDate.getMonth());
+                temp = transDate.getMonth();
+                if (temp == 0) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 1) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 2) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 3) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 4) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 5) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 6) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 7) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 8) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 9) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 10) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 11) {
                     graphData[temp] = graphData[temp] + 1;
                 }
-                else if(temp == 1){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 2){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 3){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 4){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 5){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 6){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 7){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 8){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 9){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 10){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-                else if(temp == 11){
-                    graphData[temp] = graphData[temp] + 1;
-                }
-           }
-       }
-       //console.log(graphData);
-       graphDataLoaded = true;
-       //return graphData;
-   }
+            }
+        }
+        //console.log(graphData);
+        graphDataLoaded = true;
+        //return graphData;
+    }
 }
 
 //-----------------------------------------------------
@@ -194,7 +197,7 @@ function transactionCSVtoFrequencyGraph() {
 function account_id_to_name(in_id) {
     //ported but untested
     for (var i = 0; i < account_array.length; i++) {
-        if(account_array[i].account_id === in_id){
+        if (account_array[i].account_id === in_id) {
             console.log(acct.name);
             return acct.name;
         }
@@ -203,7 +206,7 @@ function account_id_to_name(in_id) {
 
 
 
-function makeChart(){
+function makeChart() {
     if (graphDataLoaded == true) {
         //console.log("Making graph " + graphData);
         var chart = new Chart(ctx, {
@@ -213,8 +216,10 @@ function makeChart(){
             data: {
                 labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 datasets: [{
-                    backgroundColor: '#00b09b', /*rgb(255, 99, 132)*/
-                    borderColor: '#00b09b', /*rgb(255, 99, 132)*/
+                    backgroundColor: '#00b09b',
+                    /*rgb(255, 99, 132)*/
+                    borderColor: '#00b09b',
+                    /*rgb(255, 99, 132)*/
                     data: graphData,
                 }]
             },
@@ -242,7 +247,7 @@ function makeChart(){
 }
 
 
-function createAccountCards(){
+function createAccountCards() {
     if (accounts_loaded == true) {
             var div = document.getElementById('accountCards');
             //console.log(div);
@@ -304,6 +309,7 @@ function createAccountCards(){
             console.log("Creating Tiles");
             cardsLoaded = true;
             div.innerHTML += html;
+
     }
 }
 

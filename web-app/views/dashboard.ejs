@@ -50,9 +50,24 @@
     </div>
 
 <script>
+
     $('#chartDiv').addClass('spinner');
     $('#accountCards').addClass('spinner');
-    get_user_transactions();
+
+
+    //call get accont data from server if its null we rerun this
+    //can we run this serverside please
+
+    $.get('/api/on_login', {}).success(
+        function(success) {
+            console.log(success);
+        }).error(
+        function(error) {
+            console.log(error);
+        });
+
+    /*get_user_transactions();
+
     get_user_accounts();
 
     setTimeout(transactionArraytoCSV, 1000);
@@ -62,7 +77,9 @@
     var ctx = document.getElementById('myChart').getContext('2d');
 
     setTimeout(makeChart, 1000);
-    setTimeout(createAccountCards, 1000);
+
+    setTimeout(createAccountCards, 1000);*/
+
 
     setTimeout(removeGraphSpinner, 1000);
     setTimeout(removeCardSpinner, 1000);
