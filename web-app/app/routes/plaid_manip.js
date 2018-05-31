@@ -152,7 +152,6 @@ module.exports = {
         });
     },
 
-    //untested and probably something wonky here
     cache_item: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
@@ -170,11 +169,11 @@ module.exports = {
                     if (err != null) {
                         var msg = 'Unable to pull institution information from the Plaid API.';
                         console.log(msg + '\n' + error);
-                        console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
+                        console.log("inserting error in user key: " + request.user._id.toString() + "item");
                         redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(err), redis.print); //apply logic here too
                         return;
                     } else {
-                        console.log("inserting getInstitutionById in user key: " + request.user._id.toString() + "accounts");
+                        console.log("inserting getInstitutionById in user key: " + request.user._id.toString() + "item");
                         redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(instRes), redis.print);
                         return;
                     }
@@ -209,9 +208,9 @@ module.exports = {
         //}
     },
 
-    //untested
+    //Saves transactions in cache
     cache_transactions: function(request, response, next, plaid_client, redis_client, redis, num) {
-        // Pull transactions for the Item for the last 30 days
+        // Pull transactions for the Item for the last 30 days and store them in the cache
 
         var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
         var endDate = moment().format('YYYY-MM-DD');
@@ -245,16 +244,3 @@ module.exports = {
     cache_graph_data : function(data, redis_client, redis, num) {}
 
 };
-
-//wont be exposed
-
-
-
-/*And in your app file:
-
-// app.js
-// ======
-var tools = require('./tools');
-console.log(typeof tools.foo); // => 'function'
-console.log(typeof tools.bar); // => 'function'
-console.log(typeof tools.zemba); // => undefined*/

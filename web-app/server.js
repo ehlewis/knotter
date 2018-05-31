@@ -313,7 +313,7 @@ app.post('/name', function(req, res, next) {
 });
 
 
-app.get('/api/user_data', function(req, res) {
+app.get('/api/user_data', isLoggedIn, function(req, res) {
 
             if (req.user === undefined) {
                 // The user is not logged in
@@ -326,20 +326,9 @@ app.get('/api/user_data', function(req, res) {
             }
         });
 
-app.get('/api/on_login', function(request, response, next) {
-            on_login.cache_user_data(request, response, next, plaid_client, redis_client, redis);
-
-            /*if (request.user === undefined) {
-                // The user is not logged in
-                response.json({});
-            } else {
-                response.json({
-                    username: request.user,
-                    num_of_accounts : request.user.accounts.length
-                }
-                );
-            }*/
-            on_login.check_cache(request, response, next, redis_client, redis);
+app.get('/api/on_login', isLoggedIn, function(request, response, next) {
+            //on_login.cache_user_data(request, response, next, plaid_client, redis_client, redis);
+            on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
         });
 
 
