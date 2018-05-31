@@ -95,8 +95,8 @@ module.exports = {
                     var msg = 'Unable to pull accounts from the Plaid API.';
                     console.log(msg + '\n' + error);
                     //---------test
-                    console.log("setting key");
-                    redis_client.set(request.user._id.toString(), JSON.stringify(error), redis.print);
+                    console.log("inserting error in user key: " + request.user._id.toString()+"accounts");
+                    redis_client.lpush(request.user._id.toString()+"accounts", JSON.stringify(error), redis.print); //apply logic here too
                     //------------
                     return;
                 }
@@ -104,8 +104,7 @@ module.exports = {
                 //first this needs to work then it needs new logic
                     // first get to see if the key exists
                     // if the key exists then do .add not .set (or do we use append)
-                //memcached.set(request.user._id, authResponse, 10000000, function (err) { /* stuff */ });
-                console.log("caching users accounts");
+                console.log("inserting account in user key: " + request.user._id.toString()+"accounts");
                 redis_client.set(request.user._id, JSON.stringify(response), redis.print);
 
 
