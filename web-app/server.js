@@ -328,7 +328,9 @@ app.get('/api/user_data', isLoggedIn, function(req, res) {
 
 app.get('/api/on_login', isLoggedIn, function(request, response, next) {
             //on_login.cache_user_data(request, response, next, plaid_client, redis_client, redis);
-            on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
+            //on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
+            plaid_manip.get_cache_item(request, response, next, redis_client, redis);
+            //on_login.test(request, response, next, redis_client, redis);
         });
 
 

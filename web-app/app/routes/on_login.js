@@ -1,6 +1,4 @@
 var plaid_manip = require('./plaid_manip');
-var wait = require('wait.for');
-var sync = require('synchronize')
 
 module.exports = {
     //Do not use this function, use refresh cache
@@ -31,6 +29,23 @@ module.exports = {
     //Try to avoid using this as it will append if data already exists
     populate_cache : function(request, response, next, plaid_client, redis_client, redis){
         cache_user_data(request, response, next, plaid_client, redis_client, redis);
+    },
+
+    test : function(request, response, next, redis_client, redis){
+        redis_client.lrange(request.user._id.toString() + "accounts", 0, -1, function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                console.log("error" + err);
+            }
+            if (reply == '') {
+                console.log("no data stored");
+                return;
+            } else {
+                console.log(JSON.parse(reply));
+                response.json(JSON.parse(reply));
+                return;
+            }
+        });
     }
 };
 // DO NOT USE Checks to see if the cache value accounts exists and returns a bool

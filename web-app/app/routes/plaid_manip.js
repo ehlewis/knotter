@@ -1,14 +1,10 @@
 var moment = require('moment');
-var wait = require('wait.for-es6');
 var BPromise = require('bluebird')
 
 var myPromises = [];
 
 
 module.exports = {
-    foo: function() {
-        console.log("HELLO");
-    },
     get_access_token: function(request, response, next, plaid_client) {
         PUBLIC_TOKEN = request.body.public_token;
         plaid_client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
@@ -118,8 +114,9 @@ module.exports = {
             // do whatever you need...
             return;
         });
-
     },
+
+    get_cache_user_accounts: function(request, response, next, redis_client, redis, num) {},
 
     item: function(request, response, next, plaid_client) {
         // Pull the Item - this includes information about available products,
@@ -186,6 +183,23 @@ module.exports = {
         });
     },
 
+    get_cache_item : function(request, response, next, redis_client, redis) {
+        redis_client.lrange(request.user._id.toString() + "accounts", 0, -1, function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                console.log("error" + err);
+            }
+            if (reply == '') {
+                console.log("no data stored");
+                return;
+            } else {
+                console.log(JSON.parse(reply));
+                response.json(JSON.parse(reply));
+                return;
+            }
+        });
+    },
+
     transactions: function(request, response, next, plaid_client) {
         // Pull transactions for the Item for the last 30 days
         var i = request.body.params.var_i;
@@ -238,9 +252,15 @@ module.exports = {
         });
     },
 
-    //or should we just calculate it and send it?
-    cache_transactions_raw_array : function(data, redis_client, redis) {},
+    get_cache_transactions: function(request, response, next, redis_client, redis, num) {},
 
-    cache_graph_data : function(data, redis_client, redis, num) {}
+    //or should we just calculate it and send it?
+    cache_transactions_raw_array: function(data, redis_client, redis) {},
+
+    get_transactions_raw_array: function(data, redis_client, redis) {},
+
+    cache_graph_data: function(data, redis_client, redis, num) {},
+
+    get_graph_data: function(data, redis_client, redis, num) {}
 
 };
