@@ -59,37 +59,37 @@
         //call get accont data from server if its null we rerun this
         //can we run this serverside please
 
-        $.get('/api/on_login', {}).success(
+        /*$.get('/api/on_login', {}).success(
             function(success) {
                 console.log(success);
             }).error(
             function(error) {
                 console.log(error);
-            });
+            });*/
 
-        /*$.get('/api/get_cache_user_accounts', {}).success(
+        /*$.get('/api/get_cached_user_accounts', {}).success(
             function(success) {
                 console.log(success);
             }).error(
             function(error) {
                 console.log(error);
-            });
+            });*/
 
-        $.get('/api/get_cache_item', {}).success(
+        $.get('/api/get_cached_item', {}).success(
             function(success) {
                 console.log(success);
             }).error(
             function(error) {
                 console.log(error);
             });
-        $.get('/api/get_cache_transactions', {}).success(
+        /*$.get('/api/get_cached_transactions', {}).success(
             function(success) {
                 console.log(success);
             }).error(
             function(error) {
                 console.log(error);
-            });
-*/
+            });*/
+
         /*get_user_transactions();
 
         get_user_accounts();

@@ -171,8 +171,8 @@ module.exports = {
         });
     },
 
-    //This might work? my testing account is getting a 404 off of accounts that says ITEM_LOGIN_REQUIRED so that could be why this is returning bad
-    //Also tho check FOR ALL OF THESE what data were storing ause there could be more data than what were storing
+    //Gets item but does NOT convert inst_id into anything useful right now
+    //todo: Make the above functionality an api call that will fetch the data as needed
     cache_item: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
@@ -185,39 +185,42 @@ module.exports = {
                         console.log(JSON.stringify(error));
                         item_response_array.push(error);
                         return;
-                        /*return response.json({
-                            error: error
-                        });*/
                     }
+                    item_response_array.push(itemResponse);
+                    return;
 
                     // Also pull information about the institution
-                    plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
+                    /*plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
                         if (err != null) {
                             var msg = 'Unable to pull institution information from the Plaid API.';
                             console.log(msg + '\n' + error);
                             item_response_array.push(error);
-                            return;
-                            /*return response.json({
+
+                            return response.json({
                                 error: msg
-                            });*/
+                            });
                         } else {
+                            console.log("pushing");
                             item_response_array.push(itemResponse);
-                            /*response.json({
+                            institution_response_array.push(instRes);
+
+                            response.json({
                                 item: itemResponse.item,
                                 institution: instRes.institution,
-                            });*/
+                            });
                         }
-                    });
+                    });*/
                 })
             );
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            console.log("items " + item_response_array);
-            console.log("institution_response_array " + institution_response_array);
+            //console.log("items " + item_response_array);
+            //console.log("institution_response_array " + institution_response_array);
             console.log("item " + item_response_array.length + " out of length " + request.user.accounts.length);
             console.log("institution " + institution_response_array.length + " out of length " + request.user.accounts.length);
             redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
+            redis_client.set(request.user._id.toString() + "institution", JSON.stringify(institution_response_array), redis.print);
             return;
         });
     },
@@ -225,6 +228,24 @@ module.exports = {
     //I dont want to have to do this I want this to be stored as an array or object and I dont want to have to reconstruct it
     get_cached_item: function(request, response, next, redis_client, redis) {
         redis_client.get(request.user._id.toString() + "item", function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                console.log("error" + err);
+            }
+            if (reply == '') {
+                console.log("no data stored");
+                return;
+            } else {
+                //console.log(reply);
+                console.log("item " + JSON.parse(reply));
+                response.json(JSON.parse(reply));
+                return;
+            }
+        });
+    },
+
+    get_cached_institutions: function(request, response, next, redis_client, redis) {
+        redis_client.get(request.user._id.toString() + "institution", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
                 console.log("error" + err);
@@ -306,7 +327,7 @@ module.exports = {
                 return;
             } else {
                 //console.log(reply);
-                console.log("Transactions" + JSON.parse(reply));
+                //console.log("Transactions" + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }

@@ -351,7 +351,7 @@ app.get('/api/get_cached_item', isLoggedIn, function(request, response, next) {
 });
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
-    plaid_manip.get_cached_user_accounts(request, response, next, redis_client, redis);
+    plaid_manip.get_cached_transactions(request, response, next, redis_client, redis);
 });
 
 
