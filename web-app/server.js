@@ -2,24 +2,24 @@
 'use strict';
 // set up ======================================================================
 // get all the tools we need
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 8080;
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
-var flash    = require('connect-flash');
-var envvar  = require('envvar');
+var flash = require('connect-flash');
+var envvar = require('envvar');
 var moment = require('moment');
 var plaid = require('plaid');
 
-var morgan       = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
+var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var configDB = require('./config/database.js');
 
-var mongodb     = require('mongodb');
+var mongodb = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
@@ -28,7 +28,7 @@ var mongo_url = "mongodb://localhost:27017/link";
 var colors = require('colors');
 
 var redis = require("redis"),
-redis_client = redis.createClient();
+    redis_client = redis.createClient();
 console.log("Connected to " + "redis".green);
 
 var plaid_manip = require('./app/routes/plaid_manip');
@@ -42,7 +42,7 @@ var PLAID_SECRET = envvar.string('PLAID_SECRET');
 var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
 var PLAID_CLIENT_ID = '5ac8108bbdc6a40eb40cb093';
 var PLAID_SECRET = '786c67f3c3dd820f2bf7dd37ec5bb1';
-var PLAID_PUBLIC_KEY ='201d391154bbd55ef3725c4e6baed3';
+var PLAID_PUBLIC_KEY = '201d391154bbd55ef3725c4e6baed3';
 var PLAID_ENV = 'sandbox';
 
 // We store the access_token in memory - in production, store it in a secure
@@ -58,7 +58,7 @@ var collection = null;
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
-MongoClient.connect(mongo_url, function (err, client) {
+MongoClient.connect(mongo_url, function(err, client) {
     if (err) throw err;
 
     db = client.db('link');
@@ -77,7 +77,9 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 // required for passport
 app.use(session({
     secret: 'fun',
-    cookie: {_expires : 3600000}
+    cookie: {
+        _expires: 3600000
+    }
 })); // session secret and cookie timeout
 
 app.use(passport.initialize());
@@ -133,19 +135,19 @@ app.post('/get_access_token', function(request, response, next) {
 
 app.get('/accounts', function(request, response, next) {
 
-  // Retrieve high-level account information and account and routing numbers
-  // for each account associated with the Item.
-  plaid_manip.accounts(request, response, next, plaid_client);
+    // Retrieve high-level account information and account and routing numbers
+    // for each account associated with the Item.
+    plaid_manip.accounts(request, response, next, plaid_client);
 });
 
 app.post('/item', function(request, response, next) {
-  // Pull the Item - this includes information about available products,
-  // billed products, webhook information, and more.
-  plaid_manip.item(request, response, next, plaid_client);
+    // Pull the Item - this includes information about available products,
+    // billed products, webhook information, and more.
+    plaid_manip.item(request, response, next, plaid_client);
 });
 
 app.post('/transactions', function(request, response, next) {
-  // Pull transactions for the Item for the last 30 days
+    // Pull transactions for the Item for the last 30 days
     plaid_manip.transactions(request, response, next, plaid_client);
 });
 
@@ -163,7 +165,9 @@ app.get('/', function(req, res) {
 // show the login form
 app.get('/login', function(req, res) {
     // render the page and pass in any flash data if it exists
-    res.render('login.ejs', { message: req.flash('loginMessage') });
+    res.render('login.ejs', {
+        message: req.flash('loginMessage')
+    });
 });
 
 // process the login form
@@ -175,7 +179,9 @@ app.get('/login', function(req, res) {
 // show the signup form
 app.get('/signup', function(req, res) {
     // render the page and pass in any flash data if it exists
-    res.render('signup.ejs', { message: req.flash('signupMessage') });
+    res.render('signup.ejs', {
+        message: req.flash('signupMessage')
+    });
 });
 
 // process the signup form
@@ -187,7 +193,7 @@ app.get('/signup', function(req, res) {
 // show the second step of the signup form
 app.get('/signup_step2', isLoggedIn, function(req, res) {
     res.render('signup_step2.ejs', {
-        user : req.user, // get the user out of session and pass to template
+        user: req.user, // get the user out of session and pass to template
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV
     });
@@ -200,7 +206,7 @@ app.get('/signup_step2', isLoggedIn, function(req, res) {
 // we will use route middleware to verify this (the isLoggedIn function)
 app.get('/profile', isLoggedIn, function(req, res) {
     res.render('profile.ejs', {
-        user : req.user, // get the user out of session and pass to template
+        user: req.user, // get the user out of session and pass to template
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV
     });
@@ -242,9 +248,9 @@ app.get('/logout', function(req, res) { //todo clear redis cache ***
 app.post('/signup', function(request, response, next) {
 
     passport.authenticate('local-signup', {
-        successRedirect : '/dashboard', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+        successRedirect: '/dashboard', // redirect to the secure profile section
+        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
     });
 
 });
@@ -252,9 +258,9 @@ app.post('/signup', function(request, response, next) {
 
 // process the login form
 app.post('/login', passport.authenticate('local-login', {
-   successRedirect : '/dashboard', // redirect to the secure profile section
-   failureRedirect : '/login', // redirect back to the signup page if there is an error
-   failureFlash : true // allow flash messages
+    successRedirect: '/dashboard', // redirect to the secure profile section
+    failureRedirect: '/login', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
 }));
 
 
@@ -274,19 +280,19 @@ function isLoggedIn(req, res, next) {
 //!!!!!!!API IMPLEMENT!!!!!!!!!!!!!!!!!!!!
 
 app.get('/name', function(request, response, next) {
-  response.render('name.ejs', {
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('name.ejs', {
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 
 app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
-  response.render('old_dash_api.ejs', {
-    user : request.user,
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('old_dash_api.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 
@@ -305,7 +311,13 @@ app.post('/name', function(req, res, next) {
     console.log(req.body.name);
     console.log(req.user);
 
-    collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
+    collection.update({
+        '_id': req.user._id
+    }, {
+        '$set': {
+            'name': req.body.name
+        }
+    });
 
     console.log("inserted username: " + req.body.name + " for user " + req.user);
 
@@ -315,23 +327,32 @@ app.post('/name', function(req, res, next) {
 
 app.get('/api/user_data', isLoggedIn, function(req, res) {
 
-            if (req.user === undefined) {
-                // The user is not logged in
-                res.json({});
-            } else {
-                res.json({
-                    username: req.user,
-                    num_of_accounts : req.user.accounts.length
-                });
-            }
+    if (req.user === undefined) {
+        // The user is not logged in
+        res.json({});
+    } else {
+        res.json({
+            username: req.user,
+            num_of_accounts: req.user.accounts.length
         });
+    }
+});
 
 app.get('/api/on_login', isLoggedIn, function(request, response, next) {
-            //on_login.cache_user_data(request, response, next, plaid_client, redis_client, redis);
-            //on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
-            plaid_manip.get_cache_user_accounts(request, response, next, redis_client, redis);
-            //on_login.test(request, response, next, redis_client, redis);
-        });
+    on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
+});
+
+app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
+    plaid_manip.get_cached_user_accounts(request, response, next, redis_client, redis);
+});
+
+app.get('/api/get_cached_item', isLoggedIn, function(request, response, next) {
+    plaid_manip.get_cached_item(request, response, next, redis_client, redis);
+});
+
+app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
+    plaid_manip.get_cached_user_accounts(request, response, next, redis_client, redis);
+});
 
 
 // launch ======================================================================

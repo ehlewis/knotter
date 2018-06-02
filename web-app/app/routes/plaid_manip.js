@@ -114,17 +114,16 @@ module.exports = {
             }));
         }
 
-
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            console.log(response_array.length + " length " + request.user.accounts.length);
+            console.log("accounts " + response_array.length + " out of length " + request.user.accounts.length);
             //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             return;
         });
     },
 
-    get_cache_user_accounts: function(request, response, next, redis_client, redis, num) {
+    get_cached_user_accounts: function(request, response, next, redis_client, redis, num) {
         redis_client.get(request.user._id.toString() + "accounts", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -134,9 +133,7 @@ module.exports = {
                 console.log("no data stored");
                 return;
             } else {
-                console.log("REPLAYS");
-                console.log(reply);
-                console.log(JSON.parse(reply));
+                console.log("accounts " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -174,43 +171,60 @@ module.exports = {
         });
     },
 
+    //This might work? my testing account is getting a 404 off of accounts that says ITEM_LOGIN_REQUIRED so that could be why this is returning bad
+    //Also tho check FOR ALL OF THESE what data were storing ause there could be more data than what were storing
     cache_item: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
+        var item_response_array = [];
+        var institution_response_array = [];
         for (var i = 0; i < num; i++) {
-            myPromises.push(plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
-                if (error != null) {
-                    console.log(JSON.stringify(error));
-                    console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
-                    redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(error), redis.print); //apply logic here too
-                    return;
-                }
-
-                // Also pull information about the institution
-                plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
-                    if (err != null) {
-                        var msg = 'Unable to pull institution information from the Plaid API.';
-                        console.log(msg + '\n' + error);
-                        console.log("inserting error in user key: " + request.user._id.toString() + "item");
-                        redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(err), redis.print); //apply logic here too
+            myPromises.push(
+                plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
+                    if (error != null) {
+                        console.log(JSON.stringify(error));
+                        item_response_array.push(error);
                         return;
-                    } else {
-                        console.log("inserting getInstitutionById in user key: " + request.user._id.toString() + "item");
-                        redis_client.lpush(request.user._id.toString() + "item", JSON.stringify(instRes), redis.print);
-                        return;
+                        /*return response.json({
+                            error: error
+                        });*/
                     }
-                });
-            }));
+
+                    // Also pull information about the institution
+                    plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
+                        if (err != null) {
+                            var msg = 'Unable to pull institution information from the Plaid API.';
+                            console.log(msg + '\n' + error);
+                            item_response_array.push(error);
+                            return;
+                            /*return response.json({
+                                error: msg
+                            });*/
+                        } else {
+                            item_response_array.push(itemResponse);
+                            /*response.json({
+                                item: itemResponse.item,
+                                institution: instRes.institution,
+                            });*/
+                        }
+                    });
+                })
+            );
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
+            console.log("items " + item_response_array);
+            console.log("institution_response_array " + institution_response_array);
+            console.log("item " + item_response_array.length + " out of length " + request.user.accounts.length);
+            console.log("institution " + institution_response_array.length + " out of length " + request.user.accounts.length);
+            redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
             return;
         });
     },
 
     //I dont want to have to do this I want this to be stored as an array or object and I dont want to have to reconstruct it
-    get_cache_item: function(request, response, next, redis_client, redis) {
-        redis_client.lrange(request.user._id.toString() + "item", 0, 0, function(err, reply) {
+    get_cached_item: function(request, response, next, redis_client, redis) {
+        redis_client.get(request.user._id.toString() + "item", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
                 console.log("error" + err);
@@ -219,14 +233,12 @@ module.exports = {
                 console.log("no data stored");
                 return;
             } else {
-                console.log(reply);
-                console.log(JSON.parse(reply));
-                item_array.push(JSON.parse(reply));
-                //response.json(JSON.parse(reply));
+                //console.log(reply);
+                console.log("item " + JSON.parse(reply));
+                response.json(JSON.parse(reply));
                 return;
             }
         });
-
     },
 
     transactions: function(request, response, next, plaid_client) {
@@ -254,34 +266,52 @@ module.exports = {
     //Saves transactions in cache
     cache_transactions: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
+        var response_array = [];
 
         var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
         var endDate = moment().format('YYYY-MM-DD');
         for (var i = 0; i < num; i++) {
-            myPromises.push(plaid_client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
-                count: 250,
-                offset: 0,
-            }, function(error, transactionsResponse) {
-                if (error != null) {
-                    console.log(JSON.stringify(error));
-                    console.log("inserting error in user key: " + request.user._id.toString() + "transactions");
-                    redis_client.lpush(request.user._id.toString() + "transactions", JSON.stringify(error), redis.print); //apply logic here too
+            myPromises.push(
+                plaid_client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
+                    count: 250,
+                    offset: 0,
+                }, function(error, transactionsResponse) {
+                    if (error != null) {
+                        console.log(error);
+                        response_array.push(error);
+                        return;
+                    }
+                    console.log(transactionsResponse);
+                    response_array.push(transactionsResponse);
                     return;
-                }
-                //console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
-
-                console.log("inserting error in user key: " + request.user._id.toString() + "transactions");
-                redis_client.lpush(request.user._id.toString() + "transactions", JSON.stringify(transactionsResponse), redis.print); //apply logic here too
-                return;
-            }));
+                }));
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
+            console.log("transactions " + response_array.length + " out of length " + request.user.accounts.length);
+            //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
+            redis_client.set(request.user._id.toString() + "transactions", JSON.stringify(response_array), redis.print);
             return;
         });
     },
 
-    get_cache_transactions: function(request, response, next, redis_client, redis, num) {},
+    get_cached_transactions: function(request, response, next, redis_client, redis, num) {
+        redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                console.log("error" + err);
+            }
+            if (reply == '') {
+                console.log("no data stored");
+                return;
+            } else {
+                //console.log(reply);
+                console.log("Transactions" + JSON.parse(reply));
+                response.json(JSON.parse(reply));
+                return;
+            }
+        });
+    },
 
     //or should we just calculate it and send it?
     cache_transactions_raw_array: function(data, redis_client, redis) {},
