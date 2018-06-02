@@ -71,6 +71,6 @@ function check_cache(request, response, next, plaid_client, redis_client, redis)
 function cache_user_data(request, response, next, plaid_client, redis_client, redis) {
     num = request.user.accounts.length; //get num accounts
     plaid_manip.cache_user_accounts(request, response, next, plaid_client, redis_client, redis, num);
-    plaid_manip.cache_item(request, response, next, plaid_client, redis_client, redis, num);
-    plaid_manip.cache_transactions(request, response, next, plaid_client, redis_client, redis, num);
+    //plaid_manip.cache_item(request, response, next, plaid_client, redis_client, redis, num);
+    //plaid_manip.cache_transactions(request, response, next, plaid_client, redis_client, redis, num);
 }

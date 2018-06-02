@@ -83,6 +83,7 @@ module.exports = {
     cache_user_accounts: async function(request, response, next, plaid_client, redis_client, redis, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
+        var response_array = [];
         for (var i = 0; i < num; i++) {
             myPromises.push(plaid_client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) { //this is a callback
                 if (error != null) {
@@ -90,14 +91,17 @@ module.exports = {
                     var msg = 'Unable to pull accounts from the Plaid API.';
                     console.log(msg + '\n' + error);
                     //---------test
-                    console.log("inserting error in user key: " + request.user._id.toString() + "accounts");
-                    redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(error), redis.print); //apply logic here too
+                    console.log("got error in user key: " + request.user._id.toString() + "accounts");
+                    response_array.push(error);
+                    //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(error), redis.print); //apply logic here too
                     //------------
                     return;
                 }
 
-                console.log("inserting account in user key: " + request.user._id.toString() + "accounts");
-                redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(authResponse), redis.print);
+                console.log("got account in user key: " + request.user._id.toString() + "accounts");
+
+                response_array.push(authResponse);
+                //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(authResponse), redis.print);
 
 
                 //Change this is ack the plaid_client that the server has cache this req
@@ -106,17 +110,38 @@ module.exports = {
                     accounts: authResponse.accounts,
                     numbers: authResponse.numbers,
                 });
+                return;
             }));
         }
 
 
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
+            console.log(response_array.length + " length " + request.user.accounts.length);
+            //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
+            redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             return;
         });
     },
 
-    get_cache_user_accounts: function(request, response, next, redis_client, redis, num) {},
+    get_cache_user_accounts: function(request, response, next, redis_client, redis, num) {
+        redis_client.get(request.user._id.toString() + "accounts", function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                console.log("error" + err);
+            }
+            if (reply == '') {
+                console.log("no data stored");
+                return;
+            } else {
+                console.log("REPLAYS");
+                console.log(reply);
+                console.log(JSON.parse(reply));
+                response.json(JSON.parse(reply));
+                return;
+            }
+        });
+    },
 
     item: function(request, response, next, plaid_client) {
         // Pull the Item - this includes information about available products,
@@ -183,8 +208,9 @@ module.exports = {
         });
     },
 
-    get_cache_item : function(request, response, next, redis_client, redis) {
-        redis_client.lrange(request.user._id.toString() + "accounts", 0, -1, function(err, reply) {
+    //I dont want to have to do this I want this to be stored as an array or object and I dont want to have to reconstruct it
+    get_cache_item: function(request, response, next, redis_client, redis) {
+        redis_client.lrange(request.user._id.toString() + "item", 0, 0, function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
                 console.log("error" + err);
@@ -193,11 +219,14 @@ module.exports = {
                 console.log("no data stored");
                 return;
             } else {
+                console.log(reply);
                 console.log(JSON.parse(reply));
-                response.json(JSON.parse(reply));
+                item_array.push(JSON.parse(reply));
+                //response.json(JSON.parse(reply));
                 return;
             }
         });
+
     },
 
     transactions: function(request, response, next, plaid_client) {
