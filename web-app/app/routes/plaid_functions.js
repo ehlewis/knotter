@@ -123,7 +123,7 @@ module.exports = {
         });
     },
 
-    get_cached_user_accounts: function(request, response, next, redis_client, redis, num) {
+    get_cached_user_accounts: function(request, response, next, redis_client, redis) {
         redis_client.get(request.user._id.toString() + "accounts", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -172,7 +172,6 @@ module.exports = {
     },
 
     //Gets item but does NOT convert inst_id into anything useful right now
-    //todo: Make the above functionality an api call that will fetch the data as needed
     cache_item: function(request, response, next, plaid_client, redis_client, redis, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
@@ -188,39 +187,13 @@ module.exports = {
                     }
                     item_response_array.push(itemResponse);
                     return;
-
-                    // Also pull information about the institution
-                    /*plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
-                        if (err != null) {
-                            var msg = 'Unable to pull institution information from the Plaid API.';
-                            console.log(msg + '\n' + error);
-                            item_response_array.push(error);
-
-                            return response.json({
-                                error: msg
-                            });
-                        } else {
-                            console.log("pushing");
-                            item_response_array.push(itemResponse);
-                            institution_response_array.push(instRes);
-
-                            response.json({
-                                item: itemResponse.item,
-                                institution: instRes.institution,
-                            });
-                        }
-                    });*/
                 })
             );
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            //console.log("items " + item_response_array);
-            //console.log("institution_response_array " + institution_response_array);
             console.log("item " + item_response_array.length + " out of length " + request.user.accounts.length);
-            console.log("institution " + institution_response_array.length + " out of length " + request.user.accounts.length);
             redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
-            redis_client.set(request.user._id.toString() + "institution", JSON.stringify(institution_response_array), redis.print);
             return;
         });
     },
@@ -240,6 +213,22 @@ module.exports = {
                 console.log("item " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
+            }
+        });
+    },
+
+    get_institution: function(request, response, next, ins_id) {
+        plaid_client.getInstitutionById(ins_id, function(err, instRes) {
+            if (err != null) {
+                var msg = 'Unable to pull institution information from the Plaid API.';
+                console.log(msg + '\n' + error);
+                return response.json({
+                    error: msg
+                });
+            } else {
+                response.json({
+                    institution: instRes.institution,
+                });
             }
         });
     },
@@ -316,7 +305,7 @@ module.exports = {
         });
     },
 
-    get_cached_transactions: function(request, response, next, redis_client, redis, num) {
+    get_cached_transactions: function(request, response, next, redis_client, redis) {
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -337,9 +326,57 @@ module.exports = {
     //or should we just calculate it and send it?
     cache_transactions_raw_array: function(data, redis_client, redis) {},
 
-    get_transactions_raw_array: function(data, redis_client, redis) {},
+    get_cached_transactions_raw_array: function(data, redis_client, redis) {
+        var transaction_array = get_cached_transactions_raw_array(); //need to wait for this somehow
+        for (var i = 0; i < transaction_array.length; i++) {
+            for (var j = 0; j < transaction_array[i].transactions.length; j++) {
+                all_transactions.push(transaction_array[i].transactions[j]);
+            }
+        }
 
-    cache_graph_data: function(data, redis_client, redis, num) {},
+    },
+
+    //incomplete
+    cache_graph_data: function(data, redis_client, redis) {
+        //we have to await the transaction_array;
+        var transaction_array = get_cached_transactions_raw_array();
+        var transDate = new Date();
+        var temp = -1;
+        for (var i = 0; i < transaction_array.length; i++) {
+            for (var j = 0; j < transaction_array[i].transactions.length; j++) {
+                transDate = new Date(transaction_array[i].transactions[j].date);
+                //console.log(transDate.getMonth());
+                temp = transDate.getMonth();
+                if (temp == 0) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 1) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 2) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 3) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 4) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 5) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 6) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 7) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 8) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 9) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 10) {
+                    graphData[temp] = graphData[temp] + 1;
+                } else if (temp == 11) {
+                    graphData[temp] = graphData[temp] + 1;
+                }
+            }
+        }
+        //store the array
+        //return graphData;
+    },
 
     get_graph_data: function(data, redis_client, redis, num) {}
 
