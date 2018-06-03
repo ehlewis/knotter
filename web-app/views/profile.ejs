@@ -26,6 +26,12 @@
         <button id="get-item-btn" class="btn btn-default btn-sm">Get Item</button>
         <button id="get-all-item-btn" class="btn btn-default btn-sm">Get All Items</button>
     </div>
+    <div class="page-header text-center">
+        <button id="refresh-cache-btn" class="btn btn-default btn-sm">Refresh Cache</button>
+        <button id="get-cached-accounts-btn" class="btn btn-default btn-sm">Get Cached Accounts</button>
+        <button id="get-cached-transactions-btn" class="btn btn-default btn-sm">Get Cached Transactions</button>
+        <button id="get-cached-items-btn" class="btn btn-default btn-sm">Get Cached Items</button>
+    </div>
 
     <div class="row">
 
@@ -157,6 +163,46 @@ $('#get-all-transactions-btn').on('click', function(e) {
 //     }});
 // });
 
+
+//-- TEST CACHE
+
+$('#refresh-cache-btn').on('click', function(e) {
+      $.get('/api/refresh_cache').success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+});
+
+$('#get-cached-accounts-btn').on('click', function(e) {
+      $.get('/api/get_cached_user_accounts').success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+});
+$('#get-cached-transactions-btn').on('click', function(e) {
+      $.get('/api/get_cached_transactions').success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+});
+$('#get-cached-items-btn').on('click', function(e) {
+      $.get('/api/get_cached_items').success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+});
 
 </script>
 

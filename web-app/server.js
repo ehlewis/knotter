@@ -31,7 +31,7 @@ var redis = require("redis"),
     redis_client = redis.createClient();
 console.log("Connected to " + "redis".green);
 
-var plaid_manip = require('./app/routes/plaid_manip');
+var plaid_functions = require('./app/routes/plaid_functions');
 var on_login = require('./app/routes/on_login');
 
 
@@ -338,7 +338,7 @@ app.get('/api/user_data', isLoggedIn, function(req, res) {
     }
 });
 
-app.get('/api/on_login', isLoggedIn, function(request, response, next) {
+app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
     on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
 });
 
@@ -346,8 +346,8 @@ app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response,
     plaid_functions.get_cached_user_accounts(request, response, next, redis_client, redis);
 });
 
-app.get('/api/get_cached_item', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_item(request, response, next, redis_client, redis);
+app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
+    plaid_functions.get_cached_items(request, response, next, redis_client, redis);
 });
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
