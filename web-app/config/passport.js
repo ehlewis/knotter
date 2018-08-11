@@ -51,9 +51,9 @@ module.exports = function(passport) {
 
             // asynchronous
             // User.findOne wont fire unless data is sent back
+            // find a user whose email is the same as the forms email
+            // we are checking to see if the user trying to login already exists
             process.nextTick(function() {
-                // find a user whose email is the same as the forms email
-                // we are checking to see if the user trying to login already exists
                 User.findOne({
                     'email': email
                 }, function(err, user) {
@@ -83,7 +83,6 @@ module.exports = function(passport) {
                             return done(null, newUser);
                         });
                     }
-
                 });
             });
         }));

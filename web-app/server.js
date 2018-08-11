@@ -245,15 +245,12 @@ app.get('/logout', function(req, res) { //todo clear redis cache ***
 });*/
 
 
-app.post('/signup', function(request, response, next) {
-
-    passport.authenticate('local-signup', {
+app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/dashboard', // redirect to the secure profile section
         failureRedirect: '/signup', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
-    });
-
-});
+    })
+);
 
 
 // process the login form
