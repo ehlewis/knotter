@@ -1,10 +1,23 @@
-### Link
+# Link
 
 Run the following commands to start the website
+
+## Start the db
 ```
 mongod
-
-APP_PORT=8000 PLAID_CLIENT_ID=5ac8108bbdc6a40eb40cb093 PLAID_SECRET=786c67f3c3dd820f2bf7dd37ec5bb1 PLAID_PUBLIC_KEY=201d391154bbd55ef3725c4e6baed3 PLAID_ENV=sandbox node server.js
-
-# Go to http://localhost:8000
 ```
+To access the mongodb cli: ```mongo```
+To list the users we have in the db from the cli: ```db.users.find().pretty()```
+
+## Start the Redis Cache
+```
+brew services start redis
+```
+
+To access the redis cli: ```redis-cli```
+To view all keys in the redis cache from the cli: ```keys *```
+
+## Start the web server
+```node server.js```
+
+#### Go to http://localhost:8080

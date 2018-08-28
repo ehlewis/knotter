@@ -2,24 +2,24 @@
 'use strict';
 // set up ======================================================================
 // get all the tools we need
-var express  = require('express');
-var app      = express();
-var port     = process.env.PORT || 8080;
+var express = require('express');
+var app = express();
+var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
-var flash    = require('connect-flash');
-var envvar  = require('envvar');
+var flash = require('connect-flash');
+var envvar = require('envvar');
 var moment = require('moment');
 var plaid = require('plaid');
 
-var morgan       = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
+var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var configDB = require('./config/database.js');
 
-var mongodb     = require('mongodb');
+var mongodb = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
@@ -27,12 +27,23 @@ var mongo_url = "mongodb://localhost:27017/link";
 
 var colors = require('colors');
 
+var redis = require("redis"),
+    redis_client = redis.createClient();
+console.log("Connected to " + "redis".green);
 
-var APP_PORT = envvar.number('APP_PORT', 8000);
+var plaid_functions = require('./app/routes/plaid_functions');
+var on_login = require('./app/routes/on_login');
+
+
+
+/*var APP_PORT = envvar.number('APP_PORT', 8000);
 var PLAID_CLIENT_ID = envvar.string('PLAID_CLIENT_ID');
 var PLAID_SECRET = envvar.string('PLAID_SECRET');
-var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');
-var PLAID_ENV = envvar.string('PLAID_ENV', 'sandbox');
+var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
+var PLAID_CLIENT_ID = '5ac8108bbdc6a40eb40cb093';
+var PLAID_SECRET = '786c67f3c3dd820f2bf7dd37ec5bb1';
+var PLAID_PUBLIC_KEY = '201d391154bbd55ef3725c4e6baed3';
+var PLAID_ENV = 'sandbox';
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
@@ -47,13 +58,13 @@ var collection = null;
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
 
-MongoClient.connect(mongo_url, function (err, client) {
+MongoClient.connect(mongo_url, function(err, client) {
     if (err) throw err;
 
     db = client.db('link');
     collection = db.collection('users');
 
-    console.log("Connected to db!");
+    console.log("Connected to " + "db!".green);
 });
 
 // set up our express application
@@ -66,7 +77,9 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 // required for passport
 app.use(session({
     secret: 'fun',
-    cookie: {_expires : 3600000}
+    cookie: {
+        _expires: 3600000
+    }
 })); // session secret and cookie timeout
 
 app.use(passport.initialize());
@@ -79,152 +92,63 @@ app.use(express.static('public')); //Serves resources from public folder
 
 //************************************BEGIN PLAID API**********************************
 // Initialize the Plaid client
-var client = new plaid.Client(
-  PLAID_CLIENT_ID,
-  PLAID_SECRET,
-  PLAID_PUBLIC_KEY,
-  plaid.environments[PLAID_ENV]
+var plaid_client = new plaid.Client(
+    PLAID_CLIENT_ID,
+    PLAID_SECRET,
+    PLAID_PUBLIC_KEY,
+    plaid.environments[PLAID_ENV]
 );
 
 app.use(bodyParser.urlencoded({
-  extended: false
+    extended: false
 }));
 app.use(bodyParser.json());
 
 app.get('/', function(request, response, next) {
-  response.render('landing.ejs', {
-    /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,*/
-  });
+    response.render('landing.ejs', {
+        /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,*/
+    });
 });
 
 
 
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
-  response.render('dashboard.ejs', {
-    user : request.user, // get the user out of session and pass to template
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('dashboard.ejs', {
+        user: request.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
-  response.render('accounts.ejs', {
-    user : request.user,
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('accounts.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 app.post('/get_access_token', function(request, response, next) {
-  PUBLIC_TOKEN = request.body.public_token;
-  client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
-    if (error != null) {
-      var msg = 'Could not exchange public_token!';
-      console.log(msg + '\n' + error);
-      return response.json({
-        error: msg
-      });
-    }
-    ACCESS_TOKEN = tokenResponse.access_token;
-    ITEM_ID = tokenResponse.item_id;
-    console.log('Exchanged'.green + ' tokens');
-    console.log('   Access Token: ' + ACCESS_TOKEN);
-    console.log('   Item ID: ' + ITEM_ID);
-
-    //Inserts this data into our db
-
-    //This needs to append not overwrite
-    if(request.user.accounts == null){
-        collection.update({'_id' : request.user._id}, {'$set' : {'accounts' : [{"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }]}});
-    }
-    else{
-        collection.update({'_id' : request.user._id}, {'$push' : {'accounts' : {"access_token" : ACCESS_TOKEN, "item_id" : ITEM_ID }}});
-    }
-
-    console.log("Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-    console.log("Length of accounts is now: " + request.user.accounts.length);
-
-    response.json({
-      'error': false
-    });
-  });
+    plaid_manip.get_access_token(request, response, next, plaid_client);
 });
 
 app.get('/accounts', function(request, response, next) {
-  // Retrieve high-level account information and account and routing numbers
-  // for each account associated with the Item.
-  var i = request.query.params.var_i;
-  console.log(i);
-  client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
-    if (error != null) {
-      var msg = 'Unable to pull accounts from the Plaid API.';
-      console.log(msg + '\n' + error);
-      return response.json({
-        error: msg
-      });
-    }
 
-    //console.log(authResponse.accounts);
-    response.json({
-      error: false,
-      accounts: authResponse.accounts,
-      numbers: authResponse.numbers,
-    });
-  });
+    // Retrieve high-level account information and account and routing numbers
+    // for each account associated with the Item.
+    plaid_manip.accounts(request, response, next, plaid_client);
 });
 
 app.post('/item', function(request, response, next) {
-  // Pull the Item - this includes information about available products,
-  // billed products, webhook information, and more.
-  var i = request.body.params.var_i;
-  console.log(i);
-      client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
-        if (error != null) {
-          console.log(JSON.stringify(error));
-          return response.json({
-            error: error
-          });
-        }
-
-        // Also pull information about the institution
-        client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
-          if (err != null) {
-            var msg = 'Unable to pull institution information from the Plaid API.';
-            console.log(msg + '\n' + error);
-            return response.json({
-              error: msg
-            });
-          } else {
-            response.json({
-              item: itemResponse.item,
-              institution: instRes.institution,
-            });
-          }
-        });
-      });
+    // Pull the Item - this includes information about available products,
+    // billed products, webhook information, and more.
+    plaid_manip.item(request, response, next, plaid_client);
 });
 
 app.post('/transactions', function(request, response, next) {
-  // Pull transactions for the Item for the last 30 days
-      var i = request.body.params.var_i;
-      console.log(i);
-      var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
-      var endDate = moment().format('YYYY-MM-DD');
-      client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
-        count: 250,
-        offset: 0,
-      }, function(error, transactionsResponse) {
-        if (error != null) {
-          console.log(JSON.stringify(error));
-          return response.json({
-            error: error
-          });
-        }
-        console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
-        response.json(transactionsResponse);
-      });
-  //}
+    // Pull transactions for the Item for the last 30 days
+    plaid_manip.transactions(request, response, next, plaid_client);
 });
 
 //**************************************END PLAID API**********************************
@@ -240,9 +164,10 @@ app.get('/', function(req, res) {
 // =====================================
 // show the login form
 app.get('/login', function(req, res) {
-
     // render the page and pass in any flash data if it exists
-    res.render('login.ejs', { message: req.flash('loginMessage') });
+    res.render('login.ejs', {
+        message: req.flash('loginMessage')
+    });
 });
 
 // process the login form
@@ -253,13 +178,26 @@ app.get('/login', function(req, res) {
 // =====================================
 // show the signup form
 app.get('/signup', function(req, res) {
-
     // render the page and pass in any flash data if it exists
-    res.render('signup.ejs', { message: req.flash('signupMessage') });
+    res.render('signup.ejs', {
+        message: req.flash('signupMessage')
+    });
 });
 
 // process the signup form
 // app.post('/signup', do all our passport stuff here);
+
+// =====================================
+// SIGNUP2 =============================
+// =====================================
+// show the second step of the signup form
+app.get('/signup_step2', isLoggedIn, function(req, res) {
+    res.render('signup_step2.ejs', {
+        user: req.user, // get the user out of session and pass to template
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
+    });
+});
 
 // =====================================
 // PROFILE SECTION =====================
@@ -268,7 +206,7 @@ app.get('/signup', function(req, res) {
 // we will use route middleware to verify this (the isLoggedIn function)
 app.get('/profile', isLoggedIn, function(req, res) {
     res.render('profile.ejs', {
-        user : req.user, // get the user out of session and pass to template
+        user: req.user, // get the user out of session and pass to template
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV
     });
@@ -289,7 +227,7 @@ app.get('/profile', isLoggedIn, function(req, res) {
 // =====================================
 // LOGOUT ==============================
 // =====================================
-app.get('/logout', function(req, res) {
+app.get('/logout', function(req, res) { //todo clear redis cache ***
     req.logout();
     res.redirect('/');
 });
@@ -306,17 +244,20 @@ app.get('/logout', function(req, res) {
     collection.update({'_id' : req.user._id}, {'$set' : {'name' : ""}});
 });*/
 
+
 app.post('/signup', passport.authenticate('local-signup', {
-successRedirect : '/dashboard', // redirect to the secure profile section
-failureRedirect : '/signup', // redirect back to the signup page if there is an error
-failureFlash : true // allow flash messages
-}));
+        successRedirect: '/dashboard', // redirect to the secure profile section
+        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
+    })
+);
+
 
 // process the login form
 app.post('/login', passport.authenticate('local-login', {
-   successRedirect : '/dashboard', // redirect to the secure profile section
-   failureRedirect : '/login', // redirect back to the signup page if there is an error
-   failureFlash : true // allow flash messages
+    successRedirect: '/dashboard', // redirect to the secure profile section
+    failureRedirect: '/login', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
 }));
 
 
@@ -336,19 +277,19 @@ function isLoggedIn(req, res, next) {
 //!!!!!!!API IMPLEMENT!!!!!!!!!!!!!!!!!!!!
 
 app.get('/name', function(request, response, next) {
-  response.render('name.ejs', {
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('name.ejs', {
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 
 app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
-  response.render('old_dash_api.ejs', {
-    user : request.user,
-    PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-    PLAID_ENV: PLAID_ENV,
-  });
+    response.render('old_dash_api.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
 });
 
 
@@ -367,7 +308,13 @@ app.post('/name', function(req, res, next) {
     console.log(req.body.name);
     console.log(req.user);
 
-    collection.update({'_id' : req.user._id}, {'$set' : {'name' : req.body.name }});
+    collection.update({
+        '_id': req.user._id
+    }, {
+        '$set': {
+            'name': req.body.name
+        }
+    });
 
     console.log("inserted username: " + req.body.name + " for user " + req.user);
 
@@ -375,18 +322,34 @@ app.post('/name', function(req, res, next) {
 });
 
 
-app.get('/api/user_data', function(req, res) {
+app.get('/api/user_data', isLoggedIn, function(req, res) {
 
-            if (req.user === undefined) {
-                // The user is not logged in
-                res.json({});
-            } else {
-                res.json({
-                    username: req.user,
-                    num_of_accounts : req.user.accounts.length
-                });
-            }
+    if (req.user === undefined) {
+        // The user is not logged in
+        res.json({});
+    } else {
+        res.json({
+            username: req.user,
+            num_of_accounts: req.user.accounts.length
         });
+    }
+});
+
+app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
+    on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
+});
+
+app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
+    plaid_functions.get_cached_user_accounts(request, response, next, redis_client, redis);
+});
+
+app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
+    plaid_functions.get_cached_items(request, response, next, redis_client, redis);
+});
+
+app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
+    plaid_functions.get_cached_transactions(request, response, next, redis_client, redis);
+});
 
 
 // launch ======================================================================
