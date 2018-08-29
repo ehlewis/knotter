@@ -352,6 +352,12 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
 });
 
 
+//404
+
+app.get('*', function(req, res){
+    res.render('404.ejs');
+});
+
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
