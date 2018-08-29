@@ -1,0 +1,43 @@
+https://stackoverflow.com/questions/1125968/how-do-i-force-git-pull-to-overwrite-local-files
+
+https://stackoverflow.com/questions/3876977/update-git-branches-from-master
+
+https://gist.github.com/thomasfr/9691385
+
+"Most API requests interact with an Item, a set of credentials (map of key value pairs) associated with a financial institution. Each Item can have many associated Accounts. For each Account, Plaid returns high-level information such as balance, name, and account type. Credit and depository Accounts may also have transactions associated with them.
+
+A single end-user of your application might have accounts at different financial institutions, which means they would have multiple different Items.
+
+Your users create Items through Link, a drop-in module that handles the credential and MFA validation process. Once an Item is created, Link passes a public_token that you exchange for an access_token from your backend app server.
+
+That access_token and item_id uniquely identify the Item. You use the access_token along with your client_id and secret to access products available for an Item and make changes to it over time."
+
+https://stackoverflow.com/questions/35764792/insert-post-data-into-mongodb-using-node
+
+https://stackoverflow.com/questions/28096735/how-do-i-access-passports-req-user-variable-in-client-side-javascript
+
+https://stackoverflow.com/questions/33108326/how-to-pass-client-side-parameters-to-the-server-side-in-angular-node-js-express
+
+https://stackoverflow.com/questions/449541/how-do-you-merge-selective-files-with-git-merge
+
+https://stackoverflow.com/questions/6756024/in-mongo-how-do-i-make-the-display-of-results-when-doing-a-find-the-same-as
+
+https://cloud.google.com/community/tutorials/nodejs-mongodb-on-appengine
+
+https://cloud.google.com/nodejs/
+
+https://stephanwagner.me/only-css-loading-spinner
+
+https://stackoverflow.com/questions/28760101/nodejs-passport-how-to-add-more-user-information
+
+https://nodewebapps.com/2017/06/18/how-do-nodejs-sessions-work/
+
+https://cloud.google.com/community/tutorials/express-memcached-session-appengine
+
+https://www.codementor.io/noddy/cookie-management-in-express-js-du107rmna
+
+https://stackoverflow.com/questions/12737371/calling-already-defined-routes-in-other-routes-in-express-nodejs?rq=1
+
+https://stackoverflow.com/questions/27393206/node-js-calling-a-callback-function-inside-a-callback
+
+https://stackoverflow.com/questions/8694871/node-js-store-objects-in-redis
