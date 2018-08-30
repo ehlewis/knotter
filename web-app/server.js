@@ -1,5 +1,6 @@
 // server.js
 'use strict';
+
 // set up ======================================================================
 // get all the tools we need
 var express = require('express');
@@ -25,11 +26,31 @@ var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
 var mongo_url = "mongodb://localhost:27017/link";
 
+//Set up Logging
 var colors = require('colors');
+const winston = require('winston');
+winston.level = 'debug';
+let logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.printf(info => {
+            return `${info.timestamp} ${info.level}: ${info.message}`;
+        })
+    ),
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({filename: 'link.log'})
+        ]
+});
+/*logger.log("debug","hi");
+logger.info('Hello world');
+logger.debug('Debugging info');*/
 
 var redis = require("redis"),
     redis_client = redis.createClient();
-console.log("Connected to " + "redis".green);
+logger.log("info","Connected to redis!");
+//console.log("Connected to " + "redis".green);
 
 var plaid_functions = require('./app/routes/plaid_functions');
 var on_login = require('./app/routes/on_login');
@@ -55,7 +76,8 @@ var ITEM_ID = null;
 var db = null;
 var collection = null;
 
-// configuration ===============================================================
+
+// ==Configuration*==
 mongoose.connect(configDB.url); // connect to our database
 
 MongoClient.connect(mongo_url, function(err, client) {
@@ -63,8 +85,8 @@ MongoClient.connect(mongo_url, function(err, client) {
 
     db = client.db('link');
     collection = db.collection('users');
-
-    console.log("Connected to " + "db!".green);
+    logger.info("Connected to DB!");
+    //console.log("Connected to " + "db!".green);
 });
 
 // set up our express application

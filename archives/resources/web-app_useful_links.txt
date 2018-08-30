@@ -43,3 +43,5 @@ https://stackoverflow.com/questions/27393206/node-js-calling-a-callback-function
 https://stackoverflow.com/questions/8694871/node-js-store-objects-in-redis
 
 https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program
+
+https://stackabuse.com/using-global-variables-in-node-js/
