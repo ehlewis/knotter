@@ -6,12 +6,11 @@
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 8080;
-var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 var envvar = require('envvar');
 var moment = require('moment');
-var plaid = require('plaid');
+
 
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -24,52 +23,10 @@ var on_login = require('./app/routes/on_login');
 
 //Set up Logging
 var colors = require('colors');
-const winston = require('winston');
-winston.level = 'debug';
-let logger = winston.createLogger({
-    level: 'debug',
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.printf(info => {
-            return `${info.timestamp} ${info.level}: ${info.message}`;
-        })
-    ),
-    transports: [
-        new winston.transports.Console({
-            format: winston.format.combine(winston.format.colorize(),winston.format.simple())
-        }),
-        new winston.transports.File({filename: 'link.log'})
-        ]
-});
-logger.stream = {
-    write: function(message, encoding){
-        logger.info(message);
-    }
-};
+/*const winston = require('winston');
+winston.level = 'debug';*/
+var logger = require('./config/logger');
 
-//app.use(morgan('dev')); // log every request to the console
-app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));
-
-
-/*logger.log("debug","hi");
-logger.info('Hello world');
-logger.debug('Debugging info');*/
-
-//Connect Redis
-var redis = require("redis"),
-    redis_client = redis.createClient();
-logger.log("info","Connected to redis!");
-//console.log("Connected to " + "redis".green);
-
-
-/*var APP_PORT = envvar.number('APP_PORT', 8000);
-var PLAID_CLIENT_ID = envvar.string('PLAID_CLIENT_ID');
-var PLAID_SECRET = envvar.string('PLAID_SECRET');
-var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
-var PLAID_CLIENT_ID = '5ac8108bbdc6a40eb40cb093';
-var PLAID_SECRET = '786c67f3c3dd820f2bf7dd37ec5bb1';
-var PLAID_PUBLIC_KEY = '201d391154bbd55ef3725c4e6baed3';
-var PLAID_ENV = 'sandbox';
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
@@ -77,29 +34,23 @@ var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
 var ITEM_ID = null;
 
-//Configure DB
-var configDB = require('./config/database.js');
-
-var mongodb = require('mongodb');
-var MongoClient = require('mongodb').MongoClient;
-var Schema = mongoose.Schema;
-//var User = mongoose.model('User');
-var mongo_url = "mongodb://localhost:27017/link";
-
-var db = null;
-var collection = null;
+var mongo_setup = require('./config/mongo_setup')();
 
 
-// ==Configuration*==
-mongoose.connect(configDB.url); // connect to our database
+global.redis = require("redis");
+var redis_setup = require('./config/redis_setup')();
 
-MongoClient.connect(mongo_url, function(err, client) {
-    if (err) throw err;
+var plaid_setup = require("./config/plaid_setup");
 
-    db = client.db('link');
-    collection = db.collection('users');
-    logger.info("Connected to DB!");
-});
+
+
+//app.use(morgan('dev')); // log every request to the console
+app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));
+
+
+/*var APP_PORT = envvar.number('APP_PORT', 8000);
+var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
+
 
 // set up our express application
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -123,14 +74,6 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use(express.static('public')); //Serves resources from public folder
 
-//************************************BEGIN PLAID API**********************************
-// Initialize the Plaid client
-var plaid_client = new plaid.Client(
-    PLAID_CLIENT_ID,
-    PLAID_SECRET,
-    PLAID_PUBLIC_KEY,
-    plaid.environments[PLAID_ENV]
-);
 
 app.use(bodyParser.urlencoded({
     extended: false
@@ -161,25 +104,25 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
 });
 
 app.post('/get_access_token', function(request, response, next) {
-    plaid_manip.get_access_token(request, response, next, plaid_client);
+    plaid_functions.get_access_token(request, response, next);
 });
 
 app.get('/accounts', function(request, response, next) {
 
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
-    plaid_manip.accounts(request, response, next, plaid_client);
+    plaid_functions.accounts(request, response, next);
 });
 
 app.post('/item', function(request, response, next) {
     // Pull the Item - this includes information about available products,
     // billed products, webhook information, and more.
-    plaid_manip.item(request, response, next, plaid_client);
+    plaid_functions.item(request, response, next);
 });
 
 app.post('/transactions', function(request, response, next) {
     // Pull transactions for the Item for the last 30 days
-    plaid_manip.transactions(request, response, next, plaid_client);
+    plaid_functions.transactions(request, response, next);
 });
 
 //**************************************END PLAID API**********************************
@@ -365,19 +308,19 @@ app.get('/api/user_data', isLoggedIn, function(req, res) {
 });
 
 app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
-    on_login.refresh_cache(request, response, next, plaid_client, redis_client, redis);
+    on_login.refresh_cache(request, response, next);
 });
 
 app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_user_accounts(request, response, next, redis_client, redis);
+    plaid_functions.get_cached_user_accounts(request, response, next);
 });
 
 app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_items(request, response, next, redis_client, redis);
+    plaid_functions.get_cached_items(request, response, next);
 });
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_transactions(request, response, next, redis_client, redis);
+    plaid_functions.get_cached_transactions(request, response, next);
 });
 
 

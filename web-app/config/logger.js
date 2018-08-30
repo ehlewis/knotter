@@ -1,30 +1,33 @@
 var winston = require('winston');
 var path = require('path');
 
-// Set this to whatever, by default the path of the script.
-var logPath = __dirname;
-
-const tsFormat = () => (new Date().toISOString());
-
-const errorLog = winston.createlogger({
+var logger = winston.createLogger({
+    level: 'debug',
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.printf(info => {
+            return `${info.timestamp} ${info.level}: ${info.message}`;
+        })
+    ),
     transports: [
-        new winston.transports.File({
-            filename: path.join(logPath, 'errors.log'),
-            timestamp: tsFormat,
-            level: 'info'})
-    ]
+        new winston.transports.Console({
+            format: winston.format.combine(winston.format.colorize(),winston.format.simple())
+        }),
+        new winston.transports.File({filename: 'link.log'})
+        ]
 });
 
-const accessLog = winston.createlogger({
-    transports: [
-        new winston.transports.File({
-            filename: path.join(logPath, 'access.log'),
-            timestamp: tsFormat,
-            level: 'info'})
-    ]
-});
+module.exports = logger;
 
-module.exports = {
-    errorLog: errorLog,
-    accessLog: accessLog
+
+module.exports.stream = {
+    write: function(message, encoding){
+        logger.info(message);
+    }
 };
+
+/*logger.stream = {
+    write: function(message, encoding){
+        logger.info(message);
+    }
+};*/

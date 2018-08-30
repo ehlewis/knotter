@@ -1,11 +1,11 @@
 var moment = require('moment');
-var BPromise = require('bluebird')
-
+var logger = require('../../config/logger');
+var BPromise = require('bluebird');
 var myPromises = [];
 
 
 module.exports = {
-    get_access_token: function(request, response, next, plaid_client) {
+    get_access_token: function(request, response, next) {
         PUBLIC_TOKEN = request.body.public_token;
         plaid_client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
             if (error != null) {
@@ -55,7 +55,7 @@ module.exports = {
         });
     },
 
-    accounts: function(request, response, next, plaid_client) {
+    accounts: function(request, response, next) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         var i = request.query.params.var_i;
@@ -78,7 +78,7 @@ module.exports = {
         });
     },
 
-    cache_user_accounts: async function(request, response, next, plaid_client, redis_client, redis, num) {
+    cache_user_accounts: async function(request, response, next, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         var response_array = [];
@@ -121,7 +121,7 @@ module.exports = {
         });
     },
 
-    get_cached_user_accounts: function(request, response, next, redis_client, redis) {
+    get_cached_user_accounts: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "accounts", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -138,7 +138,7 @@ module.exports = {
         });
     },
 
-    item: function(request, response, next, plaid_client) {
+    item: function(request, response, next) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         var i = request.body.params.var_i;
@@ -170,7 +170,7 @@ module.exports = {
     },
 
     //Gets item but does NOT convert inst_id into anything useful right now
-    cache_items: function(request, response, next, plaid_client, redis_client, redis, num) {
+    cache_items: function(request, response, next, plaid_client, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         var item_response_array = [];
@@ -197,7 +197,7 @@ module.exports = {
     },
 
     //I dont want to have to do this I want this to be stored as an array or object and I dont want to have to reconstruct it
-    get_cached_items: function(request, response, next, redis_client, redis) {
+    get_cached_items: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "item", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -231,7 +231,7 @@ module.exports = {
         });
     },
 
-    get_cached_institutions: function(request, response, next, redis_client, redis) {
+    get_cached_institutions: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "institution", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -272,7 +272,7 @@ module.exports = {
     },
 
     //Saves transactions in cache
-    cache_transactions: function(request, response, next, plaid_client, redis_client, redis, num) {
+    cache_transactions: function(request, response, next, num) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
         var response_array = [];
 
@@ -302,7 +302,7 @@ module.exports = {
         });
     },
 
-    get_cached_transactions: function(request, response, next, redis_client, redis) {
+    get_cached_transactions: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
