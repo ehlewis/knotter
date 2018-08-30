@@ -18,13 +18,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-var configDB = require('./config/database.js');
+var plaid_functions = require('./app/routes/plaid_functions');
+var on_login = require('./app/routes/on_login');
 
-var mongodb = require('mongodb');
-var MongoClient = require('mongodb').MongoClient;
-var Schema = mongoose.Schema;
-//var User = mongoose.model('User');
-var mongo_url = "mongodb://localhost:27017/link";
 
 //Set up Logging
 var colors = require('colors');
@@ -39,22 +35,31 @@ let logger = winston.createLogger({
         })
     ),
     transports: [
-        new winston.transports.Console(),
+        new winston.transports.Console({
+            format: winston.format.combine(winston.format.colorize(),winston.format.simple())
+        }),
         new winston.transports.File({filename: 'link.log'})
         ]
 });
+logger.stream = {
+    write: function(message, encoding){
+        logger.info(message);
+    }
+};
+
+//app.use(morgan('dev')); // log every request to the console
+app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));
+
+
 /*logger.log("debug","hi");
 logger.info('Hello world');
 logger.debug('Debugging info');*/
 
+//Connect Redis
 var redis = require("redis"),
     redis_client = redis.createClient();
 logger.log("info","Connected to redis!");
 //console.log("Connected to " + "redis".green);
-
-var plaid_functions = require('./app/routes/plaid_functions');
-var on_login = require('./app/routes/on_login');
-
 
 
 /*var APP_PORT = envvar.number('APP_PORT', 8000);
@@ -72,6 +77,14 @@ var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
 var ITEM_ID = null;
 
+//Configure DB
+var configDB = require('./config/database.js');
+
+var mongodb = require('mongodb');
+var MongoClient = require('mongodb').MongoClient;
+var Schema = mongoose.Schema;
+//var User = mongoose.model('User');
+var mongo_url = "mongodb://localhost:27017/link";
 
 var db = null;
 var collection = null;
@@ -86,11 +99,9 @@ MongoClient.connect(mongo_url, function(err, client) {
     db = client.db('link');
     collection = db.collection('users');
     logger.info("Connected to DB!");
-    //console.log("Connected to " + "db!".green);
 });
 
 // set up our express application
-app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
@@ -98,7 +109,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({
-    secret: 'fun',
+    secret: 'thisissupersecret',
     cookie: {
         _expires: 3600000
     }
@@ -128,8 +139,6 @@ app.use(bodyParser.json());
 
 app.get('/', function(request, response, next) {
     response.render('landing.ejs', {
-        /*PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,*/
     });
 });
 
@@ -294,8 +303,6 @@ function isLoggedIn(req, res, next) {
 }
 
 
-
-
 //!!!!!!!API IMPLEMENT!!!!!!!!!!!!!!!!!!!!
 
 app.get('/name', function(request, response, next) {
@@ -327,8 +334,8 @@ app.post('/name', function(req, res, next) {
          client.close();
      });*/ //Inserts new attribute
 
-    console.log(req.body.name);
-    console.log(req.user);
+    logger.debug(req.body.name);
+    logger.debug(req.user);
 
     collection.update({
         '_id': req.user._id
@@ -338,7 +345,7 @@ app.post('/name', function(req, res, next) {
         }
     });
 
-    console.log("inserted username: " + req.body.name + " for user " + req.user);
+    logger.debug("inserted username: " + req.body.name + " for user " + req.user);
 
     res.redirect('/profile');
 });
@@ -382,4 +389,4 @@ app.get('*', function(req, res){
 
 // launch ======================================================================
 app.listen(port);
-console.log('The magic happens on port ' + port);
+logger.info('The magic happens on port ' + port);
