@@ -3,5 +3,4 @@ On host machine:
     Mongodb (all of them)
     redis
 Node packages:
-    npm install express mongoose passport connect-flash envvar moment plaid morgan cookie-parser body-parser express-session mongodb colors passport-local bcrypt-nodejs redis bluebird
-
+    npm install express mongoose passport connect-flash envvar moment plaid morgan cookie-parser body-parser express-session mongodb colors passport-local bcrypt-nodejs redis bluebird winston

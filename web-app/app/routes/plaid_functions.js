@@ -1,25 +1,23 @@
 var moment = require('moment');
-var BPromise = require('bluebird')
-
+var logger = require('../../config/logger');
+var BPromise = require('bluebird');
 var myPromises = [];
 
 
 module.exports = {
-    get_access_token: function(request, response, next, plaid_client) {
+    get_access_token: function(request, response, next) {
         PUBLIC_TOKEN = request.body.public_token;
         plaid_client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
             if (error != null) {
                 var msg = 'Could not exchange public_token!';
-                console.log(msg + '\n' + error);
+                logger.error(msg + '\n' + error);
                 return response.json({
                     error: msg
                 });
             }
             ACCESS_TOKEN = tokenResponse.access_token;
             ITEM_ID = tokenResponse.item_id;
-            console.log('Exchanged'.green + ' tokens');
-            console.log('   Access Token: ' + ACCESS_TOKEN);
-            console.log('   Item ID: ' + ITEM_ID);
+            logger.debug('Exchanged'.green + ' tokens' + '   Access Token: ' + ACCESS_TOKEN + '   Item ID: ' + ITEM_ID);
 
             //Inserts this data into our db
 
@@ -48,8 +46,8 @@ module.exports = {
                 });
             }
 
-            console.log("Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-            console.log("Length of accounts is now: " + request.user.accounts.length);
+            logger.debug("Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
+            logger.debug("Length of accounts is now: " + request.user.accounts.length);
 
             response.json({
                 'error': false
@@ -57,15 +55,15 @@ module.exports = {
         });
     },
 
-    accounts: function(request, response, next, plaid_client) {
+    accounts: function(request, response, next) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         var i = request.query.params.var_i;
-        console.log(i);
+        logger.log("silly",i);
         plaid_client.getAuth(request.user.accounts[i].access_token, function(error, authResponse) {
             if (error != null) {
                 var msg = 'Unable to pull accounts from the Plaid API.';
-                console.log(msg + '\n' + error);
+                logger.error(msg + '\n' + error);
                 return response.json({
                     error: msg
                 });
@@ -80,7 +78,7 @@ module.exports = {
         });
     },
 
-    cache_user_accounts: async function(request, response, next, plaid_client, redis_client, redis, num) {
+    cache_user_accounts: async function(request, response, next, num) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         var response_array = [];
@@ -89,16 +87,16 @@ module.exports = {
                 if (error != null) {
                     //console.log(error);
                     var msg = 'Unable to pull accounts from the Plaid API.';
-                    console.log(msg + '\n' + error);
+                    logger.error(msg + '\n' + error);
                     //---------test
-                    console.log("got error in user key: " + request.user._id.toString() + "accounts");
+                    logger.error("got error in user key: " + request.user._id.toString() + "accounts");
                     response_array.push(error);
                     //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(error), redis.print); //apply logic here too
                     //------------
                     return;
                 }
 
-                console.log("got account in user key: " + request.user._id.toString() + "accounts");
+                logger.debug("got account in user key: " + request.user._id.toString() + "accounts");
 
                 response_array.push(authResponse);
                 //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(authResponse), redis.print);
@@ -116,38 +114,38 @@ module.exports = {
 
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            console.log("accounts " + response_array.length + " out of length " + request.user.accounts.length);
+            logger.debug("accounts " + response_array.length + " out of length " + request.user.accounts.length);
             //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             return;
         });
     },
 
-    get_cached_user_accounts: function(request, response, next, redis_client, redis) {
+    get_cached_user_accounts: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "accounts", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                console.log("error" + err);
+                logger.error("error" + err);
             }
             if (reply == '') {
-                console.log("no data stored");
+                logger.debug("no data stored");
                 return;
             } else {
-                console.log("accounts " + JSON.parse(reply));
+                logger.debug("accounts " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }
         });
     },
 
-    item: function(request, response, next, plaid_client) {
+    item: function(request, response, next) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         var i = request.body.params.var_i;
-        console.log(i);
+        logger.log("silly",i);
         plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
             if (error != null) {
-                console.log(JSON.stringify(error));
+                logger.error(JSON.stringify(error));
                 return response.json({
                     error: error
                 });
@@ -157,7 +155,7 @@ module.exports = {
             plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
                 if (err != null) {
                     var msg = 'Unable to pull institution information from the Plaid API.';
-                    console.log(msg + '\n' + error);
+                    logger.error(msg + '\n' + error);
                     return response.json({
                         error: msg
                     });
@@ -172,7 +170,7 @@ module.exports = {
     },
 
     //Gets item but does NOT convert inst_id into anything useful right now
-    cache_items: function(request, response, next, plaid_client, redis_client, redis, num) {
+    cache_items: function(request, response, next, plaid_client, num) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         var item_response_array = [];
@@ -181,7 +179,7 @@ module.exports = {
             myPromises.push(
                 plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
                     if (error != null) {
-                        console.log(JSON.stringify(error));
+                        logger.error(JSON.stringify(error));
                         item_response_array.push(error);
                         return;
                     }
@@ -192,25 +190,25 @@ module.exports = {
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            console.log("item " + item_response_array.length + " out of length " + request.user.accounts.length);
+            logger.debug("item " + item_response_array.length + " out of length " + request.user.accounts.length);
             redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
             return;
         });
     },
 
     //I dont want to have to do this I want this to be stored as an array or object and I dont want to have to reconstruct it
-    get_cached_items: function(request, response, next, redis_client, redis) {
+    get_cached_items: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "item", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                console.log("error" + err);
+                logger.error("error" + err);
             }
             if (reply == '') {
-                console.log("no data stored");
+                logger.debug("no data stored");
                 return;
             } else {
                 //console.log(reply);
-                console.log("item " + JSON.parse(reply));
+                logger.debug("item " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -221,7 +219,7 @@ module.exports = {
         plaid_client.getInstitutionById(ins_id, function(err, instRes) {
             if (err != null) {
                 var msg = 'Unable to pull institution information from the Plaid API.';
-                console.log(msg + '\n' + error);
+                logger.error(msg + '\n' + error);
                 return response.json({
                     error: msg
                 });
@@ -233,18 +231,18 @@ module.exports = {
         });
     },
 
-    get_cached_institutions: function(request, response, next, redis_client, redis) {
+    get_cached_institutions: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "institution", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                console.log("error" + err);
+                logger.error("error" + err);
             }
             if (reply == '') {
-                console.log("no data stored");
+                logger.debug("no data stored");
                 return;
             } else {
                 //console.log(reply);
-                console.log("item " + JSON.parse(reply));
+                logger.debug("item " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -254,7 +252,7 @@ module.exports = {
     transactions: function(request, response, next, plaid_client) {
         // Pull transactions for the Item for the last 30 days
         var i = request.body.params.var_i;
-        console.log(i);
+        logger.log("silly",i);
         var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
         var endDate = moment().format('YYYY-MM-DD');
         plaid_client.getTransactions(request.user.accounts[i].access_token, startDate, endDate, {
@@ -262,19 +260,19 @@ module.exports = {
             offset: 0,
         }, function(error, transactionsResponse) {
             if (error != null) {
-                console.log(JSON.stringify(error));
+                logger.error(JSON.stringify(error));
                 return response.json({
                     error: error
                 });
             }
-            console.log('pulled '.green + transactionsResponse.transactions.length + ' transactions');
+            logger.debug('pulled '.green + transactionsResponse.transactions.length + ' transactions');
             response.json(transactionsResponse);
         });
         //}
     },
 
     //Saves transactions in cache
-    cache_transactions: function(request, response, next, plaid_client, redis_client, redis, num) {
+    cache_transactions: function(request, response, next, num) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
         var response_array = [];
 
@@ -287,7 +285,7 @@ module.exports = {
                     offset: 0,
                 }, function(error, transactionsResponse) {
                     if (error != null) {
-                        console.log(error);
+                        logger.error(error);
                         response_array.push(error);
                         return;
                     }
@@ -297,21 +295,21 @@ module.exports = {
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            console.log("transactions " + response_array.length + " out of length " + request.user.accounts.length);
+            logger.debug("transactions " + response_array.length + " out of length " + request.user.accounts.length);
             //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             redis_client.set(request.user._id.toString() + "transactions", JSON.stringify(response_array), redis.print);
             return;
         });
     },
 
-    get_cached_transactions: function(request, response, next, redis_client, redis) {
+    get_cached_transactions: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                console.log("error" + err);
+                logger.error("error" + err);
             }
             if (reply == '') {
-                console.log("no data stored");
+                logger.debug("no data stored");
                 return;
             } else {
                 //console.log(reply);
