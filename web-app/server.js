@@ -6,7 +6,6 @@
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 8080;
-var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 var envvar = require('envvar');
@@ -28,20 +27,17 @@ var colors = require('colors');
 winston.level = 'debug';*/
 var logger = require('./config/logger');
 
+var db_setup = require('./config/mongo_setup');
+db_setup();
+
+var redis = require("redis");
+var redis_setup = require('./config/redis_setup');
+var redis_client = redis_setup();
+
 
 //app.use(morgan('dev')); // log every request to the console
 app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));
 
-
-/*logger.log("debug","hi");
-logger.info('Hello world');
-logger.debug('Debugging info');*/
-
-//Connect Redis
-var redis = require("redis"),
-    redis_client = redis.createClient();
-logger.log("info","Connected to redis!");
-//console.log("Connected to " + "redis".green);
 
 
 /*var APP_PORT = envvar.number('APP_PORT', 8000);
@@ -59,29 +55,6 @@ var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
 var ITEM_ID = null;
 
-//Configure DB
-var configDB = require('./config/database.js');
-
-var mongodb = require('mongodb');
-var MongoClient = require('mongodb').MongoClient;
-var Schema = mongoose.Schema;
-//var User = mongoose.model('User');
-var mongo_url = "mongodb://localhost:27017/link";
-
-var db = null;
-var collection = null;
-
-
-// ==Configuration*==
-mongoose.connect(configDB.url); // connect to our database
-
-MongoClient.connect(mongo_url, function(err, client) {
-    if (err) throw err;
-
-    db = client.db('link');
-    collection = db.collection('users');
-    logger.info("Connected to DB!");
-});
 
 // set up our express application
 app.use(cookieParser()); // read cookies (needed for auth)
