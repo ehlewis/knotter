@@ -24,28 +24,10 @@ var on_login = require('./app/routes/on_login');
 
 //Set up Logging
 var colors = require('colors');
-const winston = require('winston');
-winston.level = 'debug';
-let logger = winston.createLogger({
-    level: 'debug',
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.printf(info => {
-            return `${info.timestamp} ${info.level}: ${info.message}`;
-        })
-    ),
-    transports: [
-        new winston.transports.Console({
-            format: winston.format.combine(winston.format.colorize(),winston.format.simple())
-        }),
-        new winston.transports.File({filename: 'link.log'})
-        ]
-});
-logger.stream = {
-    write: function(message, encoding){
-        logger.info(message);
-    }
-};
+/*const winston = require('winston');
+winston.level = 'debug';*/
+var logger = require('./config/logger');
+
 
 //app.use(morgan('dev')); // log every request to the console
 app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));

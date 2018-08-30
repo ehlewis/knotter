@@ -1,6 +1,6 @@
 var moment = require('moment');
+var logger = require('./config/logger');
 var BPromise = require('bluebird')
-
 var myPromises = [];
 
 
