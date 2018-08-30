@@ -5,9 +5,7 @@ var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
 var mongo_url = "mongodb://localhost:27017/link";
 var configDB = require('./database.js');
-var db = null;
 var collection = null;
-
 var logger = require('./logger.js');
 
 
@@ -19,7 +17,7 @@ module.exports = function() {
         if (err) throw err;
 
         db = client.db('link');
-        collection = db.collection('users');
+        global.collection = db.collection('users');
         logger.info("Connected to DB!");
     });
 }
