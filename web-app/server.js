@@ -10,8 +10,6 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var envvar = require('envvar');
 var moment = require('moment');
-
-
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -206,18 +204,6 @@ app.get('/logout', function(req, res) { //todo clear redis cache ***
     res.redirect('/');
 });
 
-//??
-//Create blank name and accounts field on signup so we can append and not create later on
-/*app.post('/signup', function(req, res) {
-    passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
-        failureRedirect : '/signup', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
-    });
-    collection.update({'_id' : req.user._id}, {'$set' : {'accounts' : []}});
-    collection.update({'_id' : req.user._id}, {'$set' : {'name' : ""}});
-});*/
-
 
 app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/dashboard', // redirect to the secure profile section
@@ -267,16 +253,6 @@ app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
 
 
 app.post('/name', function(req, res, next) {
-
-    /* var product = {  name: "A" };
-
-       collection.insert(product, function(err, result) {
-
-       if(err) { throw err; }
-
-         client.close();
-     });*/ //Inserts new attribute
-
     logger.debug(req.body.name);
     logger.debug(req.user);
 
