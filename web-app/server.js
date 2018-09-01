@@ -78,12 +78,24 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
+
+//=====GETS=====
+
 app.get('/', function(request, response, next) {
     response.render('landing.ejs', {
     });
 });
-
-
 
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
@@ -101,10 +113,6 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     });
 });
 
-app.post('/get_access_token', function(request, response, next) {
-    plaid_functions.get_access_token(request, response, next);
-});
-
 app.get('/accounts', function(request, response, next) {
 
     // Retrieve high-level account information and account and routing numbers
@@ -112,29 +120,7 @@ app.get('/accounts', function(request, response, next) {
     plaid_functions.accounts(request, response, next);
 });
 
-app.post('/item', function(request, response, next) {
-    // Pull the Item - this includes information about available products,
-    // billed products, webhook information, and more.
-    plaid_functions.item(request, response, next);
-});
 
-app.post('/transactions', function(request, response, next) {
-    // Pull transactions for the Item for the last 30 days
-    plaid_functions.transactions(request, response, next);
-});
-
-//**************************************END PLAID API**********************************
-// =====================================
-// HOME PAGE (with login links) ========
-// =====================================
-app.get('/', function(req, res) {
-    res.render('login.ejs'); // load the index.ejs file
-});
-
-// =====================================
-// LOGIN ===============================
-// =====================================
-// show the login form
 app.get('/login', function(req, res) {
     // render the page and pass in any flash data if it exists
     res.render('login.ejs', {
@@ -142,13 +128,11 @@ app.get('/login', function(req, res) {
     });
 });
 
-// process the login form
-// app.post('/login', do all our passport stuff here);
+app.get('/logout', function(req, res) { //todo clear redis cache ***
+    req.logout();
+    res.redirect('/');
+});
 
-// =====================================
-// SIGNUP ==============================
-// =====================================
-// show the signup form
 app.get('/signup', function(req, res) {
     // render the page and pass in any flash data if it exists
     res.render('signup.ejs', {
@@ -171,9 +155,6 @@ app.get('/signup_step2', isLoggedIn, function(req, res) {
     });
 });
 
-// =====================================
-// PROFILE SECTION =====================
-// =====================================
 // we will want this protected so you have to be logged in to visit
 // we will use route middleware to verify this (the isLoggedIn function)
 app.get('/profile', isLoggedIn, function(req, res) {
@@ -183,56 +164,6 @@ app.get('/profile', isLoggedIn, function(req, res) {
         PLAID_ENV: PLAID_ENV
     });
 });
-
-// =====================================
-// DASHBOARD ==============================
-// =====================================
-// show the signup form
-// app.get('/dashboard', function(req, res) {
-//     // render the page and pass in api keys
-//     res.render('dashboard.ejs', {
-//         user : req.user, // get the user out of session and pass to template
-//         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-//         PLAID_ENV: PLAID_ENV});
-// });
-
-// =====================================
-// LOGOUT ==============================
-// =====================================
-app.get('/logout', function(req, res) { //todo clear redis cache ***
-    req.logout();
-    res.redirect('/');
-});
-
-
-app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/dashboard', // redirect to the secure profile section
-        failureRedirect: '/signup', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
-    })
-);
-
-
-// process the login form
-app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/dashboard', // redirect to the secure profile section
-    failureRedirect: '/login', // redirect back to the signup page if there is an error
-    failureFlash: true // allow flash messages
-}));
-
-
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}
-
-
-//!!!!!!!API IMPLEMENT!!!!!!!!!!!!!!!!!!!!
 
 app.get('/name', function(request, response, next) {
     response.render('name.ejs', {
@@ -249,26 +180,6 @@ app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
         PLAID_ENV: PLAID_ENV,
     });
 });
-
-
-
-app.post('/name', function(req, res, next) {
-    logger.debug(req.body.name);
-    logger.debug(req.user);
-
-    collection.update({
-        '_id': req.user._id
-    }, {
-        '$set': {
-            'name': req.body.name
-        }
-    });
-
-    logger.debug("inserted username: " + req.body.name + " for user " + req.user);
-
-    res.redirect('/profile');
-});
-
 
 app.get('/api/user_data', isLoggedIn, function(req, res) {
 
@@ -299,9 +210,59 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
     plaid_functions.get_cached_transactions(request, response, next);
 });
 
+//=====POSTS=====
+
+app.post('/get_access_token', function(request, response, next) {
+    plaid_functions.get_access_token(request, response, next);
+});
+
+app.post('/item', function(request, response, next) {
+    // Pull the Item - this includes information about available products,
+    // billed products, webhook information, and more.
+    plaid_functions.item(request, response, next);
+});
+
+app.post('/transactions', function(request, response, next) {
+    // Pull transactions for the Item for the last 30 days
+    plaid_functions.transactions(request, response, next);
+});
+
+
+app.post('/signup', passport.authenticate('local-signup', {
+        successRedirect: '/dashboard', // redirect to the secure profile section
+        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureFlash: true // allow flash messages
+    })
+);
+
+
+// process the login form
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/dashboard', // redirect to the secure profile section
+    failureRedirect: '/login', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+}));
+
+
+app.post('/name', function(req, res, next) {
+    logger.debug(req.body.name);
+    logger.debug(req.user);
+
+    collection.update({
+        '_id': req.user._id
+    }, {
+        '$set': {
+            'name': req.body.name
+        }
+    });
+
+    logger.debug("inserted username: " + req.body.name + " for user " + req.user);
+
+    res.redirect('/profile');
+});
+
 
 //404
-
 app.get('*', function(req, res){
     res.render('404.ejs');
 });
