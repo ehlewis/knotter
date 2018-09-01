@@ -15,8 +15,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-var plaid_functions = require('./app/routes/plaid_functions');
-var on_login = require('./app/routes/on_login');
+var link_functions = require('./app/routes/link_functions');
+var cache_functions = require('./app/routes/cache_functions');
 
 
 //Set up Logging
@@ -117,7 +117,7 @@ app.get('/accounts', function(request, response, next) {
 
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
-    plaid_functions.accounts(request, response, next);
+    link_functions.accounts(request, response, next);
 });
 
 
@@ -195,36 +195,36 @@ app.get('/api/user_data', isLoggedIn, function(req, res) {
 });
 
 app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
-    on_login.refresh_cache(request, response, next);
+    cache_functions.refresh_cache(request, response, next);
 });
 
 app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_user_accounts(request, response, next);
+    link_functions.get_cached_user_accounts(request, response, next);
 });
 
 app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_items(request, response, next);
+    link_functions.get_cached_items(request, response, next);
 });
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
-    plaid_functions.get_cached_transactions(request, response, next);
+    link_functions.get_cached_transactions(request, response, next);
 });
 
 //=====POSTS=====
 
 app.post('/get_access_token', function(request, response, next) {
-    plaid_functions.get_access_token(request, response, next);
+    link_functions.get_access_token(request, response, next);
 });
 
 app.post('/item', function(request, response, next) {
     // Pull the Item - this includes information about available products,
     // billed products, webhook information, and more.
-    plaid_functions.item(request, response, next);
+    link_functions.item(request, response, next);
 });
 
 app.post('/transactions', function(request, response, next) {
     // Pull transactions for the Item for the last 30 days
-    plaid_functions.transactions(request, response, next);
+    link_functions.transactions(request, response, next);
 });
 
 
