@@ -52,7 +52,12 @@ var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
 
 // set up our express application
 app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser()); // get information from html forms
+
+//app.use(bodyParser()); // get information from html forms
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 app.set('view engine', 'ejs'); // set up ejs for templating
 
@@ -61,7 +66,9 @@ app.use(session({
     secret: 'thisissupersecret',
     cookie: {
         _expires: 3600000
-    }
+    },
+    resave: true,
+    saveUninitialized: true
 })); // session secret and cookie timeout
 
 app.use(passport.initialize());

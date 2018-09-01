@@ -6,7 +6,7 @@ var LocalStrategy = require('passport-local').Strategy;
 // load up the user model
 var User = require('../app/models/user');
 
-var on_login = require('../app/routes/on_login');
+var cache_functions = require('../app/routes/cache_functions');
 
 
 // expose this function to our app using module.exports
@@ -120,7 +120,7 @@ module.exports = function(passport) {
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                 //We are going to load user data to our cache here
-                //on_login.foo(req, response, next, client);
+                //cache_functions.foo(req, response, next, client);
                 //no were not
 
                 //
