@@ -13,7 +13,7 @@ var logger = require('./logger.js');
 module.exports = function() {
     mongoose.connect(configDB.url); // connect to our database
 
-    MongoClient.connect(mongo_url, function(err, client) {
+    MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
         if (err) throw err;
 
         db = client.db('link');
