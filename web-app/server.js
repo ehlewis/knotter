@@ -1,7 +1,7 @@
 // server.js
 'use strict';
 
-// set up ======================================================================
+//=====Setup=====
 // get all the tools we need
 var express = require('express');
 var app = express();
@@ -17,7 +17,6 @@ var session = require('express-session');
 
 var link_functions = require('./app/routes/link_functions');
 var cache_functions = require('./app/routes/cache_functions');
-
 
 //Set up Logging
 var colors = require('colors');
@@ -41,6 +40,17 @@ var redis_setup = require('./config/redis_setup')();
 var plaid_setup = require("./config/plaid_setup");
 
 
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
+//=====USES=====
 
 //app.use(morgan('dev')); // log every request to the console
 app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));
@@ -65,7 +75,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 app.use(session({
     secret: 'thisissupersecret',
     cookie: {
-        _expires: 3600000
+        maxage: 3600000
     },
     resave: true,
     saveUninitialized: true
@@ -84,17 +94,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-
-
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}
 
 
 //=====GETS=====
