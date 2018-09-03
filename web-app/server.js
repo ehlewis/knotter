@@ -119,7 +119,7 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     });
 });
 
-app.get('/accounts', function(request, response, next) {
+app.get('/accounts', isLoggedIn, function(request, response, next) {
 
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
@@ -134,7 +134,7 @@ app.get('/login', function(req, res) {
     });
 });
 
-app.get('/logout', function(req, res) { //todo clear redis cache ***
+app.get('/logout', isLoggedIn, function(req, res) { //todo clear redis cache ***
     req.logout();
     res.redirect('/');
 });
@@ -171,7 +171,7 @@ app.get('/profile', isLoggedIn, function(req, res) {
     });
 });
 
-app.get('/name', function(request, response, next) {
+app.get('/name', isLoggedIn, function(request, response, next) {
     response.render('name.ejs', {
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV,
@@ -179,16 +179,15 @@ app.get('/name', function(request, response, next) {
 });
 
 
-app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
+/*app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
     response.render('old_dash_api.ejs', {
         user: request.user,
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV,
     });
-});
+});*/
 
 app.get('/api/user_data', isLoggedIn, function(req, res) {
-
     if (req.user === undefined) {
         // The user is not logged in
         res.json({});
