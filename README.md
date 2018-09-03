@@ -21,3 +21,6 @@ To view all keys in the redis cache from the cli: ```keys *```
 ```node server.js```
 
 #### Go to http://localhost:8080
+
+## Testing
+```npm test``` to run the test file
