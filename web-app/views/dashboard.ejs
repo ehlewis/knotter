@@ -15,27 +15,31 @@
     google.charts.setOnLoadCallback(drawChart);
     function drawChart(){
       var data = google.visualization.arrayToDataTable([
-        ['Month', 'Spending'],
-        ['January', 100],
-        ['February', 100],
-        ['March', 100],
-        ['April', 100],
-        ['May', 100],
-        ['June', 100],
-        ['July', 100],
-        ['August', 100],
-        ['September', 100],
-        ['October', 100],
-        ['November', 100],
-        ['December', 100]
+        ['Month', 'Budget', 'Spent', 'Saved'],
+        ['January', 750, 654, 231],
+        ['February', 800, 812, 98],
+        ['March', 600, 821, 23],
+        ['April', 750, 507, 348],
+        ['May', 675, 672, 147],
+        ['June', 700, 832, 5],
+        ['July', 500, 487, 437],
+        ['August', 775, 732, 214],
+        ['September', 675, 703, 55],
+        ['October', 725, 802, 94],
+        ['November', 950, 805, 302],
+        ['December', 1000, 1060, 9]
       ]);
 
       var options = {
         title: 'Spending each month',
+        width: 1300,
+        height: 300,
+        bar: {groupWidth: "95%"},
+        // hAxis.textStyle: {fontSize: "10"},
         legend: {position: 'none'},
       };
 
-      var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
       chart.draw(data, options);
     }
     </script>
