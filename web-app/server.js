@@ -41,13 +41,13 @@ var plaid_setup = require("./config/plaid_setup");
 
 
 // route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
+function isLoggedIn(request, response, next) {
     // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
+    if (request.isAuthenticated())
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    response.redirect('/');
 }
 
 //=====USES=====
@@ -127,22 +127,22 @@ app.get('/accounts', isLoggedIn, function(request, response, next) {
 });
 
 
-app.get('/login', function(req, res) {
+app.get('/login', function(request, response) {
     // render the page and pass in any flash data if it exists
-    res.render('login.ejs', {
-        message: req.flash('loginMessage')
+    response.render('login.ejs', {
+        message: request.flash('loginMessage')
     });
 });
 
-app.get('/logout', isLoggedIn, function(req, res) { //todo clear redis cache ***
-    req.logout();
-    res.redirect('/');
+app.get('/logout', isLoggedIn, function(request, response) { //todo clear redis cache ***
+    request.logout();
+    response.redirect('/');
 });
 
-app.get('/signup', function(req, res) {
+app.get('/signup', function(request, response) {
     // render the page and pass in any flash data if it exists
-    res.render('signup.ejs', {
-        message: req.flash('signupMessage')
+    response.render('signup.ejs', {
+        message: request.flash('signupMessage')
     });
 });
 
@@ -153,9 +153,9 @@ app.get('/signup', function(req, res) {
 // SIGNUP2 =============================
 // =====================================
 // show the second step of the signup form
-app.get('/signup_step2', isLoggedIn, function(req, res) {
-    res.render('signup_step2.ejs', {
-        user: req.user, // get the user out of session and pass to template
+app.get('/signup_step2', isLoggedIn, function(request, response) {
+    response.render('signup_step2.ejs', {
+        user: request.user, // get the user out of session and pass to template
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV
     });
@@ -163,9 +163,9 @@ app.get('/signup_step2', isLoggedIn, function(req, res) {
 
 // we will want this protected so you have to be logged in to visit
 // we will use route middleware to verify this (the isLoggedIn function)
-app.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.ejs', {
-        user: req.user, // get the user out of session and pass to template
+app.get('/profile', isLoggedIn, function(request, response) {
+    response.render('profile.ejs', {
+        user: request.user, // get the user out of session and pass to template
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV
     });
@@ -187,14 +187,14 @@ app.get('/name', isLoggedIn, function(request, response, next) {
     });
 });*/
 
-app.get('/api/user_data', isLoggedIn, function(req, res) {
-    if (req.user === undefined) {
+app.get('/api/user_data', isLoggedIn, function(request, response) {
+    if (request.user === undefined) {
         // The user is not logged in
-        res.json({});
+        response.json({});
     } else {
-        res.json({
-            username: req.user,
-            num_of_accounts: req.user.accounts.length
+        response.json({
+            username: request.user,
+            num_of_accounts: request.user.accounts.length
         });
     }
 });
@@ -249,27 +249,27 @@ app.post('/login', passport.authenticate('local-login', {
 }));
 
 
-app.post('/name', function(req, res, next) {
-    logger.debug(req.body.name);
-    logger.debug(req.user);
+app.post('/name', function(request, response, next) {
+    logger.debug(request.body.name);
+    logger.debug(request.user);
 
     collection.update({
-        '_id': req.user._id
+        '_id': request.user._id
     }, {
         '$set': {
-            'name': req.body.name
+            'name': request.body.name
         }
     });
 
-    logger.debug("inserted username: " + req.body.name + " for user " + req.user);
+    logger.debug("inserted username: " + request.body.name + " for user " + request.user);
 
-    res.redirect('/profile');
+    response.redirect('/profile');
 });
 
 
 //404
-app.get('*', function(req, res){
-    res.render('404.ejs');
+app.get('*', function(request, response){
+    response.render('404.ejs');
 });
 
 // launch ======================================================================
