@@ -2,111 +2,142 @@
 <html>
 
 <head>
-    <title>Link</title>
-    <link rel="icon" href="assets/link_icon_w_on_g.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
-    <!--<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    <script src="assets/js/plaid_api_calls.js"></script>
+  <title>Link</title>
+  <link rel="icon" href="assets/link_icon_w_on_g.png">
+  <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
+  <!--<script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+  <script src="assets/js/plaid_api_calls.js"></script>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/jscript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart(){
+      var data = google.visualization.arrayToDataTable([
+        ['Month', 'Spending'],
+        ['January', 100],
+        ['February', 100],
+        ['March', 100],
+        ['April', 100],
+        ['May', 100],
+        ['June', 100],
+        ['July', 100],
+        ['August', 100],
+        ['September', 100],
+        ['October', 100],
+        ['November', 100],
+        ['December', 100]
+      ]);
+
+      var options = {
+        title: 'Spending each month',
+        legend: {position: 'none'},
+      };
+
+      var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+    </script>
 </head>
 
 <body>
 
-    <aside class="sidebar">
-        <a href="/dashboard"><img src="assets/link_brand_white.png"></a>
-        <nav>
-            <ul>
-                <li><a href="/dashboard" class="selected">Dashboard</a></li>
-                <li><a href="/accounts.ejs">Accounts</a></li>
-                <li><a href="/dashboard">Bills</a></li>
-                <li><a href="/dashboard">Analytics</a></li>
-                <li><a href="/dashboard">Link+</a></li>
-            </ul>
-        </nav>
-        <div class="profile">
-            <div id="profile-links">
-                <a id="logout-button" href="/logout">Logout</a>
-                <div class="vl"></div>
-                <a href="/profile">My Account</a>
-            </div>
-            <a href="/profile"><img src="assets/profile_pic_default.svg"/></a>
-        </div>
-    </aside>
-
-    <!-- Dashboard content starts here  -->
-    <div class="dash-sections">
-        <div class="chart-container" id="chartDiv">
-            <!--insert chart here-->
-            <canvas id="myChart" width="800" height="250"></canvas>
-        </div>
+  <aside class="sidebar">
+    <a href="/dashboard"><img src="assets/link_brand_white.png"></a>
+    <nav>
+      <ul>
+        <li><a href="/dashboard" class="selected">Dashboard</a></li>
+        <li><a href="/accounts.ejs">Accounts</a></li>
+        <li><a href="/dashboard">Bills</a></li>
+        <li><a href="/dashboard">Analytics</a></li>
+        <li><a href="/dashboard">Link+</a></li>
+      </ul>
+    </nav>
+    <div class="profile">
+      <div id="profile-links">
+        <a id="logout-button" href="/logout">Logout</a>
+        <div class="vl"></div>
+        <a href="/profile">My Account</a>
+      </div>
+      <a href="/profile"><img src="assets/profile_pic_default.svg"/></a>
     </div>
-    <div class="dash-sections">
-        <div class="card-container">
-            insert recent transactions here
-        </div>
+  </aside>
+
+  <!-- Dashboard content starts here  -->
+  <div class="dash-sections">
+    <div id="chart_div" style="width:900px; height: 500px;">
+      <!--insert chart here-->
+
+      <!-- <canvas id="myChart" width="800" height="250"></canvas> -->
     </div>
-    <header class="section-header">Most Active Accounts</header>
-    <div class="dash-sections" id="accountCards">
-
+  </div>
+  <div class="dash-sections">
+    <div class="card-container">
+      insert recent transactions here
     </div>
+  </div>
+  <header class="section-header">Most Active Accounts</header>
+  <div class="dash-sections" id="accountCards">
 
-    <script>
-        $('#chartDiv').addClass('spinner');
-        $('#accountCards').addClass('spinner');
+  </div>
 
-
-        //call get accont data from server if its null we rerun this
-        //can we run this serverside please
-
-        /*$.get('/api/on_login', {}).success(
-            function(success) {
-                console.log(success);
-            }).error(
-            function(error) {
-                console.log(error);
-            });*/
-
-        /*$.get('/api/get_cached_user_accounts', {}).success(
-            function(success) {
-                console.log(success);
-            }).error(
-            function(error) {
-                console.log(error);
-            });*/
-
-        $.get('/api/get_cached_items', {}).success(
-            function(success) {
-                console.log(success);
-            }).error(
-            function(error) {
-                console.log(error);
-            });
-        /*$.get('/api/get_cached_transactions', {}).success(
-            function(success) {
-                console.log(success);
-            }).error(
-            function(error) {
-                console.log(error);
-            });*/
-
-        /*get_user_transactions();
-
-        get_user_accounts();
-
-        setTimeout(transactionArraytoCSV, 1000);
-        setTimeout(transactionCSVtoFrequencyGraph, 1000);
+  <script>
+    $('#chartDiv').addClass('spinner');
+    $('#accountCards').addClass('spinner');
 
 
-        var ctx = document.getElementById('myChart').getContext('2d');
+    //call get accont data from server if its null we rerun this
+    //can we run this serverside please
 
-        setTimeout(makeChart, 1000);
+    /*$.get('/api/on_login', {}).success(
+        function(success) {
+            console.log(success);
+        }).error(
+        function(error) {
+            console.log(error);
+        });*/
 
-        setTimeout(createAccountCards, 1000);*/
+    /*$.get('/api/get_cached_user_accounts', {}).success(
+        function(success) {
+            console.log(success);
+        }).error(
+        function(error) {
+            console.log(error);
+        });*/
+
+    $.get('/api/get_cached_items', {}).success(
+      function(success) {
+        console.log(success);
+      }).error(
+      function(error) {
+        console.log(error);
+      });
+    /*$.get('/api/get_cached_transactions', {}).success(
+        function(success) {
+            console.log(success);
+        }).error(
+        function(error) {
+            console.log(error);
+        });*/
+
+    /*get_user_transactions();
+
+    get_user_accounts();
+
+    setTimeout(transactionArraytoCSV, 1000);
+    setTimeout(transactionCSVtoFrequencyGraph, 1000);
 
 
-        setTimeout(removeGraphSpinner, 1000);
-        setTimeout(removeCardSpinner, 1000);
-    </script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    setTimeout(makeChart, 1000);
+
+    setTimeout(createAccountCards, 1000);*/
+
+
+    setTimeout(removeGraphSpinner, 1000);
+    setTimeout(removeCardSpinner, 1000);
+  </script>
 
 </body>
