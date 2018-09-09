@@ -157,6 +157,9 @@ app.get('/profile', isLoggedIn, function(request, response) {
 
 //=====API GETS=====
 app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear redis cache ***
+    redis_client.del(request.user._id.toString() + "accounts");
+    redis_client.del(request.user._id.toString() + "item");
+    redis_client.del(request.user._id.toString() + "transactions");
     request.logout();
     response.redirect('/');
 });
