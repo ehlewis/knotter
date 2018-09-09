@@ -34,9 +34,7 @@ module.exports = {
                 //logger.debug("LOG1 " + reply);
                 //logger.debug("Transactions LOG 2" + JSON.parse(reply));
                 transactions = JSON.parse(reply);
-                logger.debug("Pulled cached transactions for graph data");
-
-
+                //logger.debug("Pulled cached transactions for graph data");
                 var transDate = new Date();
                 var transMonth = -1;
                 for (var i = 0; i < transactions.length; i++) {
@@ -88,8 +86,6 @@ module.exports = {
                 for (var month = 0; month < 12; month++) {
                     graph_array[month + 1].push(parseInt(monthly_spent[month]));
                 }
-
-                logger.debug(graph_array);
                 response.json(graph_array);
                 //response.json(JSON.parse(reply));
             }

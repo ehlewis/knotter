@@ -11,7 +11,7 @@ var logger = require('./logger.js');
 
 // ==Configuration*==
 module.exports = function() {
-    mongoose.connect(mongo_url); // connect to our database
+    mongoose.connect(mongo_url, {useMongoClient: true}); // connect to our database
 
     MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
         if (err) throw err;
