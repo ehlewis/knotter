@@ -113,6 +113,14 @@ app.get('/dashboard', isLoggedIn, function(request, response, next) {
     });
 });
 
+app.get('/admin', isLoggedIn, function(request, response, next) {
+    response.render('admin_panel.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
+});
+
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     response.render('accounts.ejs', {
         user: request.user,
@@ -121,47 +129,21 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     });
 });
 
-app.get('/accounts', isLoggedIn, function(request, response, next) {
-
-    // Retrieve high-level account information and account and routing numbers
-    // for each account associated with the Item.
-    link_functions.accounts(request, response, next);
-});
 
 
-app.get('/login', function(request, response) {
+/*app.get('/login', function(request, response) {
     // render the page and pass in any flash data if it exists
     response.render('login.ejs', {
         message: request.flash('loginMessage')
     });
 });
-
-app.get('/logout', isLoggedIn, function(request, response) { //todo clear redis cache ***
-    request.logout();
-    response.redirect('/');
-});
-
 app.get('/signup', function(request, response) {
     // render the page and pass in any flash data if it exists
     response.render('signup.ejs', {
         message: request.flash('signupMessage')
     });
-});
+});*/
 
-// process the signup form
-// app.post('/signup', do all our passport stuff here);
-
-// =====================================
-// SIGNUP2 =============================
-// =====================================
-// show the second step of the signup form
-app.get('/signup_step2', isLoggedIn, function(request, response) {
-    response.render('signup_step2.ejs', {
-        user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV
-    });
-});
 
 // we will want this protected so you have to be logged in to visit
 // we will use route middleware to verify this (the isLoggedIn function)
@@ -173,21 +155,18 @@ app.get('/profile', isLoggedIn, function(request, response) {
     });
 });
 
-app.get('/name', isLoggedIn, function(request, response, next) {
-    response.render('name.ejs', {
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
-    });
+//=====API GETS=====
+app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear redis cache ***
+    request.logout();
+    response.redirect('/');
 });
 
+app.get('/api/accounts', isLoggedIn, function(request, response, next) {
 
-/*app.get('/old_dash_api', isLoggedIn, function(request, response, next) {
-    response.render('old_dash_api.ejs', {
-        user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
-    });
-});*/
+    // Retrieve high-level account information and account and routing numbers
+    // for each account associated with the Item.
+    link_functions.accounts(request, response, next);
+});
 
 app.get('/api/user_data', isLoggedIn, function(request, response) {
     if (request.user === undefined) {
@@ -241,7 +220,7 @@ app.post('/transactions', function(request, response, next) {
 
 app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/dashboard', // redirect to the secure profile section
-        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureRedirect: '/', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     })
 );
@@ -250,12 +229,12 @@ app.post('/signup', passport.authenticate('local-signup', {
 // process the login form
 app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/dashboard', // redirect to the secure profile section
-    failureRedirect: '/login', // redirect back to the signup page if there is an error
+    failureRedirect: '/', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 }));
 
 
-app.post('/name', function(request, response, next) {
+app.post('/api/name', function(request, response, next) {
     logger.debug(request.body.name);
     logger.debug(request.user);
 
