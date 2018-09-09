@@ -312,8 +312,9 @@ module.exports = {
                 logger.debug("no data stored");
                 return;
             } else {
-                //console.log(reply);
-                //console.log("Transactions" + JSON.parse(reply));
+                //logger.debug("LOG1 " + reply);
+                //logger.debug("Transactions LOG 2" + JSON.parse(reply));
+                logger.debug("Pulled cached transactions");
                 response.json(JSON.parse(reply));
                 return;
             }

@@ -17,6 +17,8 @@ var session = require('express-session');
 
 var link_functions = require('./app/routes/link_functions');
 var cache_functions = require('./app/routes/cache_functions');
+var front_end_functions = require('./app/routes/front_end_functions');
+
 
 //Set up Logging
 var colors = require('colors');
@@ -213,6 +215,10 @@ app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
     link_functions.get_cached_transactions(request, response, next);
+});
+
+app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
+    front_end_functions.create_transaction_graph_data(request, response, next);
 });
 
 //=====POSTS=====
