@@ -20,8 +20,8 @@ module.exports = {
           ['October'],
           ['November'],
           ['December']];
-        var monthly_transactions = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]];
-        var monthly_spent = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]];
+        var monthly_transactions = ['0','0','0','0','0','0','0','0','0','0','0','0'];
+        var monthly_spent = ['0','0','0','0','0','0','0','0','0','0','0','0'];
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
@@ -44,7 +44,7 @@ module.exports = {
                         transDate = new Date(transactions[i].transactions[j].date);
                         transMonth = transDate.getMonth();
                         if (transMonth == 0) {
-                            monthly_transactions[transMonth] = parseInt(monthly_transactions[transMonth]) + 1;
+                            monthly_transactions[transMonth] += 1;
                             monthly_spent[transMonth] = parseInt(monthly_spent[transMonth]) + transactions[i].transactions[j].amount;
                         } else if (transMonth == 1) {
                             monthly_transactions[transMonth] = parseInt(monthly_transactions[transMonth]) + 1;
@@ -82,15 +82,11 @@ module.exports = {
                         }
                     }
                 }
-                logger.debug(monthly_transactions);
-                logger.debug(monthly_spent);
-                logger.debug(monthly_transactions[month]);
                 for (var month = 0; month < 12; month++) {
-                    logger.debug(monthly_transactions[month][0]);
-                    graph_array[month + 1].push(monthly_transactions[month][0]);
+                    graph_array[month + 1].push(parseInt(monthly_transactions[month]));
                 }
                 for (var month = 0; month < 12; month++) {
-                    graph_array[month + 1].push(monthly_spent[month][0]);
+                    graph_array[month + 1].push(parseInt(monthly_spent[month]));
                 }
 
                 logger.debug(graph_array);
