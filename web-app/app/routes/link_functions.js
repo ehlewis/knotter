@@ -274,8 +274,8 @@ module.exports = {
     //Saves transactions in cache
     cache_transactions: function(request, response, next, num) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
+        console.debug("Caching transactions");
         var response_array = [];
-
         var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
         var endDate = moment().format('YYYY-MM-DD');
         for (var i = 0; i < num; i++) {

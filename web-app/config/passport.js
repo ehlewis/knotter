@@ -124,7 +124,7 @@ module.exports = function(passport) {
                 //no were not
 
                 //
-
+                //cache_functions.refresh_cache_on_login(user, done);
                 // all is well, return successful user
                 return done(null, user);
             });

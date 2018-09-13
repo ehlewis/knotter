@@ -31,8 +31,8 @@ module.exports = {
                 logger.debug("no data stored");
                 return;
             } else {
-                //logger.debug("LOG1 " + reply);
-                //logger.debug("Transactions LOG 2" + JSON.parse(reply));
+                logger.debug("LOG1 " + reply);
+                logger.debug("Transactions LOG 2" + JSON.parse(reply));
                 transactions = JSON.parse(reply);
                 //logger.debug("Pulled cached transactions for graph data");
                 var transDate = new Date();

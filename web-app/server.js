@@ -184,6 +184,7 @@ app.get('/api/user_data', isLoggedIn, function(request, response) {
 });
 
 app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
+    console.debug("Cache refreshing");
     cache_functions.refresh_cache(request, response, next);
 });
 
