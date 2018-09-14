@@ -137,6 +137,11 @@ app.get('/loginbuffer', isLoggedIn, function(request, response, next) {
     });
 });
 
+app.get('/workinprogress', function(request, response, next) {
+    response.render('workinprogress.ejs', {
+    });
+});
+
 
 /*app.get('/login', function(request, response) {
     // render the page and pass in any flash data if it exists
