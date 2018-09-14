@@ -10,21 +10,21 @@
     <script src="assets/js/plaid_api_calls.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/jscript">
-        $.get('/api/refresh_cache').success(
+        /*$.get('/api/refresh_cache').success(
             function(success) {
                 console.log("I refrrshed");
 
             }).error(
             function(error) {
                 console.log(error)
-            });
+            });*/
 
 
-        /*google.charts.load("current", {
+        google.charts.load("current", {
             packages: ["corechart"]
         });
 
-
+        google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
             $.get('/api/get_graph_data').success(
@@ -51,7 +51,7 @@
                     console.log(error)
                 });
         }
-        setTimeout(drawChart(),3000);*/
+        //setTimeout(drawChart(),3000);
     </script>
 </head>
 

@@ -1,22 +1,36 @@
 <!doctype html>
 <html>
+
 <head>
     <title>Link</title>
     <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
     <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 </head>
+
 <body>
-  <div class="top-bar">
-    <div class="logo">
-      <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
-    </div class>
-  </div>
-  <div class="loader">
-    <img src="assets/graphics/loader.svg"></img>
-    <p>Please wait while we load your account</p>
-  </div>
-  <script>
-    setTimeout(function(){window.location='/dashboard'}, 5000);
-  </script>
+    <div class="top-bar">
+        <div class="logo">
+            <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
+        </div class>
+    </div>
+    <div class="loader">
+        <img src="assets/graphics/loader.svg"></img>
+        <p>Please wait while we load your account</p>
+    </div>
+    <script>
+        $.get('/api/refresh_cache').success(
+            function(success) {
+                console.log("I refrrshed");
+
+            }).error(
+            function(error) {
+                console.log(error)
+            });
+        setTimeout(function() {
+            window.location = '/dashboard'
+        }, 5000);
+    </script>
 </body>
+
 </html>
