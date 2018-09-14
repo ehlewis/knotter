@@ -238,6 +238,21 @@ a{
   cursor: pointer;
 }
 
-/* input:invalid{
-  border: 1px solid red;
-} */
+.loader{
+  display: block;
+  margin: auto;
+  margin-top: 100px;
+  width: 50%;
+}
+
+.loader img{
+  display: block;
+  margin: auto;
+  width: 30%;
+}
+
+.loader p {
+  font-size: 25px;
+  color: white;
+  text-align: center;
+}

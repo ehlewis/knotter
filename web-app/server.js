@@ -129,6 +129,13 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     });
 });
 
+app.get('/loginbuffer', isLoggedIn, function(request, response, next) {
+    response.render('loginbuffer.ejs', {
+        user: request.user,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
+    });
+});
 
 
 /*app.get('/login', function(request, response) {
@@ -232,7 +239,7 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 // process the login form
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/dashboard', // redirect to the secure profile section
+    successRedirect: '/loginbuffer', // redirect to the secure profile section
     failureRedirect: '/', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 }));
