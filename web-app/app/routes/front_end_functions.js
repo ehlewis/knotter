@@ -25,14 +25,18 @@ module.exports = {
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                logger.error("error" + err);
+                logger.error(request.user._id + " error" + err);
             }
             if (reply == '') {
-                logger.debug("no data stored");
+                logger.debug(request.user._id + " no data stored");
                 return;
-            } else {
-                logger.debug("LOG1 " + reply);
-                logger.debug("Transactions LOG 2" + JSON.parse(reply));
+            }
+            if (reply == null){
+                logger.debug(request.user._id + " null answer");
+                return;
+            }else {
+                /*logger.debug("LOG1 " + reply);
+                logger.debug("Transactions LOG 2" + JSON.parse(reply));*/
                 transactions = JSON.parse(reply);
                 //logger.debug("Pulled cached transactions for graph data");
                 var transDate = new Date();

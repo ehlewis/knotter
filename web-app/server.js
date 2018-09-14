@@ -196,7 +196,7 @@ app.get('/api/user_data', isLoggedIn, function(request, response) {
 });
 
 app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
-    console.debug("Cache refreshing");
+    console.debug(request.user._id + " Cache refreshing");
     cache_functions.refresh_cache(request, response, next);
 });
 
@@ -262,7 +262,7 @@ app.post('/api/name', function(request, response, next) {
         }
     });
 
-    logger.debug("inserted username: " + request.body.name + " for user " + request.user);
+    logger.debug("inserted username: " + request.body.name + " for user " + request.user._id);
 
     response.redirect('/profile');
 });

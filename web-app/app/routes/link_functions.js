@@ -1,5 +1,6 @@
 var moment = require('moment');
 var logger = require('../../config/logger');
+//var cache = require("./cache_functions.js");
 var BPromise = require('bluebird');
 var myPromises = [];
 
@@ -46,8 +47,9 @@ module.exports = {
                 });
             }
 
-            logger.debug("Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
-            logger.debug("Length of accounts is now: " + request.user.accounts.length);
+            logger.debug(request.user._id + "Inserted".green + " access_token: " + ACCESS_TOKEN + " and itemId " + ITEM_ID + " for user " + request.user);
+            //cache.refresh_cache(request, response);
+            //logger.debug("Length of accounts is now: " + request.user.accounts.length);
 
             response.json({
                 'error': false
@@ -114,7 +116,7 @@ module.exports = {
 
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            logger.debug("accounts " + response_array.length + " out of length " + request.user.accounts.length);
+            logger.debug(request.user._id + " accounts " + response_array.length + " out of length " + request.user.accounts.length);
             //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             return;
@@ -128,10 +130,10 @@ module.exports = {
                 logger.error("error" + err);
             }
             if (reply == '') {
-                logger.debug("no data stored");
+                logger.debug(request.user._id + " no data stored");
                 return;
             } else {
-                logger.debug("accounts " + JSON.parse(reply));
+                logger.debug(request.user._id + " accounts " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -145,7 +147,7 @@ module.exports = {
         logger.log("silly",i);
         plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
             if (error != null) {
-                logger.error(JSON.stringify(error));
+                logger.error(request.user._id + JSON.stringify(error));
                 return response.json({
                     error: error
                 });
@@ -155,7 +157,7 @@ module.exports = {
             plaid_client.getInstitutionById(itemResponse.item.institution_id, function(err, instRes) {
                 if (err != null) {
                     var msg = 'Unable to pull institution information from the Plaid API.';
-                    logger.error(msg + '\n' + error);
+                    logger.error(request.user._id + msg + '\n' + error);
                     return response.json({
                         error: msg
                     });
@@ -179,8 +181,8 @@ module.exports = {
             myPromises.push(
                 plaid_client.getItem(request.user.accounts[i].access_token, function(error, itemResponse) {
                     if (error != null) {
-                        logger.error(JSON.stringify(error));
-                        item_response_array.push(error);
+                        logger.error(request.user._id + JSON.stringify(error));
+                        //item_response_array.push(error);
                         return;
                     }
                     item_response_array.push(itemResponse);
@@ -190,7 +192,7 @@ module.exports = {
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            logger.debug("item " + item_response_array.length + " out of length " + request.user.accounts.length);
+            logger.debug(request.user._id + " item " + item_response_array.length + " out of length " + request.user.accounts.length);
             redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
             return;
         });
@@ -201,14 +203,14 @@ module.exports = {
         redis_client.get(request.user._id.toString() + "item", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                logger.error("error" + err);
+                logger.error(request.user._id + " error" + err);
             }
             if (reply == '') {
-                logger.debug("no data stored");
+                logger.debug(request.user._id + " no data stored");
                 return;
             } else {
                 //console.log(reply);
-                logger.debug("item " + JSON.parse(reply));
+                logger.debug(request.user._id + " item " + JSON.parse(reply));
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -219,7 +221,7 @@ module.exports = {
         plaid_client.getInstitutionById(ins_id, function(err, instRes) {
             if (err != null) {
                 var msg = 'Unable to pull institution information from the Plaid API.';
-                logger.error(msg + '\n' + error);
+                logger.error(request.user._id + msg + '\n' + error);
                 return response.json({
                     error: msg
                 });
@@ -235,10 +237,10 @@ module.exports = {
         redis_client.get(request.user._id.toString() + "institution", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                logger.error("error" + err);
+                logger.error(request.user._id + " error" + err);
             }
             if (reply == '') {
-                logger.debug("no data stored");
+                logger.debug(request.user._id + " no data stored");
                 return;
             } else {
                 //console.log(reply);
@@ -265,7 +267,7 @@ module.exports = {
                     error: error
                 });
             }
-            logger.debug('pulled '.green + transactionsResponse.transactions.length + ' transactions');
+            logger.debug(request.user._id + ' pulled ' + transactionsResponse.transactions.length + ' transactions');
             response.json(transactionsResponse);
         });
         //}
@@ -285,8 +287,8 @@ module.exports = {
                     offset: 0,
                 }, function(error, transactionsResponse) {
                     if (error != null) {
-                        logger.error(error);
-                        response_array.push(error);
+                        logger.error(request.user._id + error);
+                        response_array.push(request.user._id + error);
                         return;
                     }
                     response_array.push(transactionsResponse);
@@ -295,7 +297,7 @@ module.exports = {
         }
         BPromise.all(myPromises).then(function() {
             // do whatever you need...
-            logger.debug("transactions " + response_array.length + " out of length " + request.user.accounts.length);
+            logger.debug(request.user._id + "  transactions " + response_array.length + " out of length " + request.user.accounts.length);
             //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
             redis_client.set(request.user._id.toString() + "transactions", JSON.stringify(response_array), redis.print);
             return;
@@ -306,15 +308,15 @@ module.exports = {
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
             if (err != null) {
-                logger.error("error" + err);
+                logger.error(request.user._id + " error" + err);
             }
             if (reply == '') {
-                logger.debug("no data stored");
+                logger.debug(request.user._id + " no data stored");
                 return;
             } else {
                 //logger.debug("LOG1 " + reply);
                 //logger.debug("Transactions LOG 2" + JSON.parse(reply));
-                logger.debug("Pulled cached transactions");
+                logger.debug(request.user._id + " Pulled cached transactions");
                 response.json(JSON.parse(reply));
                 return;
             }
