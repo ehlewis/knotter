@@ -18,7 +18,7 @@ To access the redis cli: ```redis-cli```
 To view all keys in the redis cache from the cli: ```keys *```
 
 ## Start the web server
-```node server.js```
+```sudo node server.js```
 
 #### Go to http://localhost:8080
 
