@@ -24,6 +24,7 @@ var front_end_functions = require('./app/routes/front_end_functions');
 var colors = require('colors');
 var logger = require('./config/logger');
 
+//Set up HTTPS
 var https = require('https');
 var helmet = require("helmet");
 var fs = require("fs");
@@ -31,9 +32,6 @@ const httpsOptions = {
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem')
 };
-app.use(helmet());
-app.use(helmet.noCache());
-
 
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
@@ -42,11 +40,8 @@ var PUBLIC_TOKEN = null;
 var ITEM_ID = null;
 
 var mongo_setup = require('./config/mongo_setup')();
-
-
 global.redis = require("redis");
 var redis_setup = require('./config/redis_setup')();
-
 var plaid_setup = require("./config/plaid_setup");
 
 
@@ -105,19 +100,16 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+//Don't let the user go back
 app.use(function(request, response, next) {
   response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
   next();
 });
 
+//Protects against some header attacks
+app.use(helmet());
+app.use(helmet.noCache());
 
-app.use(function(request, response, next) {
-    if (request.secure) {
-        next();
-    } else {
-        response.redirect('https://' + request.headers.host + request.url);
-    }
-});
 
 //=====GETS=====
 
@@ -297,7 +289,7 @@ app.get('*', function(request, response){
 // launch ======================================================================
 
 const server = https.createServer(httpsOptions, app).listen(443, function(){
-    logger.info('Server started on port ' + 443);
+    logger.info('Server started on port 443');
 });
 
 var http = require('http');
@@ -305,7 +297,5 @@ http.createServer(function (request, response) {
     response.writeHead(301, { "Location": "https://" + request.headers['host'] + request.url });
     response.end();
 }).listen(80, function(){
-    logger.info('Server started on port ' + port);
+    logger.info('Server started on port 80');
 });
-
-//app.listen(port);
