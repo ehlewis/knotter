@@ -49,3 +49,9 @@ https://stackabuse.com/using-global-variables-in-node-js/
 https://stackoverflow.com/questions/24330014/bodyparser-is-deprecated-express-4
 
 https://github.com/sripathikrishnan/redis-rdb-tools/wiki/Redis-RDB-Dump-File-Format
+
+https://stackoverflow.com/questions/8169999/how-can-i-create-a-self-signed-cert-for-localhost
+
+https://stackoverflow.com/questions/21397809/create-a-trusted-self-signed-ssl-cert-for-localhost-for-use-with-express-node
+
+https://stackoverflow.com/questions/22453782/nodejs-http-and-https-over-same-port/23975955#23975955
