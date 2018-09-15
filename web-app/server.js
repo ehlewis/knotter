@@ -5,7 +5,7 @@
 // get all the tools we need
 var express = require('express');
 var app = express();
-var port = process.env.PORT || 8080;
+//var port = process.env.PORT || 443;
 var passport = require('passport');
 var flash = require('connect-flash');
 var envvar = require('envvar');
@@ -22,9 +22,17 @@ var front_end_functions = require('./app/routes/front_end_functions');
 
 //Set up Logging
 var colors = require('colors');
-/*const winston = require('winston');
-winston.level = 'debug';*/
 var logger = require('./config/logger');
+
+var https = require('https');
+var helmet = require("helmet");
+var fs = require("fs");
+const httpsOptions = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+};
+app.use(helmet());
+app.use(helmet.noCache());
 
 
 // We store the access_token in memory - in production, store it in a secure
@@ -102,6 +110,14 @@ app.use(function(request, response, next) {
   next();
 });
 
+
+app.use(function(request, response, next) {
+    if (request.secure) {
+        next();
+    } else {
+        response.redirect('https://' + request.headers.host + request.url);
+    }
+});
 
 //=====GETS=====
 
@@ -279,5 +295,17 @@ app.get('*', function(request, response){
 });
 
 // launch ======================================================================
-app.listen(port);
-logger.info('The magic happens on port ' + port);
+
+const server = https.createServer(httpsOptions, app).listen(443, function(){
+    logger.info('Server started on port ' + 443);
+});
+
+var http = require('http');
+http.createServer(function (request, response) {
+    response.writeHead(301, { "Location": "https://" + request.headers['host'] + request.url });
+    response.end();
+}).listen(80, function(){
+    logger.info('Server started on port ' + port);
+});
+
+//app.listen(port);
