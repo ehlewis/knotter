@@ -190,10 +190,9 @@ app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear re
 });
 
 app.get('/api/accounts', isLoggedIn, function(request, response, next) {
-
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
-    link_functions.accounts(request, response, next);
+    link_functions.get_cached_user_accounts(request, response, next);
 });
 
 app.get('/api/user_data', isLoggedIn, function(request, response) {
@@ -229,6 +228,25 @@ app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
     front_end_functions.create_transaction_graph_data(request, response, next);
 });
 
+//=====API Post=====
+
+app.post('/api/name', function(request, response, next) {
+    logger.debug(request.body.name);
+    logger.debug(request.user);
+
+    collection.update({
+        '_id': request.user._id
+    }, {
+        '$set': {
+            'name': request.body.name
+        }
+    });
+
+    logger.debug("inserted username: " + request.body.name + " for user " + request.user._id);
+
+    response.redirect('/profile');
+});
+
 //=====POSTS=====
 
 app.post('/get_access_token', function(request, response, next) {
@@ -262,25 +280,6 @@ app.post('/login', passport.authenticate('local-login', {
     failureFlash: true // allow flash messages
 }));
 
-
-app.post('/api/name', function(request, response, next) {
-    logger.debug(request.body.name);
-    logger.debug(request.user);
-
-    collection.update({
-        '_id': request.user._id
-    }, {
-        '$set': {
-            'name': request.body.name
-        }
-    });
-
-    logger.debug("inserted username: " + request.body.name + " for user " + request.user._id);
-
-    response.redirect('/profile');
-});
-
-
 //404
 app.get('*', function(request, response){
     response.render('404.ejs');
@@ -289,7 +288,7 @@ app.get('*', function(request, response){
 // launch ======================================================================
 
 const server = https.createServer(httpsOptions, app).listen(443, function(){
-    logger.info('Server started on port 443');
+    logger.info('HTTPS server started on port 443');
 });
 
 var http = require('http');
@@ -297,5 +296,5 @@ http.createServer(function (request, response) {
     response.writeHead(301, { "Location": "https://" + request.headers['host'] + request.url });
     response.end();
 }).listen(80, function(){
-    logger.info('Server started on port 80');
+    logger.info('HTTP server started on port 80');
 });

@@ -44,46 +44,37 @@ module.exports = function(passport) {
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
         function(req, email, password, done) {
-            /*var name = req.body.name;
-            console.log(name);
-            var username = req.body.username;
-            var email = req.body.email;*/
-
-            // asynchronous
-            // User.findOne wont fire unless data is sent back
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
-            process.nextTick(function() {
-                User.findOne({
-                    'email': email
-                }, function(err, user) {
-                    // if there are any errors, return the error
-                    if (err)
-                        return done(err);
+            User.findOne({
+                'email': email
+            }, function(err, user) {
+                // if there are any errors, return the error
+                if (err)
+                    return done(err);
 
-                    // check to see if theres already a user with that email
-                    if (user) {
-                        return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-                    } else {
+                // check to see if theres already a user with that email
+                if (user) {
+                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                } else {
 
-                        // if there is no user with that email
-                        // create the user
-                        var newUser = new User();
-                        console.log(req.body);
-                        // set the user's local credentials
-                        newUser.email = email;
-                        newUser.name = req.body.name;
-                        newUser.password = newUser.generateHash(password);
-                        newUser.subscriber = false;
+                    // if there is no user with that email
+                    // create the user
+                    var newUser = new User();
+                    console.log(req.body);
+                    // set the user's local credentials
+                    newUser.email = email;
+                    newUser.name = req.body.name;
+                    newUser.password = newUser.generateHash(password);
+                    newUser.subscriber = false;
 
-                        // save the user
-                        newUser.save(function(err) {
-                            if (err)
-                                throw err;
-                            return done(null, newUser);
-                        });
-                    }
-                });
+                    // save the user
+                    newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                    });
+                }
             });
         }));
 

@@ -8,6 +8,7 @@ var mongo_url = "mongodb://localhost:27017/link"; // looks like mongodb://<user>
 var collection = null;
 var logger = require('./logger.js');
 
+mongoose.Promise = require('bluebird');
 
 // ==Configuration*==
 module.exports = function() {
