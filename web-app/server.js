@@ -14,6 +14,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var redis_store = require('connect-redis')(session);
 
 var link_functions = require('./app/routes/link_functions');
 var cache_functions = require('./app/routes/cache_functions');
@@ -78,6 +79,7 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({
+    store: new redis_store({client: redis}),
     secret: 'thisissupersecret',
     cookie: {
         maxage: 3600000
