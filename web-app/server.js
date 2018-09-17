@@ -5,10 +5,8 @@
 // get all the tools we need
 var express = require('express');
 var app = express();
-//var port = process.env.PORT || 443;
 var passport = require('passport');
 var flash = require('connect-flash');
-var envvar = require('envvar');
 var moment = require('moment');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -58,15 +56,10 @@ function isLoggedIn(request, response, next) {
 
 //=====USES=====
 
-//app.use(morgan('dev')); // log every request to the console
+// set up our logger
 app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", {
     "stream": logger.stream
 }));
-
-
-/*var APP_PORT = envvar.number('APP_PORT', 8000);
-var PLAID_PUBLIC_KEY = envvar.string('PLAID_PUBLIC_KEY');*/
-
 
 // set up our express application
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -288,7 +281,7 @@ app.get('*', function(request, response) {
     response.render('404.ejs');
 });
 
-// launch ======================================================================
+// =====launch=====
 
 const server = https.createServer(httpsOptions, app).listen(443, function() {
     logger.info('HTTPS server started on port 443');
