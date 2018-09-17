@@ -32,9 +32,6 @@ const httpsOptions = {
     cert: fs.readFileSync('./cert.pem')
 };
 
-// We store the access_token in memory - in production, store it in a secure
-// persistent data store
-var ACCESS_TOKEN = null;
 var PUBLIC_TOKEN = null;
 var ITEM_ID = null;
 
