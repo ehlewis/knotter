@@ -32,8 +32,6 @@ const httpsOptions = {
     cert: fs.readFileSync('./cert.pem')
 };
 
-var PUBLIC_TOKEN = null;
-var ITEM_ID = null;
 
 var mongo_setup = require('./config/mongo_setup')();
 global.redis = require("redis");
@@ -48,7 +46,7 @@ function isLoggedIn(request, response, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    response.redirect('/');
+    response.redirect('/landing');
 }
 
 //=====USES=====
@@ -109,7 +107,11 @@ app.use(helmet.noCache());
 
 //=====GETS=====
 
-app.get('/', function(request, response, next) {
+app.get('/', isLoggedIn, function(request, response, next) {
+    response.render('dashboard.ejs', {});
+});
+
+app.get('/landing', function(request, response, next) {
     response.render('landing.ejs', {});
 });
 
