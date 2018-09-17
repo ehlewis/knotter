@@ -10,17 +10,19 @@ To access the mongodb cli: ```mongo```
 To list the users we have in the db from the cli: ```db.users.find().pretty()```
 
 ## Start the Redis Cache
+from the web-app server file
 ```
-brew services start redis
+redis-server redis.conf
 ```
 
 To access the redis cli: ```redis-cli```
 To view all keys in the redis cache from the cli: ```keys *```
 
 ## Start the web server
+from the web-app server file
 ```sudo node server.js```
 
-#### Go to http://localhost:8080
+#### Go to 127.0.0.1
 
 ## Testing
 ```npm test``` to run the test file
