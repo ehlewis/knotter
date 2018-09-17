@@ -230,7 +230,7 @@ app.post('/api/name', function(request, response, next) {
     logger.debug(request.body.name);
     logger.debug(request.user);
 
-    collection.update({
+    collection.updateOne({
         '_id': request.user._id
     }, {
         '$set': {
