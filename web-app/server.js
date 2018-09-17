@@ -14,6 +14,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var redis_store = require('connect-redis')(session);
 
 var link_functions = require('./app/routes/link_functions');
 var cache_functions = require('./app/routes/cache_functions');
@@ -58,7 +59,9 @@ function isLoggedIn(request, response, next) {
 //=====USES=====
 
 //app.use(morgan('dev')); // log every request to the console
-app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", { "stream": logger.stream }));
+app.use(require("morgan")(":method :url :status :response-time ms :remote-addr", {
+    "stream": logger.stream
+}));
 
 
 /*var APP_PORT = envvar.number('APP_PORT', 8000);
@@ -70,7 +73,7 @@ app.use(cookieParser()); // read cookies (needed for auth)
 
 //app.use(bodyParser()); // get information from html forms
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 app.use(bodyParser.json());
 
@@ -78,6 +81,9 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 
 // required for passport
 app.use(session({
+    store: new redis_store({
+        client: redis_client
+        }),
     secret: 'thisissupersecret',
     cookie: {
         maxage: 3600000
@@ -102,8 +108,8 @@ app.use(bodyParser.json());
 
 //Don't let the user go back
 app.use(function(request, response, next) {
-  response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-  next();
+    response.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    next();
 });
 
 //Protects against some header attacks
@@ -114,8 +120,7 @@ app.use(helmet.noCache());
 //=====GETS=====
 
 app.get('/', function(request, response, next) {
-    response.render('landing.ejs', {
-    });
+    response.render('landing.ejs', {});
 });
 
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
@@ -151,8 +156,7 @@ app.get('/loginbuffer', isLoggedIn, function(request, response, next) {
 });
 
 app.get('/workinprogress', function(request, response, next) {
-    response.render('workinprogress.ejs', {
-    });
+    response.render('workinprogress.ejs', {});
 });
 
 
@@ -266,11 +270,10 @@ app.post('/transactions', function(request, response, next) {
 
 
 app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/dashboard', // redirect to the secure profile section
-        failureRedirect: '/', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
-    })
-);
+    successRedirect: '/dashboard', // redirect to the secure profile section
+    failureRedirect: '/', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+}));
 
 
 // process the login form
@@ -281,20 +284,22 @@ app.post('/login', passport.authenticate('local-login', {
 }));
 
 //404
-app.get('*', function(request, response){
+app.get('*', function(request, response) {
     response.render('404.ejs');
 });
 
 // launch ======================================================================
 
-const server = https.createServer(httpsOptions, app).listen(443, function(){
+const server = https.createServer(httpsOptions, app).listen(443, function() {
     logger.info('HTTPS server started on port 443');
 });
 
 var http = require('http');
-http.createServer(function (request, response) {
-    response.writeHead(301, { "Location": "https://" + request.headers['host'] + request.url });
+http.createServer(function(request, response) {
+    response.writeHead(301, {
+        "Location": "https://" + request.headers['host'] + request.url
+    });
     response.end();
-}).listen(80, function(){
+}).listen(80, function() {
     logger.info('HTTP server started on port 80');
 });
