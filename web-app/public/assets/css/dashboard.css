@@ -59,31 +59,36 @@ a{
   background-color: #ffffff33;
 }
 
-.profile{
-  width: 200px;
+.profile-links{
+  width: inherit;
   position: absolute;
   bottom: 0px;
-}
-
-#profile-links{
-  position: absolute;
-  padding-top: 15px;
-}
-
-#profile-links a{
-  display: inline;
   text-decoration: none;
   color: white;
-  font-size: 12px;
+  font-size: 14px;
+  text-align: right;
+
 }
 
-.profile a img{
+.profile-links a{
+  text-decoration: inherit;
+  color:inherit;
+}
+
+.profile-links p{
+  margin-right: 20px;
+}
+
+
+/* We got rid of profile pictures */
+
+/* .profile a img{
   float: right;
   padding: 0;
   padding-bottom: 10px;
   padding-right: 10px;
   width: 50px;
-}
+} */
 
 .vl {
   display: inline;
@@ -93,10 +98,6 @@ a{
   height: 1px;
 }
 
-#logout-button{
-  padding-left: 20px;
-  padding-right: 3px;
-}
 
 .dash-sections{
   display: block;
