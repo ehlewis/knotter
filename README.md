@@ -7,7 +7,10 @@ Run the following commands to start the website
 mongod --bind_ip 127.0.0.1
 ```
 To access the mongodb cli: ```mongo```
-To list the users we have in the db from the cli: ```db.users.find().pretty()```
+To list the users we have in the db from the cli: 
+```show dbs
+use link
+db.users.find().pretty()```
 
 ## Start the Redis Cache
 from the web-app server file
