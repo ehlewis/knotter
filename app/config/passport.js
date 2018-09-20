@@ -4,9 +4,9 @@
 var LocalStrategy = require('passport-local').Strategy;
 
 // load up the user model
-var User = require('../app/models/user');
+var User = require('../models/user');
 
-var cache_functions = require('../app/routes/cache_functions');
+var cache_functions = require('../routes/cache_functions');
 
 
 // expose this function to our app using module.exports

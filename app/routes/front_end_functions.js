@@ -1,5 +1,5 @@
 var moment = require('moment');
-var logger = require('../../config/logger');
+var logger = require('../config/logger');
 var link_functions = require('./link_functions.js');
 
 

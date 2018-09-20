@@ -9,7 +9,7 @@ var userSchema = mongoose.Schema({
     password     : String,
     name         : String,
     subscriber   : Boolean,
-    accounts     : [
+    items     : [
                         {
                             access_token : String,
                             item_id      : String

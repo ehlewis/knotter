@@ -19,14 +19,22 @@
         <p>Please wait while we load your account</p>
     </div>
     <script>
-        $.get('/api/refresh_cache').success(
-            function(success) {
-                console.log("I refrrshed");
+        $.getJSON("api/user_data", function(data) {
+            // Make sure the data contains the username as expected before using it
+            if (data.hasOwnProperty('user')) {
+                console.log(data.user);
+                if (data.user.items.length != 0) {
+                    $.get('/api/refresh_cache').success(
+                        function(success) {
+                            console.log("I refrrshed");
 
-            }).error(
-            function(error) {
-                console.log(error)
-            });
+                        }).error(
+                        function(error) {
+                            console.log(error)
+                        });
+                }
+            }
+        });
         setTimeout(function() {
             window.location = '/dashboard'
         }, 5000);
