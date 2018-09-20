@@ -9,57 +9,70 @@ var alreadySignupBtn = document.getElementById('already-sign-up');
 
 var signupName = document.getElementById('sign-up-name');
 var signupPass = document.getElementById('sign-up-pass');
+var confirmPass = document.getElementById('confirm-pass');
 var signupEmail = document.getElementById('sign-up-email');
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('sign-up-form');
 
 var createButton = document.getElementById('create-button')
 
-function enableButton(){
-  var reEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  var rePassword = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-  var reName = /^[a-zA-Z '-]+$/;
 
-  if(reName.test(String(signupName.value).toLowerCase()) && reEmail.test(String(signupEmail.value).toLowerCase()) && rePassword.test(String(signupPass.value).toLowerCase())){
-    createButton.disabled = false;
+function validatePassword(){
+  if(signupPass.value != confirmPass.value) {
+    confirmPass.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirmPass.setCustomValidity('');
   }
 }
 
-function validateName() {
-    var re = /^[a-zA-Z '-]+$/;
-    if (!(re.test(String(signupName.value).toLowerCase()))){
-      signupName.style.border = "1px solid red";
-    }
-    else if(re.test(String(signupName.value).toLowerCase())){
-      signupName.style.border = "0px";
-    }
-    enableButton();
-}
+signupPass.onchange = validatePassword;
+confirmPass.onkeyup = validatePassword;
 
-function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!(re.test(String(signupEmail.value).toLowerCase()))){
-      signupEmail.style.border = "1px solid red";
-    }
-    else if(re.test(String(signupEmail.value).toLowerCase())){
-      signupEmail.style.border = "0px";
-    }
-    enableButton();
-}
-
-function validatePassword() {
-    var re = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-    if (!(re.test(String(signupPass.value).toLowerCase()))){
-      signupPass.style.border = "1px solid red";
-    }
-    else if(re.test(String(signupPass.value).toLowerCase())){
-      signupPass.style.border = "0px";
-    }
-    enableButton();
-}
-
-
-
+// function enableButton(){
+//   var reEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//   var rePassword = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+//   var reName = /^[a-zA-Z '-]+$/;
+//
+//   if(reName.test(String(signupName.value).toLowerCase()) && reEmail.test(String(signupEmail.value).toLowerCase()) && rePassword.test(String(signupPass.value).toLowerCase())){
+//     createButton.disabled = false;
+//   }
+// }
+//
+// function validateName() {
+//     var re = /^[a-zA-Z '-]+$/;
+//     if (!(re.test(String(signupName.value).toLowerCase()))){
+//       signupName.style.border = "1px solid red";
+//     }
+//     else if(re.test(String(signupName.value).toLowerCase())){
+//       signupName.style.border = "0px";
+//     }
+//     enableButton();
+// }
+//
+// function validateEmail(email) {
+//     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     if (!(re.test(String(signupEmail.value).toLowerCase()))){
+//       signupEmail.style.border = "1px solid red";
+//     }
+//     else if(re.test(String(signupEmail.value).toLowerCase())){
+//       signupEmail.style.border = "0px";
+//     }
+//     enableButton();
+// }
+//
+// function validatePassword() {
+//     var re = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
+//     if (!(re.test(String(signupPass.value).toLowerCase()))){
+//       signupPass.style.border = "1px solid red";
+//     }
+//     else if(re.test(String(signupPass.value).toLowerCase())){
+//       signupPass.style.border = "0px";
+//     }
+//     enableButton();
+// }
+//
+//
+//
 loginBtn.onclick = function() {
   loginModal.style.display = "block";
 }
