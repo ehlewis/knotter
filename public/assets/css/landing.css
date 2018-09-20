@@ -187,6 +187,14 @@ a{
     to {top:0; opacity:1}
 }
 
+.field-icon {
+  float: right;
+  margin-top: -45px;
+  position: relative;
+  z-index: 2;
+}
+
+
 .form{
   padding: 30px;
   padding-bottom: 20px;
@@ -208,6 +216,7 @@ a{
   box-sizing: border-box;
   font-size: 14px;
 }
+
 
 .form button{
   border: 1px solid white;
