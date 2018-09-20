@@ -14,65 +14,21 @@ var signupEmail = document.getElementById('sign-up-email');
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('sign-up-form');
 
-var createButton = document.getElementById('create-button')
+var createButton = document.getElementById('create-button');
+var showPassButton = document.getElementById('showbtn');
 
+var hideIcon = document.getElementById('hide-icon');
 
-function validatePassword(){
-  if(signupPass.value != confirmPass.value) {
-    confirmPass.setCustomValidity("Passwords Don't Match");
-  } else {
-    confirmPass.setCustomValidity('');
+function showPass(){
+  if (signupPass.type == "password"){
+    signupPass.type = "text";
+    hideIcon.src = "assets/graphics/hidden.svg";
+  }else {
+    signupPass.type = "password";
+    hideIcon.src = "assets/graphics/hide.svg";
   }
 }
 
-signupPass.onchange = validatePassword;
-confirmPass.onkeyup = validatePassword;
-
-// function enableButton(){
-//   var reEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//   var rePassword = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-//   var reName = /^[a-zA-Z '-]+$/;
-//
-//   if(reName.test(String(signupName.value).toLowerCase()) && reEmail.test(String(signupEmail.value).toLowerCase()) && rePassword.test(String(signupPass.value).toLowerCase())){
-//     createButton.disabled = false;
-//   }
-// }
-//
-// function validateName() {
-//     var re = /^[a-zA-Z '-]+$/;
-//     if (!(re.test(String(signupName.value).toLowerCase()))){
-//       signupName.style.border = "1px solid red";
-//     }
-//     else if(re.test(String(signupName.value).toLowerCase())){
-//       signupName.style.border = "0px";
-//     }
-//     enableButton();
-// }
-//
-// function validateEmail(email) {
-//     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     if (!(re.test(String(signupEmail.value).toLowerCase()))){
-//       signupEmail.style.border = "1px solid red";
-//     }
-//     else if(re.test(String(signupEmail.value).toLowerCase())){
-//       signupEmail.style.border = "0px";
-//     }
-//     enableButton();
-// }
-//
-// function validatePassword() {
-//     var re = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-//     if (!(re.test(String(signupPass.value).toLowerCase()))){
-//       signupPass.style.border = "1px solid red";
-//     }
-//     else if(re.test(String(signupPass.value).toLowerCase())){
-//       signupPass.style.border = "0px";
-//     }
-//     enableButton();
-// }
-//
-//
-//
 loginBtn.onclick = function() {
   loginModal.style.display = "block";
 }
