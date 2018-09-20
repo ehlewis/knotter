@@ -188,7 +188,7 @@ app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear re
 app.get('/api/accounts', isLoggedIn, function(request, response, next) {
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
-    link_functions.get_cached_user_accounts(request, response, next);
+    link_functions.get_cached_user_institutions(request, response, next);
 });
 
 app.get('/api/user_data', isLoggedIn, function(request, response) {
@@ -197,8 +197,8 @@ app.get('/api/user_data', isLoggedIn, function(request, response) {
         response.json({});
     } else {
         response.json({
-            username: request.user,
-            num_of_accounts: request.user.accounts.length
+            username: request.user
+            //num_of_accounts: request.user.items.length
         });
     }
 });
@@ -210,6 +210,10 @@ app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
 
 app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
     link_functions.get_cached_user_accounts(request, response, next);
+});
+
+app.get('/api/get_cached_user_institutions', isLoggedIn, function(request, response, next) {
+    link_functions.get_cached_user_institutions(request, response, next);
 });
 
 app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {

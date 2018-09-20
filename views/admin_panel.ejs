@@ -21,6 +21,7 @@
     <div class="page-header text-center">
         <button id="refresh-cache-btn" class="btn btn-default btn-sm">Refresh Cache</button>
         <button id="get-cached-accounts-btn" class="btn btn-default btn-sm">Get Cached Accounts</button>
+        <button id="get-cached-institutions-btn" class="btn btn-default btn-sm">Get Cached institutions</button>
         <button id="get-cached-transactions-btn" class="btn btn-default btn-sm">Get Cached Transactions</button>
         <button id="get-cached-items-btn" class="btn btn-default btn-sm">Get Cached Items</button>
         <button id="create-graph-btn" class="btn btn-default btn-sm">Get Graph Data</button>
@@ -56,8 +57,9 @@ var NUM_ACCTS = null;
 $.getJSON("api/user_data", function(data) {
     // Make sure the data contains the username as expected before using it
     if (data.hasOwnProperty('username')) {
-        console.log('Username: ' + data.username);
-        console.log('Num of accounts: ' + data.num_of_accounts);
+        console.log(data.username);
+        /*console.log('Username: ' + data.username);
+        console.log('Num of accounts: ' + data.num_of_accounts);*/
         NUM_ACCTS = data.num_of_accounts;
     }
 });
@@ -95,6 +97,15 @@ $('#refresh-cache-btn').on('click', function(e) {
         });
 });
 
+$('#get-cached-institutions-btn').on('click', function(e) {
+      $.get('/api/get_cached_user_institutions').success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+});
 $('#get-cached-accounts-btn').on('click', function(e) {
       $.get('/api/get_cached_user_accounts').success(
       function(success){
