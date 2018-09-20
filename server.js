@@ -197,7 +197,7 @@ app.get('/api/user_data', isLoggedIn, function(request, response) {
         response.json({});
     } else {
         response.json({
-            username: request.user
+            user: request.user
             //num_of_accounts: request.user.items.length
         });
     }
