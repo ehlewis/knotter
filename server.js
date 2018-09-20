@@ -21,7 +21,7 @@ var front_end_functions = require('./app/routes/front_end_functions');
 
 //Set up Logging
 var colors = require('colors');
-var logger = require('./config/logger');
+var logger = require('./app/config/logger');
 
 //Set up HTTPS
 var https = require('https');
@@ -33,10 +33,10 @@ const httpsOptions = {
 };
 
 
-var mongo_setup = require('./config/mongo_setup')();
+var mongo_setup = require('./app/config/mongo_setup')();
 global.redis = require("redis");
-var redis_setup = require('./config/redis_setup')();
-var plaid_setup = require("./config/plaid_setup");
+var redis_setup = require('./app/config/redis_setup')();
+var plaid_setup = require("./app/config/plaid_setup");
 
 
 // route middleware to make sure a user is logged in
@@ -82,7 +82,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-require('./config/passport')(passport);
+require('./app/config/passport')(passport);
 
 app.use(flash()); // use connect-flash for flash messages stored in session
 

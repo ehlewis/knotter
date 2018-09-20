@@ -1,5 +1,5 @@
 var moment = require('moment');
-var logger = require('../../config/logger');
+var logger = require('../config/logger');
 //var cache = require("./cache_functions.js");
 var BPromise = require('bluebird');
 var myPromises = [];
