@@ -81,7 +81,104 @@ a{
   transform: translateY(-50%);
 }
 
-.content{
+.white-body{
   background-color: white;
   height: inherit;
+}
+
+.content {
+  margin: auto;
+  padding-top: 20px;
+  max-width: 1000px;
+}
+
+.card {
+  margin: auto;
+  margin-bottom: 20px;
+  height: 200px;
+  width: 80%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+}
+
+.card-content{
+  display: flex;
+}
+
+.bank-logo{
+  height: inherit;
+}
+
+.bank-logo img{
+  height: inherit;
+  border-radius: 5px 0px 0px 5px;
+  float: left;
+}
+
+.info{
+  margin-left: 10px;
+  height: 200px;
+}
+
+.balance{
+  text-align: center;
+  width: 125px;
+}
+
+.transactions{
+  margin-left: 10px;
+  max-height: 200px;
+  float: right;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+table {
+    font-size: 15px;
+    border-collapse: collapse;
+    width: 510px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 4px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+hr{
+  height: 2px;
+  width: 145px;
+  margin-left: -10px;
+  background: black;
+}
+
+#wrapper
+{
+	text-align: center;
+	width: 500px;
+	margin: auto;
+}
+
+#style-1::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 0px 10px 10px 0px;
+	background-color: #lightgrey;
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #lightgrey;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+	border-radius: 0px 10px 10px 0px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
 }
