@@ -265,3 +265,9 @@ a{
   color: white;
   text-align: center;
 }
+
+.loader h2 {
+  font-size: 50px;
+  color: white;
+  text-align: center;
+}
