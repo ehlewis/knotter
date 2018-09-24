@@ -6,9 +6,11 @@
   <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
   <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="assets/js/dashboard.js"></script>
+
 </head>
 
-<body>
+<body onload="addCards()">
   <div class="top-bar">
     <div class="logo">
       <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
@@ -22,8 +24,11 @@
     </div>
   </div>
   <div class="white-body">
-    <div class="content">
-      <div class="card">
+    <div class="content" id="container_block">
+      <!-- <script>
+      document.getElementById("container_block").innerHTML = addCards();
+      </script> -->
+      <!-- <div class="card">
         <div class="card-content">
           <div class="bank-logo">
             <img src="assets/graphics/BoACardLogo.svg">
@@ -107,9 +112,13 @@
             </table>
           </div>
         </div>
-      </div>
+      </div> -->
+
     </div>
   </div>
+
+
+
 </body>
 
 </html>
