@@ -29,7 +29,7 @@ a{
 .nav-bar{
   margin-left: 150px;
   position: relative;
-  top: 40%;
+  top: 50%;
   transform: translateY(-50%);
   min-width: 650px;
 
@@ -40,8 +40,8 @@ a{
   background: inherit;
   border: none;
   color:white;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 40px;
+  padding-bottom: 40px;
   padding-left: 10px;
   padding-right: 10px;
   text-align: center;
@@ -72,12 +72,17 @@ a{
   background-color: #4dc3ff;
 }
 
+#logout{
+  position: absolute;
+  right: 150px;
+  top: -40px;
+}
 
 .logo{
   float: left;
   padding-left: 20px;
   position: relative;
-  top: 40%;
+  top: 50%;
   transform: translateY(-50%);
 }
 
