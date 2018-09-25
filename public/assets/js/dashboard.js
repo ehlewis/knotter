@@ -20,9 +20,9 @@ function addCards(user_institutions) {
           <div class="transactions">\
             <table id="' + user_institutions[insitution].accounts[account].account_id +'">\
               <tr>\
-                <th>Company</th>\
-                <th>Contact</th>\
-                <th>Country</th>\
+                <th>Date</th>\
+                <th>Name</th>\
+                <th>Amount</th>\
               </tr>\
             </table>\
           </div>\
