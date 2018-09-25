@@ -12,49 +12,61 @@
 </head>
 
 <script>
-    $.get('/api/get_cached_transactions').success(
-        function(success) {
-            if (success != null) {
-                addCards(success);
-                addTransactions(success);
-            }
-            else{
-                console.log("Im null and need to refresh");
-                $.get('/api/refresh_cache');
-                    setTimeout(function(){
-                        console.log("I'm running");
-                        $.get('/api/get_cached_transactions').success(
-                            function(success_transactions) {
-                                if (success_transactions != null) {
-                                    addCards(success_transactions);
-                                    addTransactions(success_transactions);
-                                }
-                                console.log(success_transactions);
-                            }).error(
-                            function(error) {
-                                console.log(error)
-                            });
-                        }, 2000);
-            }
-            console.log(success);
-        }).error(
-        function(error) {
-            console.log(error)
-        });
+$.getJSON("api/user_data", function(data) {
+    // Make sure the data contains the username as expected before using it
+        console.log(data.user);
+        if (data.user.items.length != 0) {
+            $.get('/api/get_cached_transactions').success(
+                function(success) {
+                    if (success != null) {
+                        addCards(success);
+                        addTransactions(success);
+                    } else {
+                        console.log("Im null and need to refresh");
+                        $.get('/api/refresh_cache');
+                        setTimeout(function() {
+                            console.log("I'm running");
+                            $.get('/api/get_cached_transactions').success(
+                                function(success_transactions) {
+                                    if (success_transactions != null) {
+                                        addCards(success_transactions);
+                                        addTransactions(success_transactions);
+                                    }
+                                    console.log(success_transactions);
+                                }).error(
+                                function(error) {
+                                    console.log(error)
+                                });
+                        }, 3000);
+                    }
+                    console.log(success);
+                }).error(
+                function(error) {
+                    console.log(error);
+                });
+        } else {
+            console.log("Loaded");
+            var new_card = document.createElement('div');
+            new_card.innerHTML = 'Link an account by pressing the + below'
+            document.getElementById('container_block').appendChild(new_card);
+            //Tell Grey thingy that nothing is going to load or render it idk
+        }
+    });
 
 </script>
 
 <body>
-  <div class="top-bar">
-    <div class="logo">
-      <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
-    </div class>
-    <div class="nav-bar">
-      <a href="/dashboard">Dashboard</a>
-      <!-- <a href="/workinprogress">Business</a>
+    <div class="top-bar">
+        <div class="logo">
+            <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
+        </div class>
+        <div class="nav-bar">
+            <a href="/dashboard">Dashboard</a>
+            <!-- <a href="/workinprogress">Business</a>
       <a href="/workinprogress">About</a>-->
-      <a href="/api/logout" id="logout">Logout</a>
-      <a id="pro-button" href="/workinprogress">Link Pro</a>
+            <a href="/api/logout" id="logout">Logout</a>
+            <a id="pro-button" href="/workinprogress">Link Pro</a>
+        </div>
     </div>
   </div>
   <div class="white-body">
