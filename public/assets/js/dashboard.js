@@ -11,8 +11,7 @@ function getUserDataFromCache(){
                             addTransactions(success);
                         } else {
                             console.log("Im null and need to refresh");
-                            $.get('/api/refresh_cache');
-                            setTimeout(function() {
+                            $.get('/api/refresh_cache').success(function(refresh_success){
                                 console.log("I'm running");
                                 $.get('/api/get_cached_transactions').success(
                                     function(success_transactions) {
@@ -25,7 +24,7 @@ function getUserDataFromCache(){
                                     function(error) {
                                         console.log(error)
                                     });
-                            }, 3000);
+                            });
                         }
                         console.log(success);
                     }).error(
@@ -53,10 +52,11 @@ function addCards(user_institutions) {
           <div class="info">\
             <div class="balance">\
               <p> Current balance: </p>\
-              <h2>'+ user_institutions[insitution].accounts[account].balances.current +'</h2>\
-              <hr>\
+              <h2> $'+ user_institutions[insitution].accounts[account].balances.current +'</h2>\
+              <hr noshade>\
+              <div class="vl"></div>\
               <p> Credit remaining: </p>\
-              <h2>' + user_institutions[insitution].accounts[account].balances.available + '</h2>\
+              <h2> $' + user_institutions[insitution].accounts[account].balances.available + '</h2>\
             </div>\
           </div>\
           <div class="transactions">\
@@ -82,7 +82,7 @@ function addTransactions(user_institutions) {
             var new_transaction = document.createElement('tr');
             new_transaction.innerHTML = '<td>'+user_institutions[insitution].transactions[transaction].date+'</td>\
               <td>'+user_institutions[insitution].transactions[transaction].name+'</td>\
-              <td>'+user_institutions[insitution].transactions[transaction].amount+'</td>'
+              <td>$'+user_institutions[insitution].transactions[transaction].amount+'</td>'
             document.getElementById(user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
         }
     }

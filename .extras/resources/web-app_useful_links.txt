@@ -61,3 +61,11 @@ https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/deploy
 http://effectif.com/git/recovering-lost-git-commits
 
 https://stackoverflow.com/questions/26881441/can-you-get-the-number-of-lines-of-code-from-a-github-repository
+
+https://stackoverflow.com/questions/24479854/how-to-define-a-callback-function-in-own-function-nodejs
+
+https://stackoverflow.com/questions/29447451/user-defined-function-with-callback-in-nodejs
+
+https://stackoverflow.com/questions/2190850/create-a-custom-callback-in-javascript
+
+https://stackoverflow.com/questions/34736705/how-to-promisify-this-function-nodejs **

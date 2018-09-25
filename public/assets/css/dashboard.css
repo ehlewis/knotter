@@ -128,7 +128,7 @@ a{
   margin-bottom: 20px;
   height: 200px;
   width: 80%;
-  border-radius: 5px;
+  border-radius: 2px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
 }
 
@@ -142,7 +142,7 @@ a{
 
 .bank-logo img{
   height: inherit;
-  border-radius: 5px 0px 0px 5px;
+  border-radius: 2px 0px 0px 2px;
   float: left;
 }
 
@@ -160,7 +160,7 @@ a{
   margin-left: 10px;
   max-height: 200px;
   float: right;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 
@@ -168,23 +168,34 @@ table {
     font-size: 15px;
     border-collapse: collapse;
     width: 510px;
+
 }
 
 td, th {
-    border: 1px solid #dddddd;
+    border-bottom: : 1px solid grey;
     text-align: left;
-    padding: 4px;
+    padding: 8px;
 }
 
-tr:nth-child(even) {
+/* tr:nth-child(even) {
     background-color: #dddddd;
-}
+} */
 
 hr{
-  height: 2px;
-  width: 145px;
+  height: 1px;
+  width: 143px;
   margin-left: -10px;
-  background: black;
+  background: grey;
+  position: absolute;
+  top: 110px;
+}
+
+.vl{
+  border-left: 2px solid grey;
+  height: 200px;
+  position: absolute;
+  left: 390px;
+  top: 20px;
 }
 
 #wrapper
