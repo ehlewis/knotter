@@ -10,7 +10,8 @@ To access the mongodb cli: ```mongo```
 To list the users we have in the db from the cli: 
 ```show dbs
 use link
-db.users.find().pretty()```
+db.users.find().pretty()
+```
 
 ## Start the Redis Cache
 from the web-app server file
