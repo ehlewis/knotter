@@ -18,13 +18,11 @@ function addCards(user_institutions) {
             </div>\
           </div>\
           <div class="transactions">\
-            <table>\
+            <table id="' + user_institutions[insitution].accounts[account].account_id +'">\
               <tr>\
                 <th>Company</th>\
                 <th>Contact</th>\
                 <th>Country</th>\
-              </tr>\
-              <tr id="' + user_institutions[insitution].accounts[account].account_id +'">\
               </tr>\
             </table>\
           </div>\
@@ -37,7 +35,15 @@ function addCards(user_institutions) {
 }
 
 function addTransactions(user_institutions) {
+    for (insitution = 0; insitution < user_institutions.length; insitution++) {
+        for (transaction = 0; transaction < user_institutions[insitution].transactions.length; transaction++) {
+            var new_transaction = document.createElement('tr');
+            new_transaction.innerHTML = '<td>'+user_institutions[insitution].transactions[transaction].date+'</td>\
+              <td>'+user_institutions[insitution].transactions[transaction].name+'</td>\
+              <td>'+user_institutions[insitution].transactions[transaction].amount+'</td>'
+            document.getElementById(user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
+        }
+    }
 
 
-    
 }
