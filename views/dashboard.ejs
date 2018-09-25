@@ -2,80 +2,76 @@
 <html>
 
 <head>
-    <title>Link</title>
-    <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    <script src="assets/js/plaid_api_calls.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/jscript">
-/*            $.get('/api/get_graph_data').success(
-                function(success) {
-                    console.log(success)
-                    var data = google.visualization.arrayToDataTable(success);
-                    var options = {
-                        title: 'Spending each month',
-                        width: 1300,
-                        height: 250,
-                        bar: {
-                            groupWidth: "95%"
-                        },
-                        // hAxis.textStyle: {fontSize: "10"},
-                        legend: {
-                            position: 'none'
-                        }
-                    };
-
-                    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-                    chart.draw(data, options);
-                }).error(
-                function(error) {
-                    console.log(error)
-                });*/
-    </script>
+  <title>Link</title>
+  <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
+  <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+  <script src="assets/js/dashboard.js"></script>
 </head>
 
+<script>
+    $.get('/api/get_cached_transactions').success(
+        function(success) {
+            console.log(success);
+            addCards(success);
+            addTransactions(success);
+        }).error(
+        function(error) {
+            console.log(error)
+        });
+</script>
+
 <body>
-
-    <aside class="sidebar">
-        <a href="/dashboard"><img src="assets/graphics/link_brand_white.png"></a>
-        <nav>
-            <ul>
-                <li><a href="/dashboard" class="selected">Dashboard</a></li>
-                <li><a href="/accounts.ejs">Accounts</a></li>
-                <li><a href="/workinprogress">Bills</a></li>
-                <li><a href="/workinprogress">Analytics</a></li>
-                <li><a href="/workinprogress">Link+</a></li>
-            </ul>
-        </nav>
-        <div class="profile-links">
-          <p><a id="logout-button" href="/api/logout">Logout</a>  |  <a href="/profile">My Account</a></p>
-        </div>
-    </aside>
-
-    <!-- Dashboard content starts here  -->
-    <div class="dash-sections">
-        <div id="chart_div" style="width:1300px; height: 250px;">
-
-        </div>
+  <div class="top-bar">
+    <div class="logo">
+      <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
+    </div class>
+    <div class="nav-bar">
+      <a href="/dashboard">Dashboard</a>
+      <!-- <a href="/workinprogress">Business</a>
+      <a href="/workinprogress">About</a>-->
+      <a href="/api/logout" id="logout">Logout</a>
+      <a id="pro-button" href="/workinprogress">Link Pro</a>
     </div>
-    <div class="dash-sections">
-        <div class="card-container">
-            insert recent transactions here
+  </div>
+  <div class="white-body">
+    <div class="content" id="container_block">
+
+      <!-- <script>
+      document.getElementById("container_block").innerHTML = addCards();
+      </script> -->
+      <!-- <div class="card">
+        <div class="card-content">
+          <div class="bank-logo">
+            <img src="assets/graphics/BoACardLogo.svg">
         </div>
-    </div>
-    <header class="section-header">Most Active Accounts</header>
-    <div class="dash-sections" id="accountCards">
+          <div class="info">
+            <div class="balance">
+              <p> Current balance: </p>
+              <h2> $50 </h2>
+              <hr>
+              <p> Credit remaining: </p>
+              <h2> $1000 </h2>
+            </div>
+          </div>
+          <div class="transactions" id="style-1">
+            <table>
+              <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Country</th>
+              </tr>
+              <tr>
+                <td>Alfreds Futterkiste</td>
+                <td>Maria Anders</td>
+                <td>Germany</td>
+              </tr>
+              <tr>
+            -->
 
     </div>
-
-    <script>
-        $('#chartDiv').addClass('spinner');
-        $('#accountCards').addClass('spinner');
-
-        setTimeout(removeGraphSpinner, 1000);
-        setTimeout(removeCardSpinner, 1000);
-    </script>
-
+  </div>
 </body>
+
+</html>

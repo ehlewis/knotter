@@ -2,6 +2,7 @@ html{
   background: linear-gradient(to bottom right, #00b09b, #96d03d);
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 100%;
   align-items: center;
 }
@@ -262,6 +263,12 @@ a{
 
 .loader p {
   font-size: 25px;
+  color: white;
+  text-align: center;
+}
+
+.loader h2 {
+  font-size: 50px;
   color: white;
   text-align: center;
 }

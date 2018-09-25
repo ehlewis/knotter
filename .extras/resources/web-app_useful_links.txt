@@ -57,3 +57,7 @@ https://stackoverflow.com/questions/21397809/create-a-trusted-self-signed-ssl-ce
 https://stackoverflow.com/questions/22453782/nodejs-http-and-https-over-same-port/23975955#23975955
 
 https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/deployment
+
+http://effectif.com/git/recovering-lost-git-commits
+
+https://stackoverflow.com/questions/26881441/can-you-get-the-number-of-lines-of-code-from-a-github-repository
