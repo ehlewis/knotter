@@ -74,7 +74,7 @@ app.use(session({
         }),
     secret: 'thisissupersecret',
     cookie: {
-        maxage: 7200
+        maxage: 1200 //20 Min cookie
     },
     resave: true,
     saveUninitialized: true
