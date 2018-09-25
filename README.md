@@ -8,9 +8,21 @@ mongod --bind_ip 127.0.0.1
 ```
 To access the mongodb cli: ```mongo```
 To list the users we have in the db from the cli: 
-```show dbs
+```
+show dbs
 use link
 db.users.find().pretty()
+```
+
+To rename an attribute
+```
+db.users.updateMany({}, {$rename: {"from":"to"}})
+```
+
+To drop the db (don't do this unless you have to)
+```
+use link
+db.users.drop()
 ```
 
 ## Start the Redis Cache
