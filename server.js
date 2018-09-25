@@ -74,7 +74,7 @@ app.use(session({
         }),
     secret: 'thisissupersecret',
     cookie: {
-        maxage: 7200
+        maxage: 1200 //20 Min cookie
     },
     resave: true,
     saveUninitialized: true
@@ -139,13 +139,13 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     });
 });
 
-app.get('/loginbuffer', isLoggedIn, function(request, response, next) {
+/*app.get('/loginbuffer', isLoggedIn, function(request, response, next) {
     response.render('loginbuffer.ejs', {
         user: request.user,
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
         PLAID_ENV: PLAID_ENV,
     });
-});
+});*/
 
 app.get('/workinprogress', function(request, response, next) {
     response.render('workinprogress.ejs', {});
@@ -274,7 +274,7 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 // process the login form
 app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/loginbuffer', // redirect to the secure profile section
+    successRedirect: '/dashboard', // redirect to the secure profile section
     failureRedirect: '/', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
 }));

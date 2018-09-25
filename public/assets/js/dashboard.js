@@ -1,3 +1,45 @@
+function getUserDataFromCache(){
+    $.getJSON("api/user_data", function(data) {
+        // Make sure the data contains the username as expected before using it
+            console.log(data.user);
+            if (data.user.items.length != 0) {
+              document.getElementById('container_block').innerHTML = ''
+                $.get('/api/get_cached_transactions').success(
+                    function(success) {
+                        if (success != null) {
+                            addCards(success);
+                            addTransactions(success);
+                        } else {
+                            console.log("Im null and need to refresh");
+                            $.get('/api/refresh_cache');
+                            setTimeout(function() {
+                                console.log("I'm running");
+                                $.get('/api/get_cached_transactions').success(
+                                    function(success_transactions) {
+                                        if (success_transactions != null) {
+                                            addCards(success_transactions);
+                                            addTransactions(success_transactions);
+                                        }
+                                        console.log(success_transactions);
+                                    }).error(
+                                    function(error) {
+                                        console.log(error)
+                                    });
+                            }, 3000);
+                        }
+                        console.log(success);
+                    }).error(
+                    function(error) {
+                        console.log(error);
+                    });
+            } else {
+                console.log("Loaded");
+                document.getElementById('container_block').innerHTML = 'Link an account by pressing the + below'
+                //Tell Grey thingy that nothing is going to load or render it idk
+            }
+        });
+}
+
 function addCards(user_institutions) {
     for (insitution = 0; insitution < user_institutions.length; insitution++) {
         for (account = 0; account < user_institutions[insitution].accounts.length; account++) {
@@ -20,9 +62,9 @@ function addCards(user_institutions) {
           <div class="transactions">\
             <table id="' + user_institutions[insitution].accounts[account].account_id +'">\
               <tr>\
-                <th>Company</th>\
-                <th>Contact</th>\
-                <th>Country</th>\
+                <th>Date</th>\
+                <th>Name</th>\
+                <th>Amount</th>\
               </tr>\
             </table>\
           </div>\

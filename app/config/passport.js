@@ -38,12 +38,12 @@ module.exports = function(passport) {
 
     passport.use('local-signup', new LocalStrategy({
             // by default, local strategy uses username and password, we will override with email
-            usernameField: 'email',
+            emailField: 'email',
             passwordField: 'password',
             usernameField: 'username',
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
-        function(req, email, password, done) {
+        function(request, email, password, done) {
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
             User.findOne({
@@ -55,16 +55,16 @@ module.exports = function(passport) {
 
                 // check to see if theres already a user with that email
                 if (user) {
-                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                    return done(null, false, request.flash('signupMessage', 'That email is already taken.'));
                 } else {
 
                     // if there is no user with that email
                     // create the user
                     var newUser = new User();
-                    console.log(req.body);
+                    console.log(request.body);
                     // set the user's local credentials
-                    newUser.email = email;
-                    newUser.username = req.body.username;
+                    newUser.email = request.body.email; //This just used to be the variable email but I had to change it because it was putting name in somehow even though in the request email was right
+                    newUser.username = request.body.username;
                     newUser.password = newUser.generateHash(password);
                     newUser.subscriber = false;
 
@@ -91,7 +91,7 @@ module.exports = function(passport) {
             passwordField: 'password',
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
-        function(req, email, password, done) { // callback with email and password from our form
+        function(request, email, password, done) { // callback with email and password from our form
 
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
@@ -104,14 +104,14 @@ module.exports = function(passport) {
 
                 // if no user is found, return the message
                 if (!user)
-                    return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                    return done(null, false, request.flash('loginMessage', 'No user found.')); // request.flash is the way to set flashdata using connect-flash
 
                 // if the user is found but the password is wrong
                 if (!user.validPassword(password))
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                    return done(null, false, request.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                 //We are going to load user data to our cache here
-                //cache_functions.foo(req, response, next, client);
+                //cache_functions.foo(request, response, next, client);
                 //no were not
 
                 //
