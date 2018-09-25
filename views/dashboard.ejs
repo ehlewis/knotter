@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
   <script src="assets/js/dashboard.js"></script>
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 </head>
 
 <script>
@@ -37,41 +38,34 @@
   </div>
   <div class="white-body">
     <div class="content" id="container_block">
-
-      <!-- <script>
-      document.getElementById("container_block").innerHTML = addCards();
-      </script> -->
-      <!-- <div class="card">
-        <div class="card-content">
-          <div class="bank-logo">
-            <img src="assets/graphics/BoACardLogo.svg">
-        </div>
-          <div class="info">
-            <div class="balance">
-              <p> Current balance: </p>
-              <h2> $50 </h2>
-              <hr>
-              <p> Credit remaining: </p>
-              <h2> $1000 </h2>
-            </div>
-          </div>
-          <div class="transactions" id="style-1">
-            <table>
-              <tr>
-                <th>Company</th>
-                <th>Contact</th>
-                <th>Country</th>
-              </tr>
-              <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>Maria Anders</td>
-                <td>Germany</td>
-              </tr>
-              <tr>
-            -->
-
+      <button id="link-btn"><img src="assets/graphics/add.svg"></button>
+      <!-- accounts cards get inserted here in the javascript -->
     </div>
   </div>
+
+  <script>
+  var handler = Plaid.create({
+      apiVersion: 'v2',
+      clientName: 'Plaid Walkthrough Demo',
+      env: '<%= PLAID_ENV %>',
+      product: ['transactions'],
+      key: '<%= PLAID_PUBLIC_KEY %>',
+      onSuccess: function(public_token) {
+        $.post('/get_access_token', {
+          public_token: public_token
+        }, function() {
+          $('#container').fadeOut('fast', function() {
+            $('#intro').hide();
+            $('#app, #steps').fadeIn('slow');
+          });
+        });
+      },
+  });
+
+  $('#link-btn').on('click', function(e) {
+      handler.open();
+  });
+  </script>
 </body>
 
 </html>
