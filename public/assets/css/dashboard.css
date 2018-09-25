@@ -108,11 +108,15 @@ a{
   width: 50px;
   position: fixed;
   bottom: 20px;
-  right: 10px;
+  right: 20px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
 }
 
 #link-btn img{
-  height: 35px;
+  height: 30px;
+  right: auto;
+  left: auto;
 }
 
 .card {
