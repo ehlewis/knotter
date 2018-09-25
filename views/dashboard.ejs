@@ -13,34 +13,35 @@
 </head>
 
 <script>
-getUserDataFromCache();
+  getUserDataFromCache();
 
-$(document).ready(inactivity_timer());
+  $(document).ready(inactivity_timer());
 </script>
 
 <body>
-    <div class="top-bar">
-        <div class="logo">
-            <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
-        </div class>
-        <div class="nav-bar">
-            <a href="/dashboard">Dashboard</a>
-            <!-- <a href="/workinprogress">Business</a>
+  <div class="top-bar">
+    <div class="logo">
+      <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
+    </div class>
+    <div class="nav-bar">
+      <a href="/dashboard">Dashboard</a>
+      <!-- <a href="/workinprogress">Business</a>
       <a href="/workinprogress">About</a>-->
-            <a href="/api/logout" id="logout">Logout</a>
-            <a id="pro-button" href="/workinprogress">Link Pro</a>
-        </div>
+      <a href="/api/logout" id="logout">Logout</a>
+      <a id="pro-button" href="/workinprogress">Link Pro</a>
     </div>
   </div>
+  </div>
   <div class="white-body">
+    <button id="link-btn"><img src="assets/graphics/add.svg"></button>
     <div class="content" id="container_block">
-      <button id="link-btn"><img src="assets/graphics/add.svg"></button>
+
       <!-- accounts cards get inserted here in the javascript -->
     </div>
   </div>
 
   <script>
-  var handler = Plaid.create({
+    var handler = Plaid.create({
       apiVersion: 'v2',
       clientName: 'Plaid Walkthrough Demo',
       env: '<%= PLAID_ENV %>',
@@ -54,13 +55,17 @@ $(document).ready(inactivity_timer());
             $('#intro').hide();
             $('#app, #steps').fadeIn('slow');
           });
+          $.get("/api/refresh_cache");
+          getUserDataFromCache();
         });
       },
-  });
+    });
 
-  $('#link-btn').on('click', function(e) {
+    $('#link-btn').on('click', function(e) {
       handler.open();
-  });
+    });
+
+    handler.onExit
   </script>
 </body>
 

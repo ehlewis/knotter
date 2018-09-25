@@ -1,5 +1,4 @@
 function inactivity_timer() {
-    console.log("created");
     var idleTime = 0;
     //Increment the idle time counter every minute.
     setInterval(function(){
@@ -12,7 +11,6 @@ function inactivity_timer() {
 
     //Zero the idle timer on mouse movement.
     $(this).mousemove(function (e) {
-        console.log("zero");
         idleTime = 0;
     });
     $(this).keypress(function (e) {

@@ -3,6 +3,7 @@ function getUserDataFromCache(){
         // Make sure the data contains the username as expected before using it
             console.log(data.user);
             if (data.user.items.length != 0) {
+              document.getElementById('container_block').innerHTML = ''
                 $.get('/api/get_cached_transactions').success(
                     function(success) {
                         if (success != null) {
@@ -33,9 +34,7 @@ function getUserDataFromCache(){
                     });
             } else {
                 console.log("Loaded");
-                var new_card = document.createElement('div');
-                new_card.innerHTML = 'Link an account by pressing the + below'
-                document.getElementById('container_block').appendChild(new_card);
+                document.getElementById('container_block').innerHTML = 'Link an account by pressing the + below'
                 //Tell Grey thingy that nothing is going to load or render it idk
             }
         });
