@@ -11,8 +11,7 @@ function getUserDataFromCache(){
                             addTransactions(success);
                         } else {
                             console.log("Im null and need to refresh");
-                            $.get('/api/refresh_cache');
-                            setTimeout(function() {
+                            $.get('/api/refresh_cache').success(function(refresh_success){
                                 console.log("I'm running");
                                 $.get('/api/get_cached_transactions').success(
                                     function(success_transactions) {
@@ -25,7 +24,7 @@ function getUserDataFromCache(){
                                     function(error) {
                                         console.log(error)
                                     });
-                            }, 3000);
+                            });
                         }
                         console.log(success);
                     }).error(
