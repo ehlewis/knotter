@@ -55,8 +55,10 @@
             $('#intro').hide();
             $('#app, #steps').fadeIn('slow');
           });
-          $.get("/api/refresh_cache");
-          getUserDataFromCache();
+          $.get("/api/refresh_cache").success(
+              function(success){
+                  getUserDataFromCache()
+              });
         });
       },
     });
