@@ -14,13 +14,34 @@
 <script>
     $.get('/api/get_cached_transactions').success(
         function(success) {
+            if (success != null) {
+                addCards(success);
+                addTransactions(success);
+            }
+            else{
+                console.log("Im null and need to refresh");
+                $.get('/api/refresh_cache');
+                    setTimeout(function(){
+                        console.log("I'm running");
+                        $.get('/api/get_cached_transactions').success(
+                            function(success_transactions) {
+                                if (success_transactions != null) {
+                                    addCards(success_transactions);
+                                    addTransactions(success_transactions);
+                                }
+                                console.log(success_transactions);
+                            }).error(
+                            function(error) {
+                                console.log(error)
+                            });
+                        }, 2000);
+            }
             console.log(success);
-            addCards(success);
-            addTransactions(success);
         }).error(
         function(error) {
             console.log(error)
         });
+
 </script>
 
 <body>
