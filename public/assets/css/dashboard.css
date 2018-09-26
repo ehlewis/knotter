@@ -183,15 +183,16 @@ td, th {
 
 hr{
   height: 1px;
-  width: 143px;
+  width: 145px;
   margin-left: -10px;
   background: grey;
   position: absolute;
   top: 110px;
+  border: none;
 }
 
 .vl{
-  border-left: 2px solid grey;
+  border-left: 1px solid grey;
   height: 200px;
   position: absolute;
   left: 390px;
