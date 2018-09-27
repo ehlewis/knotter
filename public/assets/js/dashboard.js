@@ -42,12 +42,13 @@ function getUserDataFromCache(){
 function addCards(user_institutions) {
     for (insitution = 0; insitution < user_institutions.length; insitution++) {
         for (account = 0; account < user_institutions[insitution].accounts.length; account++) {
+            var ins = user_institutions[insitution].item.institution_id;
             var new_card = document.createElement('div');
             new_card.innerHTML = '<div class="content">\
       <div class="card">\
         <div class="card-content">\
           <div class="bank-logo">\
-            <img src="assets/graphics/BoACardLogo.svg">\
+            <img src="assets/cardLogos/'+ ins +'.svg">\
         </div>\
           <div class="info">\
             <div class="balance">\
