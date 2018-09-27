@@ -40,9 +40,15 @@ function getUserDataFromCache(){
 }
 
 function addCards(user_institutions) {
+    var current_cards = ['ins_1','ins_2','ins_3','ins_4','ins_5','ins_6','ins_7','ins_9','ins_10','ins_11','ins_13','ins_14','ins_15','ins_16','ins_19','ins_20','ins_21','ins_23','ins_24','ins_27','ins_29']
     for (insitution = 0; insitution < user_institutions.length; insitution++) {
         for (account = 0; account < user_institutions[insitution].accounts.length; account++) {
-            var ins = user_institutions[insitution].item.institution_id;
+            if ($.inArray( user_institutions[insitution].item.institution_id, current_cards) == -1){
+                var ins = 'default_card';
+            }
+            else{
+                var ins = user_institutions[insitution].item.institution_id;
+            }
             var new_card = document.createElement('div');
             new_card.innerHTML = '<div class="content">\
       <div class="card">\
