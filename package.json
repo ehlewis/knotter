@@ -4,6 +4,7 @@
   "description": "Financial manager",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "mocha"
   },
   "author": "Evan Lewis, Eli Weinberger, Ryan Tom",
