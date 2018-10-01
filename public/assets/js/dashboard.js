@@ -50,6 +50,8 @@ function addCards(user_institutions) {
                 var ins = user_institutions[insitution].item.institution_id;
             }
             var new_card = document.createElement('div');
+            console.log(user_institutions[insitution].accounts[account].account_id);
+            console.log(insitution);
             new_card.innerHTML = '<div class="content">\
       <div class="card">\
         <div class="card-content">\
