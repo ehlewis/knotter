@@ -97,7 +97,19 @@ function addTransactions(user_institutions) {
 
 }
 
+//  MORE INFO MODAL STARTS HERE
+
+var info_modal = document.getElementById("more-info-modal");
+
 function createMoreInfoModal(selected_id){
-  var modal = document.getElementById(selected_id);
-  document.getElementById("more-info-modal").style.display = "block";
+  var modal_id = document.getElementById(selected_id);
+  var info_modal = document.getElementById("more-info-modal");
+
+  info_modal.style.display = "block";
+}
+
+window.onclick = function(event) {
+  if (event.target == document.getElementById("more-info-modal")){
+    document.getElementById("more-info-modal").style.display = "none";
+  }
 }
