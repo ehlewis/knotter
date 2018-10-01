@@ -41,8 +41,8 @@ function getUserDataFromCache(){
 
 function addCards(user_institutions) {
     var current_cards = ['ins_1','ins_2','ins_3','ins_4','ins_5','ins_6','ins_7','ins_9','ins_10','ins_11','ins_13','ins_14','ins_15','ins_16','ins_19','ins_20','ins_21','ins_23','ins_24','ins_27','ins_29']
-    for (insitution = 0; insitution < user_institutions.length; insitution++) {
-        for (account = 0; account < user_institutions[insitution].accounts.length; account++) {
+    for (var insitution = 0; insitution < user_institutions.length; insitution++) {
+        for (var account = 0; account < user_institutions[insitution].accounts.length; account++) {
             if ($.inArray( user_institutions[insitution].item.institution_id, current_cards) == -1){
                 var ins = 'default_card';
             }
@@ -50,11 +50,9 @@ function addCards(user_institutions) {
                 var ins = user_institutions[insitution].item.institution_id;
             }
             var new_card = document.createElement('div');
-            console.log(user_institutions[insitution].accounts[account].account_id);
-            console.log(insitution);
             new_card.innerHTML = '<div class="content">\
       <div class="card">\
-        <div class="card-content">\
+        <div class="card-content" onClick="createMoreInfoModal(this.id)" id="'+ user_institutions[insitution].accounts[account].account_id +'">\
           <div class="bank-logo">\
             <img src="assets/cardLogos/'+ ins +'.svg">\
         </div>\
@@ -69,7 +67,7 @@ function addCards(user_institutions) {
             </div>\
           </div>\
           <div class="transactions">\
-            <table id="' + user_institutions[insitution].accounts[account].account_id +'">\
+            <table id="table' + user_institutions[insitution].accounts[account].account_id +'">\
               <tr>\
                 <th>Date</th>\
                 <th>Name</th>\
@@ -92,9 +90,14 @@ function addTransactions(user_institutions) {
             new_transaction.innerHTML = '<td>'+user_institutions[insitution].transactions[transaction].date+'</td>\
               <td>'+user_institutions[insitution].transactions[transaction].name+'</td>\
               <td>$'+user_institutions[insitution].transactions[transaction].amount+'</td>'
-            document.getElementById(user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
+            document.getElementById('table'+user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
         }
     }
 
 
+}
+
+function createMoreInfoModal(selected_id){
+  var modal = document.getElementById(selected_id);
+  document.getElementById("more-info-modal").style.display = "block";
 }

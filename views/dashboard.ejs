@@ -70,6 +70,21 @@
     handler.onExit
   </script>
 
+  <div id="more-info-modal" class="modal">
+      <div class="modal-content">
+          <div class="form">
+              <form id="sign-up-form" action="/signup" method="post" class="form">
+                  <input id="sign-up-name" type="text" placeholder="Username" name="username" required/>
+                  <input id="sign-up-email" type="email" placeholder="Email" name="email" required/>
+                  <input id="sign-up-pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password" placeholder="Password" name="password" required>
+                  <img id="hide-icon" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
+                  <button id="create-button">Create</button>
+                  <p class="message">Already registered? <a id="already-login">Login</a></p>
+              </form>
+          </div>
+      </div>
+  </div>
+
 
 </body>
 
