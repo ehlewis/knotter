@@ -45,8 +45,14 @@ from the web-app server file ```sudo node server.js```
 # GCP
 
 
-If in GCP run it like this
+#### To start
 ```
 nohup sudo SERVICE_CONNECTION="remote-staging" node server.js &
 ```
 This puts it in the background so you can disconnect and do other things and whatnot
+
+#### To stop:
+```
+sudo pkill node
+``
+or the pid that the start command gave you
