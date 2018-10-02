@@ -59,14 +59,10 @@ module.exports = {
             for (var i = 0; i < num; i++) {
                 myPromises.push(plaid_client.getAuth(request.user.items[i].access_token, function(error, authResponse) { //this is a callback
                     if (error != null) {
-                        //console.log(error);
                         var msg = 'Unable to pull accounts from the Plaid API.';
                         logger.error(msg + '\n' + error);
-                        //---------test
                         logger.error("got error in user key: " + request.user._id.toString() + "accounts");
                         response_array.push(error);
-                        //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(error), redis.print); //apply logic here too
-                        //------------
                         return;
                     }
 
@@ -99,6 +95,7 @@ module.exports = {
                 return;
             } else {
                 logger.debug(request.user._id + " institutions " + JSON.parse(reply));
+                redis_client.expire(request.user._id.toString() + "institutions", 1200);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -113,14 +110,10 @@ module.exports = {
             for (var i = 0; i < num; i++) {
                 myPromises.push(plaid_client.getAccounts(request.user.items[i].access_token, function(error, authResponse) { //this is a callback
                     if (error != null) {
-                        //console.log(error);
                         var msg = 'Unable to pull accounts from the Plaid API.';
                         logger.error(msg + '\n' + error);
-                        //---------test
                         logger.error("got error in user key: " + request.user._id.toString() + "accounts");
                         response_array.push(error);
-                        //redis_client.lpush(request.user._id.toString() + "accounts", JSON.stringify(error), redis.print); //apply logic here too
-                        //------------
                         return;
                     }
 
@@ -153,6 +146,7 @@ module.exports = {
                 return;
             } else {
                 logger.debug(request.user._id + " accounts " + JSON.parse(reply));
+                redis_client.expire(request.user._id.toString() + "accounts", 1200);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -234,6 +228,7 @@ module.exports = {
             } else {
                 //console.log(reply);
                 logger.debug(request.user._id + " item " + JSON.parse(reply));
+                redis_client.expire(request.user._id.toString() + "item", 1200);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -283,6 +278,7 @@ module.exports = {
                 return;
             } else {
                 logger.debug(request.user._id + " Pulled cached transactions");
+                redis_client.expire(request.user._id.toString() + "transactions", 1200);
                 response.json(JSON.parse(reply));
                 return;
             }
