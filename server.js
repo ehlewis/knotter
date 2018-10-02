@@ -37,7 +37,7 @@ if (dotenv.error) {
 }
 logger.info("Loaded env file!");
 
-logger.inf("Starting in " + process.env.SERVICE_CONNECTION + " mode");
+logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
 
 //Set up our services (mongo and redis)
 var mongo_setup = require('./app/config/mongo_setup')();
