@@ -13,7 +13,7 @@ if (SERVICE_CONNECTION === "local-sandbox"){
 }
 else if (SERVICE_CONNECTION === "remote-staging"){
     //var mongo_url = "mongodb://link_server:link_server@linkcluster0-shard-00-00-97dei.gcp.mongodb.net/link";
-    var mongo_url = "mongodb://localhost:27017/link"; // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
+    var mongo_url = "mongodb://10.150.0.4:27017/link"; // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
 
 }
 if (SERVICE_CONNECTION === "production"){
