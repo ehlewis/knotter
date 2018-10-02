@@ -13,7 +13,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var envvar = require('envvar');
-var dotenv = require('dotenv').config()
+var dotenv = require('dotenv').config();
+if (dotenv.error) {
+  throw dotenv.error
+}
+logger.info("Loaded dotenv " + result.parsed);
+
 var redis_store = require('connect-redis')(session);
 
 var link_functions = require('./app/routes/link_functions');
