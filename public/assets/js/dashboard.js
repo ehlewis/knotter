@@ -54,7 +54,7 @@ function addCards(user_institutions) {
       <div class="card">\
         <div class="card-content" onClick="createMoreInfoModal(this.id)" id="'+ user_institutions[insitution].accounts[account].account_id +'">\
           <div class="bank-logo">\
-            <img src="assets/cardLogos/'+ ins +'.svg">\
+            <img id="img' + user_institutions[insitution].accounts[account].account_id +'" src="assets/cardLogos/'+ ins +'.svg">\
         </div>\
           <div class="info">\
             <div class="balance">\
@@ -102,10 +102,14 @@ function addTransactions(user_institutions) {
 var info_modal = document.getElementById("more-info-modal");
 
 function createMoreInfoModal(selected_id){
-  var modal_id = document.getElementById(selected_id);
+  var parent_card = document.getElementById(selected_id);
+  var parent_img = document.getElementById("img" + selected_id);
   var info_modal = document.getElementById("more-info-modal");
+  var info_modal_img = document.getElementById("info_modal_img");
+  console.log(parent_img.src);
 
   info_modal.style.display = "block";
+  info_modal_img.src = parent_img.src;
 }
 
 window.onclick = function(event) {
