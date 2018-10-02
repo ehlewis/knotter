@@ -40,14 +40,21 @@ function getUserDataFromCache(){
 }
 
 function addCards(user_institutions) {
-    for (insitution = 0; insitution < user_institutions.length; insitution++) {
-        for (account = 0; account < user_institutions[insitution].accounts.length; account++) {
+    var current_cards = ['ins_1','ins_2','ins_3','ins_4','ins_5','ins_6','ins_7','ins_9','ins_10','ins_11','ins_13','ins_14','ins_15','ins_16','ins_19','ins_20','ins_21','ins_23','ins_24','ins_27','ins_29']
+    for (var insitution = 0; insitution < user_institutions.length; insitution++) {
+        for (var account = 0; account < user_institutions[insitution].accounts.length; account++) {
+            if ($.inArray( user_institutions[insitution].item.institution_id, current_cards) == -1){
+                var ins = 'default_card';
+            }
+            else{
+                var ins = user_institutions[insitution].item.institution_id;
+            }
             var new_card = document.createElement('div');
             new_card.innerHTML = '<div class="content">\
       <div class="card">\
-        <div class="card-content">\
+        <div class="card-content" onClick="createMoreInfoModal(this.id)" id="'+ user_institutions[insitution].accounts[account].account_id +'">\
           <div class="bank-logo">\
-            <img src="assets/graphics/BoACardLogo.svg">\
+            <img src="assets/cardLogos/'+ ins +'.svg">\
         </div>\
           <div class="info">\
             <div class="balance">\
@@ -60,7 +67,7 @@ function addCards(user_institutions) {
             </div>\
           </div>\
           <div class="transactions">\
-            <table id="' + user_institutions[insitution].accounts[account].account_id +'">\
+            <table id="table' + user_institutions[insitution].accounts[account].account_id +'">\
               <tr>\
                 <th>Date</th>\
                 <th>Name</th>\
@@ -83,9 +90,26 @@ function addTransactions(user_institutions) {
             new_transaction.innerHTML = '<td>'+user_institutions[insitution].transactions[transaction].date+'</td>\
               <td>'+user_institutions[insitution].transactions[transaction].name+'</td>\
               <td>$'+user_institutions[insitution].transactions[transaction].amount+'</td>'
-            document.getElementById(user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
+            document.getElementById('table'+user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
         }
     }
 
 
+}
+
+//  MORE INFO MODAL STARTS HERE
+
+var info_modal = document.getElementById("more-info-modal");
+
+function createMoreInfoModal(selected_id){
+  var modal_id = document.getElementById(selected_id);
+  var info_modal = document.getElementById("more-info-modal");
+
+  info_modal.style.display = "block";
+}
+
+window.onclick = function(event) {
+  if (event.target == document.getElementById("more-info-modal")){
+    document.getElementById("more-info-modal").style.display = "none";
+  }
 }

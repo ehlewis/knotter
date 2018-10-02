@@ -12,6 +12,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var envvar = require('envvar');
 var redis_store = require('connect-redis')(session);
 
 var link_functions = require('./app/routes/link_functions');
@@ -32,7 +33,11 @@ const httpsOptions = {
     cert: fs.readFileSync('./cert.pem')
 };
 
+//Check our ennvars so we know what to connect to
+global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production']);
+logger.info("Starting with " + SERVICE_CONNECTION);
 
+//Set up our services (mongo and redis)
 var mongo_setup = require('./app/config/mongo_setup')();
 global.redis = require("redis");
 var redis_setup = require('./app/config/redis_setup')();
