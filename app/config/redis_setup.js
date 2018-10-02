@@ -5,7 +5,7 @@ if (SERVICE_CONNECTION === "local-sandbox"){
     var service_port = "6379";
 }
 else if (SERVICE_CONNECTION === "remote-staging"){
-    var service_host = "10.0.0.3";
+    var service_host = "10.0.0.11";
     var service_port = "6379";
 }
 if (SERVICE_CONNECTION === "production"){
