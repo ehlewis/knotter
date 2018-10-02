@@ -69,3 +69,5 @@ https://stackoverflow.com/questions/29447451/user-defined-function-with-callback
 https://stackoverflow.com/questions/2190850/create-a-custom-callback-in-javascript
 
 https://stackoverflow.com/questions/34736705/how-to-promisify-this-function-nodejs **
+
+https://hameedullah.com/use-git-hook-to-automate-the-deployment-of-code-to-staging-or-production-servers.html
