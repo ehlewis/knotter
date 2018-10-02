@@ -49,9 +49,9 @@ from the web-app server file ```sudo node server.js```
 #### To start
 make sure in the .env the SERVICE_CONNECTION is "remote_staging"
 ```
-nohup sudo node server.js &
+nohup sudo SERVICE_CONNECTION="remote-staging" node server.js &
 ```
-This puts it in the background so you can disconnect and do other things and whatnot
+This puts it in the background and overrides the (env file just in case) so you can disconnect and do other things and whatnot
 
 #### To stop:
 ```
