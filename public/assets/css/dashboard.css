@@ -128,7 +128,7 @@ a{
   margin-bottom: 20px;
   height: 200px;
   width: 80%;
-  border-radius: 2px;
+  /* border-radius: 2px; */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
 }
 
@@ -142,7 +142,7 @@ a{
 
 .bank-logo img{
   height: inherit;
-  border-radius: 2px 0px 0px 2px;
+  /* border-radius: 2px 0px 0px 2px; */
   float: left;
 }
 
