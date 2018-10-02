@@ -134,24 +134,24 @@ app.get('/landing', function(request, response, next) {
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV,
     });
 });
 
 app.get('/admin', isLoggedIn, function(request, response, next) {
     response.render('admin_panel.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV,
     });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     response.render('accounts.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV,
     });
 });
 
@@ -187,8 +187,8 @@ app.get('/signup', function(request, response) {
 app.get('/profile', isLoggedIn, function(request, response) {
     response.render('profile.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV
     });
 });
 
