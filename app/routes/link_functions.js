@@ -81,6 +81,7 @@ module.exports = {
                 // do whatever you need...
                 logger.debug(request.user._id + " institutions " + response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "institutions", JSON.stringify(response_array), redis.print);
+                redis_client.expire(request.user._id.toString() + "institutions", 1200);
                 //next();
                 resolve();
             });
@@ -134,6 +135,7 @@ module.exports = {
                 // do whatever you need...
                 logger.debug(request.user._id + response_array.length + " institutions out of " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
+                redis_client.expire(request.user._id.toString() + "accounts", 1200);
                 //next();
                 resolve();
             });
@@ -212,6 +214,7 @@ module.exports = {
                 // do whatever you need...
                 logger.debug(request.user._id + " item " + item_response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
+                redis_client.expire(request.user._id.toString() + "item", 1200);
                 //next();
                 resolve();
             });
@@ -262,6 +265,7 @@ module.exports = {
             BPromise.all(myPromises).then(function() {
                 logger.debug(request.user._id + "  transactions " + response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "transactions", JSON.stringify(response_array), redis.print);
+                redis_client.expire(request.user._id.toString() + "transactions", 1200);
                 //next();
                 resolve();
             });
