@@ -12,23 +12,38 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+
+
+//Set up services
+var redis_store = require('connect-redis')(session);
+var link_functions = require('./app/routes/link_functions');
+var cache_functions = require('./app/routes/cache_functions');
+var front_end_functions = require('./app/routes/front_end_functions');
+
+//Set up Logging
+var colors = require('colors');
+var logger = require('./app/config/logger');
+
+
+//Check our ennvars so we know what to connect to
+/*global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production'], 'local-sandbox');
+logger.info("Starting with " + SERVICE_CONNECTION);*/
+
+//Set up environment variables
 var envvar = require('envvar');
 var dotenv = require('dotenv').config();
 if (dotenv.error) {
   throw dotenv.error
 }
-logger.info("Loaded dotenv " + result.parsed);
+logger.info("Loaded env file!");
 
-var redis_store = require('connect-redis')(session);
+logger.inf("Starting in " + process.env.SERVICE_CONNECTION + " mode");
 
-var link_functions = require('./app/routes/link_functions');
-var cache_functions = require('./app/routes/cache_functions');
-var front_end_functions = require('./app/routes/front_end_functions');
-
-
-//Set up Logging
-var colors = require('colors');
-var logger = require('./app/config/logger');
+//Set up our services (mongo and redis)
+var mongo_setup = require('./app/config/mongo_setup')();
+global.redis = require("redis");
+var redis_setup = require('./app/config/redis_setup')();
+var plaid_setup = require("./app/config/plaid_setup");
 
 //Set up HTTPS
 var https = require('https');
@@ -38,16 +53,6 @@ const httpsOptions = {
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem')
 };
-
-//Check our ennvars so we know what to connect to
-global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production']);
-logger.info("Starting with " + SERVICE_CONNECTION);
-
-//Set up our services (mongo and redis)
-var mongo_setup = require('./app/config/mongo_setup')();
-global.redis = require("redis");
-var redis_setup = require('./app/config/redis_setup')();
-var plaid_setup = require("./app/config/plaid_setup");
 
 
 // route middleware to make sure a user is logged in
