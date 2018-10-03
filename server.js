@@ -96,9 +96,11 @@ app.use(session({
     saveUninitialized: true
 })); // session secret and cookie timeout
 
+//Set up passport
+require('./app/config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-require('./app/config/passport')(passport);
+
 
 app.use(flash()); // use connect-flash for flash messages stored in session
 
@@ -289,11 +291,25 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 
 // process the login form
-app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/dashboard', // redirect to the secure profile section
-    failureRedirect: '/', // redirect back to the signup page if there is an error
-    failureFlash: true // allow flash messages
-}));
+app.post('/login', function (req, res){
+    passport.authenticate('local-login', function(err, user, info){
+        if (err){
+            return res.send({ error: "Error" });
+        }
+        if (!user){
+            return res.send({ error: "User doesn't exist" });
+        }
+
+        else {
+            req.login(user, function(err) {
+              if (err){
+                  return res.send({ error: "Password is incorrect" });
+                  //return next(err);
+              }
+              return res.redirect('/dashboard');
+            });
+        }
+    })(req, res);});
 
 //404
 app.get('*', function(request, response) {
