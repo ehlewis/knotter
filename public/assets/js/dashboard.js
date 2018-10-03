@@ -113,6 +113,7 @@ function expandSubsection(subsection_id, showbtn_id, hidebtn_id) {
   subsection.style.maxHeight = "100%";
   showbtn.style.display = "none";
   hidebtn.style.display = "block";
+  subsection.className = "ins-subsection nofade";
 }
 
 function collapseSubsection(subsection_id, showbtn_id, hidebtn_id) {
@@ -122,6 +123,7 @@ function collapseSubsection(subsection_id, showbtn_id, hidebtn_id) {
   subsection.style.maxHeight = "400px";
   showbtn.style.display = "block";
   hidebtn.style.display = "none";
+  subsection.className = "ins-subsection";
 }
 
 
