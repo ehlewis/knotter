@@ -39,17 +39,21 @@ function getUserDataFromCache() {
   });
 }
 
+
+
 function addCards(user_institutions) {
   var current_cards = ['ins_1', 'ins_2', 'ins_3', 'ins_4', 'ins_5', 'ins_6', 'ins_7', 'ins_9', 'ins_10', 'ins_11', 'ins_13', 'ins_14', 'ins_15', 'ins_16', 'ins_19', 'ins_20', 'ins_21', 'ins_23', 'ins_24', 'ins_27', 'ins_29']
   for (var insitution = 0; insitution < user_institutions.length; insitution++) {
     var ins_id = user_institutions[insitution].item.institution_id;
     //Group by insitution
 
-    var new_card = document.createElement('div');
-    new_card.className = "ins-subsection";
-    new_card.id = ins_id + "subsection";
+    var new_subsection = document.createElement('div');
+    new_subsection.className = "ins-subsection";
+    new_subsection.id = ins_id + "subsection";
+    new_subsection.innerHTML = '<button class="show" id="showbtn' + ins_id + '"onclick="expandSubsection(this.parentElement.id, this.id, hidebtn'+ins_id+'.id)"> Show More </button>\
+    <button class="hide" id = "hidebtn' + ins_id + '" onclick="collapseSubsection(this.parentElement.id, showbtn'+ins_id+'.id, this.id)"> Show Less </button>';
 
-    document.getElementById('container_block').appendChild(new_card);
+    document.getElementById('container_block').appendChild(new_subsection);
 
     for (var account = 0; account < user_institutions[insitution].accounts.length; account++) {
       if ($.inArray(user_institutions[insitution].item.institution_id, current_cards) == -1) {
@@ -83,7 +87,7 @@ function addCards(user_institutions) {
               </tr>\
             </table>\
           </div>\
-        </div>'
+        </div>';
 
       document.getElementById(ins_id + "subsection").appendChild(new_card);
     }
@@ -100,26 +104,44 @@ function addTransactions(user_institutions) {
       document.getElementById('table' + user_institutions[insitution].transactions[transaction].account_id).appendChild(new_transaction);
     }
   }
-
-
 }
+
+function expandSubsection(subsection_id, showbtn_id, hidebtn_id) {
+  var subsection = document.getElementById(subsection_id);
+  var showbtn = document.getElementById(showbtn_id);
+  var hidebtn = document.getElementById(hidebtn_id)
+  subsection.style.maxHeight = "100%";
+  showbtn.style.display = "none";
+  hidebtn.style.display = "block";
+}
+
+function collapseSubsection(subsection_id, showbtn_id, hidebtn_id) {
+  var subsection = document.getElementById(subsection_id);
+  var showbtn = document.getElementById(showbtn_id);
+  var hidebtn = document.getElementById(hidebtn_id)
+  subsection.style.maxHeight = "400px";
+  showbtn.style.display = "block";
+  hidebtn.style.display = "none";
+}
+
+
 
 //  MORE INFO MODAL STARTS HERE
 
-var info_modal = document.getElementById("more-info-modal");
-
-function createMoreInfoModal(selected_id) {
-  var parent_card = document.getElementById(selected_id);
-  var parent_img = document.getElementById("img" + selected_id);
-  var info_modal = document.getElementById("more-info-modal");
-  var info_modal_img = document.getElementById("info_modal_img");
-
-  info_modal.style.display = "block";
-  info_modal_img.src = parent_img.src;
-}
-
-window.onclick = function(event) {
-  if (event.target == document.getElementById("more-info-modal")) {
-    document.getElementById("more-info-modal").style.display = "none";
-  }
-}
+// var info_modal = document.getElementById("more-info-modal");
+//
+// function createMoreInfoModal(selected_id) {
+//   var parent_card = document.getElementById(selected_id);
+//   var parent_img = document.getElementById("img" + selected_id);
+//   var info_modal = document.getElementById("more-info-modal");
+//   var info_modal_img = document.getElementById("info_modal_img");
+//
+//   info_modal.style.display = "block";
+//   info_modal_img.src = parent_img.src;
+// }
+//
+// window.onclick = function(event) {
+//   if (event.target == document.getElementById("more-info-modal")) {
+//     document.getElementById("more-info-modal").style.display = "none";
+//   }
+// }
