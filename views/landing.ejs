@@ -118,14 +118,12 @@ $('#login-submit').click(function() {
                 },
                 cache: false,
                 timeout: 5000,
-                complete: function() {
-                  //called when complete
-                  console.log('process complete');
-                },
-
                 success: function(data) {
                   console.log(data);
-                  console.log('process sucess');
+                  if (data === '{"response":"authd"}'){
+                    console.log("replace");
+                    window.location.replace("/");
+                  }
                },
 
                 error: function() {

@@ -294,19 +294,19 @@ app.post('/signup', passport.authenticate('local-signup', {
 app.post('/login', function (req, res){
     passport.authenticate('local-login', function(err, user, info){
         if (err){
-            return res.send({ error: "Error" });
+            return res.send({ response: "Error" });
         }
         if (!user){
-            return res.send({ error: "User doesn't exist" });
+            return res.send({ response: "User doesn't exist" });
         }
 
         else {
             req.login(user, function(err) {
               if (err){
-                  return res.send({ error: "Password is incorrect" });
+                  return res.send({ response: "Password is incorrect" });
                   //return next(err);
               }
-              return res.redirect('/dashboard');
+              return res.send({ response: "authd" });
             });
         }
     })(req, res);});

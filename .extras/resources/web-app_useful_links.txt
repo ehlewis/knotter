@@ -75,3 +75,5 @@ https://hameedullah.com/use-git-hook-to-automate-the-deployment-of-code-to-stagi
 https://itnext.io/automate-deployment-with-webhooks-18735f1c7f84
 
 https://stackoverflow.com/questions/24171489/passport-js-is-not-passing-user-to-request-in-req-login
+
+https://github.com/jaredhanson/passport-local/issues/4
