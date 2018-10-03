@@ -20,6 +20,11 @@ a{
   text-decoration: none;
 }
 
+.vl{
+  border-left: 1px solid grey;
+  height: 200px;
+}
+
 .top-bar{
   height: 100px;
   /* background: inherit; */
@@ -123,6 +128,12 @@ a{
   bottom: auto;
 }
 
+.ins-subsection{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
 .card {
   background-color: white;
   margin: auto;
@@ -155,6 +166,15 @@ a{
 .balance{
   text-align: center;
   width: 125px;
+}
+
+.balance .vl{
+  left: 0px;
+  border-left: 1px solid grey;
+  height: 200px;
+  position: absolute;
+  left: 390px;
+  top: 20px;
 }
 
 .transactions{
@@ -195,10 +215,8 @@ hr{
 .vl{
   border-left: 1px solid grey;
   height: 200px;
-  position: absolute;
-  left: 390px;
-  top: 20px;
 }
+
 
 #wrapper
 {
@@ -255,6 +273,18 @@ hr{
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
   animation-duration: 0.4s
+}
+
+.side-info{
+  height: inherit;
+  width: 145px;
+}
+
+.side-info .vl {
+  height: inherit;
+  left: 145px;
+  top: 0px;
+  position: absolute;
 }
 
 @-webkit-keyframes animatetop {
