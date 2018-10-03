@@ -10,7 +10,7 @@ logs
 
 # Mac File System File...utterly useless to anyone but me.
 .DS_Store
-.env
+#.env ignore this later
 
 #Redis dump
 .rdb

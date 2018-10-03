@@ -12,17 +12,38 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var envvar = require('envvar');
-var redis_store = require('connect-redis')(session);
 
+
+//Set up services
+var redis_store = require('connect-redis')(session);
 var link_functions = require('./app/routes/link_functions');
 var cache_functions = require('./app/routes/cache_functions');
 var front_end_functions = require('./app/routes/front_end_functions');
 
-
 //Set up Logging
 var colors = require('colors');
 var logger = require('./app/config/logger');
+
+
+//Check our ennvars so we know what to connect to
+/*global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production'], 'local-sandbox');
+logger.info("Starting with " + SERVICE_CONNECTION);*/
+
+//Set up environment variables
+var envvar = require('envvar');
+var dotenv = require('dotenv').config();
+if (dotenv.error) {
+  throw dotenv.error
+}
+logger.info("Loaded env file!");
+
+logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
+
+//Set up our services (mongo and redis)
+var mongo_setup = require('./app/config/mongo_setup')();
+global.redis = require("redis");
+var redis_setup = require('./app/config/redis_setup')();
+var plaid_setup = require("./app/config/plaid_setup");
 
 //Set up HTTPS
 var https = require('https');
@@ -32,16 +53,6 @@ const httpsOptions = {
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem')
 };
-
-//Check our ennvars so we know what to connect to
-global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production']);
-logger.info("Starting with " + SERVICE_CONNECTION);
-
-//Set up our services (mongo and redis)
-var mongo_setup = require('./app/config/mongo_setup')();
-global.redis = require("redis");
-var redis_setup = require('./app/config/redis_setup')();
-var plaid_setup = require("./app/config/plaid_setup");
 
 
 // route middleware to make sure a user is logged in
@@ -85,9 +96,11 @@ app.use(session({
     saveUninitialized: true
 })); // session secret and cookie timeout
 
+//Set up passport
+require('./app/config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
-require('./app/config/passport')(passport);
+
 
 app.use(flash()); // use connect-flash for flash messages stored in session
 
@@ -123,24 +136,24 @@ app.get('/landing', function(request, response, next) {
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV,
     });
 });
 
 app.get('/admin', isLoggedIn, function(request, response, next) {
     response.render('admin_panel.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV,
     });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     response.render('accounts.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV,
     });
 });
 
@@ -176,8 +189,8 @@ app.get('/signup', function(request, response) {
 app.get('/profile', isLoggedIn, function(request, response) {
     response.render('profile.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV
+        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
+        PLAID_ENV: process.env.PLAID_ENV
     });
 });
 
@@ -278,11 +291,25 @@ app.post('/signup', passport.authenticate('local-signup', {
 
 
 // process the login form
-app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/dashboard', // redirect to the secure profile section
-    failureRedirect: '/', // redirect back to the signup page if there is an error
-    failureFlash: true // allow flash messages
-}));
+app.post('/login', function (req, res){
+    passport.authenticate('local-login', function(err, user, info){
+        if (err){
+            return res.send({ response: "Error" });
+        }
+        if (!user){
+            return res.send({ response: "User doesn't exist" });
+        }
+
+        else {
+            req.login(user, function(err) {
+              if (err){
+                  return res.send({ response: "Password is incorrect" });
+                  //return next(err);
+              }
+              return res.send({ response: "authd" });
+            });
+        }
+    })(req, res);});
 
 //404
 app.get('*', function(request, response) {

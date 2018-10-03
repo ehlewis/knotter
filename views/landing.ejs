@@ -6,6 +6,7 @@
     <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
     <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 </head>
 
 <body>
@@ -70,12 +71,12 @@
         <!-- Login modal -->
         <div id="login-modal" class="modal">
             <div class="modal-content">
-                <form id="login-form" action="/login" method="post" class="form">
+                <div class="form">
                     <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
                     <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
-                    <button type="submit" class="btn btn-warning btn-lg">Login</button>
+                    <button type="submit" id="login-submit" class="btn btn-warning btn-lg">Login</button>
                     <p class="message">Not registered? <a id="already-sign-up">Sign Up</a></p>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -102,3 +103,33 @@
 </body>
 
 </html>
+
+<script>
+
+$('#login-submit').click(function() {
+            console.log("clciked");
+            $.ajax({
+                url: "/login",
+                type: "POST",
+                dataType: "html",
+                data: {
+                    email: $('#login-name').val(),
+                    password: $('#login-pass').val()
+                },
+                cache: false,
+                timeout: 5000,
+                success: function(data) {
+                  console.log(data);
+                  if (data === '{"response":"authd"}'){
+                    console.log("replace");
+                    window.location.replace("/");
+                  }
+               },
+
+                error: function() {
+                  console.log('process error');
+                },
+              });
+        })
+
+</script>

@@ -61,7 +61,7 @@ module.exports = function(passport) {
                     // if there is no user with that email
                     // create the user
                     var newUser = new User();
-                    console.log(request.body);
+                    //console.log(request.body);
                     // set the user's local credentials
                     newUser.email = request.body.email; //This just used to be the variable email but I had to change it because it was putting name in somehow even though in the request email was right
                     newUser.username = request.body.username;

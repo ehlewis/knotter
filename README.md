@@ -35,17 +35,30 @@ To access the redis cli: ```redis-cli```
 To view all keys in the redis cache from the cli: ```keys *```
 
 ## Start the web server
+make sure in the .env the SERVICE_CONNECTION is "local_sandbox"
 from the web-app server file ```sudo node server.js```
 
 #### Go to 127.0.0.1
 
-### Testing
-```npm test``` to run the test file
-
 # GCP
 
 
-If in GCP run it like this
+#### To start
+make sure in the .env the SERVICE_CONNECTION is "remote_staging"
 ```
-sudo SERVICE_CONNECTION="remote-staging" node server.js
+nohup sudo SERVICE_CONNECTION="remote-staging" node server.js &
 ```
+This puts it in the background and overrides the (env file just in case) so you can disconnect and do other things and whatnot
+
+#### To stop:
+```
+sudo pkill node
+```
+or the pid that the start command gave you
+
+
+### Testing
+```npm test``` to run the test file
+
+## Debugging
+```sudo DEBUG=* node server.js```
