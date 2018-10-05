@@ -2,6 +2,12 @@
 
 Run the following commands to start the website on localhost in sandbox mode
 
+## Install dependencies
+From inside /link
+```
+npm install
+```
+
 ## Start the db
 ```
 mongod --bind_ip 127.0.0.1
