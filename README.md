@@ -56,6 +56,11 @@ sudo pkill node
 ```
 or the pid that the start command gave you
 
+##### Redis:
+to connect to Redis from the gcp vm:
+```
+telnet 10.0.0.27 6379
+```
 
 ### Testing
 ```npm test``` to run the test file
