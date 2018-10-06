@@ -33,11 +33,27 @@ logger.info("Starting with " + SERVICE_CONNECTION);*/
 var envvar = require('envvar');
 var dotenv = require('dotenv').config();
 if (dotenv.error) {
-  throw dotenv.error
+  throw dotenv.error;
 }
 logger.info("Loaded env file!");
-
 logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
+
+if(process.env.SERVICE_CONNECTION === "local-sandbox"){
+    global.SANDBOX_PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
+    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
+    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
+    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
+}
+else if(process.env.SERVICE_CONNECTION === "remote-staging"){
+    global.SANDBOX_PLAID_SECRET = process.env.DEV_PLAID_SECRET;
+    global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
+    global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
+    global.PLAID_ENV = process.env.DEV_PLAID_ENV;
+}
+else{
+    logger.error("Not a valid service connection mode");
+    throw new Error();
+}
 
 //Set up our services (mongo and redis)
 var mongo_setup = require('./app/config/mongo_setup')();
@@ -136,24 +152,24 @@ app.get('/landing', function(request, response, next) {
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
     });
 });
 
 app.get('/admin', isLoggedIn, function(request, response, next) {
     response.render('admin_panel.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
     });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     response.render('accounts.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
     });
 });
 
@@ -189,8 +205,8 @@ app.get('/signup', function(request, response) {
 app.get('/profile', isLoggedIn, function(request, response) {
     response.render('profile.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
     });
 });
 
