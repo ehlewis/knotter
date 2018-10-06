@@ -39,7 +39,7 @@ logger.info("Loaded env file!");
 logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
 
 if(process.env.SERVICE_CONNECTION === "local-sandbox"){
-    global.SANDBOX_PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
+    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
     global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
     global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
     global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
