@@ -77,3 +77,13 @@ https://itnext.io/automate-deployment-with-webhooks-18735f1c7f84
 https://stackoverflow.com/questions/24171489/passport-js-is-not-passing-user-to-request-in-req-login
 
 https://github.com/jaredhanson/passport-local/issues/4
+
+https://www.humankode.com/ssl/create-a-selfsigned-certificate-for-nginx-in-5-minutes
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+
+https://cloud.google.com/community/tutorials/https-load-balancing-nginx
+
+https://www.digitalocean.com/community/questions/nginx-reverse-proxy-with-express-and-node-js-app-not-redirecting-to-https
+
+https://gist.github.com/nikmartin/5902176
