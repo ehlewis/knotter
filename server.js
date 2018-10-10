@@ -43,12 +43,18 @@ if(process.env.SERVICE_CONNECTION === "local-sandbox"){
     global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
     global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
     global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
+
+    var SSL_PORT = 443;
+    var HTTP_PORT = 80;
 }
 else if(process.env.SERVICE_CONNECTION === "remote-staging"){
-    global.SANDBOX_PLAID_SECRET = process.env.DEV_PLAID_SECRET;
+    global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
     global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
     global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
     global.PLAID_ENV = process.env.DEV_PLAID_ENV;
+
+    var SSL_PORT = 8443;
+    var HTTP_PORT = 8080;
 }
 else{
     logger.error("Not a valid service connection mode");
@@ -60,6 +66,8 @@ var mongo_setup = require('./app/config/mongo_setup')();
 global.redis = require("redis");
 var redis_setup = require('./app/config/redis_setup')();
 var plaid_setup = require("./app/config/plaid_setup");
+
+console.warn(plaid_client);
 
 //Set up HTTPS
 var https = require('https');
@@ -106,7 +114,7 @@ app.use(session({
         }),
     secret: 'thisissupersecret',
     cookie: {
-        maxAge: 1200 //20 Min cookie
+        maxAge: 3600000 //1 hour cookie
     },
     resave: true,
     saveUninitialized: true
@@ -334,7 +342,7 @@ app.get('*', function(request, response) {
 
 // =====launch=====
 
-const server = https.createServer(httpsOptions, app).listen(443, function() {
+const server = https.createServer(httpsOptions, app).listen(SSL_PORT, function() {
     logger.info('HTTPS server started on port 443');
 });
 
@@ -344,6 +352,6 @@ http.createServer(function(request, response) {
         "Location": "https://" + request.headers['host'] + request.url
     });
     response.end();
-}).listen(80, function() {
+}).listen(HTTP_PORT, function() {
     logger.info('HTTP server started on port 80');
 });
