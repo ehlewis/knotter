@@ -2,6 +2,12 @@
 
 Run the following commands to start the website on localhost in sandbox mode
 
+## Install dependencies
+From inside /link
+```
+npm install
+```
+
 ## Start the db
 ```
 mongod --bind_ip 127.0.0.1
@@ -39,26 +45,6 @@ make sure in the .env the SERVICE_CONNECTION is "local_sandbox"
 from the web-app server file ```sudo node server.js```
 
 #### Go to 127.0.0.1
-
-# GCP
-
-
-#### To start
-make sure in the .env the SERVICE_CONNECTION is "remote_staging"
-```
-nohup sudo SERVICE_CONNECTION="remote-staging" node server.js &
-```
-This puts it in the background and overrides the (env file just in case) so you can disconnect and do other things and whatnot
-
-#### To stop:
-```
-sudo pkill node
-```
-or the pid that the start command gave you
-
-
-### Testing
-```npm test``` to run the test file
 
 ## Debugging
 ```sudo DEBUG=* node server.js```

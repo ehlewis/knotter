@@ -2,134 +2,160 @@
 <html>
 
 <head>
-    <title>Link</title>
-    <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+  <title>Link</title>
+  <link rel="icon" href="assets/graphics/link_icon_w_on_g.png">
+  <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
 </head>
 
 <body>
-    <div class="top-bar">
-        <div class="logo">
-            <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
-        </div class>
-        <div class="nav-bar">
-            <!-- <a href="/workinprogress">Plans</a>
+  <div class="top-bar">
+    <div class="logo">
+      <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
+    </div class>
+    <div class="nav-bar">
+      <!-- <a href="/workinprogress">Plans</a>
       <a href="/workinprogress">Business</a>
       <a href="/workinprogress">About</a>
       <a href="/workinprogress">Contact Us</a> -->
-            <a id="pro-button" href="/workinprogress">Link Pro</a>
-        </div>
-        <!-- <div class="pro-button">
+      <a id="pro-button" href="/workinprogress">Link Pro</a>
+    </div>
+    <!-- <div class="pro-button">
       <a href="http://google.com" style="float:right">Lucidity Pro</a>
     </div> -->
-        <!-- <div class="top-buttons">
+    <!-- <div class="top-buttons">
       <button class="button" type="button">Login</button>
       <div class="vertical-line"></div>
       <button class="button" type="button">Sign Up</button>
     </div> -->
-    </div>
-    <div class="body-white">
+  </div>
+  <div class="body-white">
 
-        <div class="center-text">
-            <p>Manage all your finances in one place.</p>
-            <div class="action-buttons">
-                <button id="login-button" class="button" style="float: left;">Login</a></button>
-                <button id="sign-up-button" class="button" style="float: right; ">Sign Up</a></button>
-        <!-- <button class="button" type="button">Login</button> -->
-                <!-- <button class="button" type="button" style="float: right;">Sign Up</button> -->
-            </div>
-        </div>
-
-        <div class="info-section">
-            <div class="info-box">
-                <img src="assets/graphics/hub_icon.png" width="75px;">
-                <h2>Save time, reduce hassle</h2>
-                <p>Link brings all of your accounts to one centralized hub.</p>
-            </div>
-            <div class="info-box">
-                <img src="assets/graphics/exchange_icon.png" width="75px">
-                <h2>Built with your privacy in mind</h2>
-                <p>Your financial data is deleted as soon as you log out</p>
-            </div>
-            <div class="info-box">
-                <img src="assets/graphics/analytics_icon.png" width="75px">
-                <h2>See where your money is</h2>
-                <p>Keep track of your money and receive detailed analytics on it.</p>
-            </div>
-        </div>
-
-    </div>
     <div class="center-text">
-        <p>Save yourself the stress</p>
+      <p>Manage all your finances in one place.</p>
+      <div class="action-buttons">
+        <button id="login-button" class="button" style="float: left;">Login</a></button>
+        <button id="sign-up-button" class="button" style="float: right; ">Sign Up</a></button>
+        <!-- <button class="button" type="button">Login</button> -->
+        <!-- <button class="button" type="button" style="float: right;">Sign Up</button> -->
+      </div>
     </div>
-    <div>
-        <p>More text</p>
+
+    <div class="info-section">
+      <div class="info-box">
+        <img src="assets/graphics/hub_icon.png" width="75px;">
+        <h2>Save time, reduce hassle</h2>
+        <p>Link brings all of your accounts to one centralized hub.</p>
+      </div>
+      <div class="info-box">
+        <img src="assets/graphics/exchange_icon.png" width="75px">
+        <h2>Built with your privacy in mind</h2>
+        <p>Your financial data is deleted as soon as you log out</p>
+      </div>
+      <div class="info-box">
+        <img src="assets/graphics/analytics_icon.png" width="75px">
+        <h2>See where your money is</h2>
+        <p>Keep track of your money and receive detailed analytics on it.</p>
+      </div>
     </div>
 
-        <!-- Login modal -->
-        <div id="login-modal" class="modal">
-            <div class="modal-content">
-                <div class="form">
-                    <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
-                    <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
-                    <button type="submit" id="login-submit" class="btn btn-warning btn-lg">Login</button>
-                    <p class="message">Not registered? <a id="already-sign-up">Sign Up</a></p>
-                </div>
-            </div>
-        </div>
+  </div>
+  <div class="center-text">
+    <p>Save yourself the stress</p>
+  </div>
+  <div>
+    <p>More text</p>
+  </div>
+
+  <!-- Login modal -->
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <div id="login-form" class="form">
+        <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
+        <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
+        <button type="submit" id="login-submit" class="btn btn-warning btn-lg">Login</button>
+        <p class="message">Not registered? <a id="already-sign-up">Sign Up</a></p>
+      </div>
+    </div>
+  </div>
 
 
-        <!-- Sign up modal -->
-        <div id="sign-up-modal" class="modal">
-            <div class="modal-content">
-                <div class="form">
-                    <form id="sign-up-form" action="/signup" method="post" class="form">
-                        <input id="sign-up-name" type="text" placeholder="Username" name="username" required/>
-                        <input id="sign-up-email" type="email" placeholder="Email" name="email" required/>
-                        <input id="sign-up-pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password" placeholder="Password" name="password" required>
-                        <img id="hide-icon" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
-                        <button id="create-button">Create</button>
-                        <p class="message">Already registered? <a id="already-login">Login</a></p>
-                    </form>
-                </div>
-            </div>
-        </div>
+  <!-- Sign up modal -->
+  <div id="sign-up-modal" class="modal">
+    <div class="modal-content">
+      <div class="form">
+        <form id="sign-up-form" action="/signup" method="post" class="form">
+          <input id="sign-up-name" type="text" placeholder="Username" name="username" required />
+          <input id="sign-up-email" type="email" placeholder="Email" name="email" required />
+          <input id="sign-up-pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password" placeholder="Password" name="password"
+            required>
+          <img id="hide-icon" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
+          <button id="create-button">Create</button>
+          <p class="message">Already registered? <a id="already-login">Login</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
-        <script src="assets/js/landing.js"></script>
+  <script src="assets/js/landing.js"></script>
 
 </body>
 
 </html>
 
 <script>
+  $('#login-submit').click(function() {
+    console.log("clciked");
+    $.ajax({
+      url: "/login",
+      type: "POST",
+      dataType: "html",
+      data: {
+        email: $('#login-name').val(),
+        password: $('#login-pass').val()
+      },
+      cache: false,
+      timeout: 5000,
+      success: function(data) {
+        console.log(data);
+        if (data === '{"response":"authd"}') {
+          console.log("replace");
+          window.location.replace("/");
+        }
+      },
 
-$('#login-submit').click(function() {
-            console.log("clciked");
-            $.ajax({
-                url: "/login",
-                type: "POST",
-                dataType: "html",
-                data: {
-                    email: $('#login-name').val(),
-                    password: $('#login-pass').val()
-                },
-                cache: false,
-                timeout: 5000,
-                success: function(data) {
-                  console.log(data);
-                  if (data === '{"response":"authd"}'){
-                    console.log("replace");
-                    window.location.replace("/");
-                  }
-               },
+      error: function() {
+        console.log('process error');
+      },
+    });
+  })
+  $('#login-form').keyup(function(e) {
+    if(e.keyCode == 13){
+    console.log("clciked");
+    $.ajax({
+      url: "/login",
+      type: "POST",
+      dataType: "html",
+      data: {
+        email: $('#login-name').val(),
+        password: $('#login-pass').val()
+      },
+      cache: false,
+      timeout: 5000,
+      success: function(data) {
+        console.log(data);
+        if (data === '{"response":"authd"}') {
+          console.log("replace");
+          window.location.replace("/");
+        }
+      },
 
-                error: function() {
-                  console.log('process error');
-                },
-              });
-        })
-
+      error: function() {
+        console.log('process error');
+      },
+    });
+  }
+  })
 </script>

@@ -33,17 +33,41 @@ logger.info("Starting with " + SERVICE_CONNECTION);*/
 var envvar = require('envvar');
 var dotenv = require('dotenv').config();
 if (dotenv.error) {
-  throw dotenv.error
+  throw dotenv.error;
 }
 logger.info("Loaded env file!");
-
 logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
+
+if(process.env.SERVICE_CONNECTION === "local-sandbox"){
+    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
+    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
+    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
+    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
+
+    var SSL_PORT = 443;
+    var HTTP_PORT = 80;
+}
+else if(process.env.SERVICE_CONNECTION === "remote-staging"){
+    global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
+    global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
+    global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
+    global.PLAID_ENV = process.env.DEV_PLAID_ENV;
+
+    var SSL_PORT = 8443;
+    var HTTP_PORT = 8080;
+}
+else{
+    logger.error("Not a valid service connection mode");
+    throw new Error();
+}
 
 //Set up our services (mongo and redis)
 var mongo_setup = require('./app/config/mongo_setup')();
 global.redis = require("redis");
 var redis_setup = require('./app/config/redis_setup')();
 var plaid_setup = require("./app/config/plaid_setup");
+
+console.warn(plaid_client);
 
 //Set up HTTPS
 var https = require('https');
@@ -90,7 +114,7 @@ app.use(session({
         }),
     secret: 'thisissupersecret',
     cookie: {
-        maxage: 1200 //20 Min cookie
+        maxAge: 3600000 //1 hour cookie
     },
     resave: true,
     saveUninitialized: true
@@ -136,24 +160,24 @@ app.get('/landing', function(request, response, next) {
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
     });
 });
 
 app.get('/admin', isLoggedIn, function(request, response, next) {
     response.render('admin_panel.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
     });
 });
 
 app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     response.render('accounts.ejs', {
         user: request.user,
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV,
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV,
     });
 });
 
@@ -189,8 +213,8 @@ app.get('/signup', function(request, response) {
 app.get('/profile', isLoggedIn, function(request, response) {
     response.render('profile.ejs', {
         user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: process.env.PLAID_PUBLIC_KEY,
-        PLAID_ENV: process.env.PLAID_ENV
+        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
+        PLAID_ENV: PLAID_ENV
     });
 });
 
@@ -318,7 +342,7 @@ app.get('*', function(request, response) {
 
 // =====launch=====
 
-const server = https.createServer(httpsOptions, app).listen(443, function() {
+const server = https.createServer(httpsOptions, app).listen(SSL_PORT, function() {
     logger.info('HTTPS server started on port 443');
 });
 
@@ -328,6 +352,6 @@ http.createServer(function(request, response) {
         "Location": "https://" + request.headers['host'] + request.url
     });
     response.end();
-}).listen(80, function() {
+}).listen(HTTP_PORT, function() {
     logger.info('HTTP server started on port 80');
 });
