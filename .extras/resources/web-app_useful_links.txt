@@ -87,3 +87,5 @@ https://cloud.google.com/community/tutorials/https-load-balancing-nginx
 https://www.digitalocean.com/community/questions/nginx-reverse-proxy-with-express-and-node-js-app-not-redirecting-to-https
 
 https://gist.github.com/nikmartin/5902176
+
+https://mediatemple.net/community/products/developer/204405534/install-nginx-on-ubuntu
