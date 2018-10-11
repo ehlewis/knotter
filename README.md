@@ -46,30 +46,5 @@ from the web-app server file ```sudo node server.js```
 
 #### Go to 127.0.0.1
 
-# GCP
-
-
-#### To start
-make sure in the .env the SERVICE_CONNECTION is "remote_staging"
-```
-nohup sudo SERVICE_CONNECTION="remote-staging" node server.js &
-```
-This puts it in the background and overrides the (env file just in case) so you can disconnect and do other things and whatnot
-
-#### To stop:
-```
-sudo pkill node
-```
-or the pid that the start command gave you
-
-##### Redis:
-to connect to Redis from the gcp vm:
-```
-telnet 10.0.0.27 6379
-```
-
-### Testing
-```npm test``` to run the test file
-
 ## Debugging
 ```sudo DEBUG=* node server.js```
