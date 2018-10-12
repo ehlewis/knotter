@@ -21,7 +21,7 @@ if(process.env.SERVICE_CONNECTION==="local-sandbox"){
 }
 
 //STAGING setup
-else if(process.env.SERVICE_CONNECTION==="remote-staging"){
+else if(process.env.SERVICE_CONNECTION==="remote-sandbox" || process.env.SERVICE_CONNECTION === "remote-dev"){
     const {LoggingWinston} = require('@google-cloud/logging-winston');
     const loggingWinston = new LoggingWinston();
 
