@@ -46,6 +46,7 @@ if(process.env.SERVICE_CONNECTION === "local-sandbox"){
 
     var SSL_PORT = 443;
     var HTTP_PORT = 80;
+
 }
 else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
     global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
@@ -55,6 +56,7 @@ else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
 
     var SSL_PORT = 8443;
     var HTTP_PORT = 8080;
+
 }
 else if(process.env.SERVICE_CONNECTION === "remote-dev"){
     global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
@@ -277,6 +279,13 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
 
 app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
     front_end_functions.create_transaction_graph_data(request, response, next);
+});
+
+app.get('/api/env',  function(request, response) {
+    logger.info("Hey there");
+      response.json({
+          env : process.env.SERVICE_CONNECTION
+      });
 });
 
 //=====API Post=====

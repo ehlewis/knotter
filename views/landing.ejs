@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <div class="top-bar">
+  <div class="top-bar" id="tag-home">
     <div class="logo">
       <a href="/"><img src="assets/graphics/link_brand_white.png" width="120px" style="float: left; "></a>
     </div class>
@@ -106,6 +106,7 @@
 </html>
 
 <script>
+//window.onload = env();
 
 $('#login-submit').click(login());
 $('#login-form').keyup(function(e) {
@@ -123,6 +124,29 @@ function clear(elem){
   input.style.border = "none";
   input.value = "";
 }
+
+// function env(){
+//   $.ajax({
+//     url: "/api/env",
+//     type: "GET",
+//     success: function(service){
+//       console.log(service);
+//       var parent = document.getElementById('tag-home');
+//       tag = document.createElement('p');
+//       tag.innerHTML = service;
+//       parent.insertBefore(tag, parent.firstChild);
+//     }
+//   })
+// }
+
+$.getJSON("/api/env", function(data) {
+      console.log(data);
+      var parent = document.getElementById('tag-home');
+      tag = document.createElement('p');
+      tag.innerHTML = data.env;
+      parent.insertBefore(tag, parent.firstChild);
+
+});
 
   function login() {
     $.ajax({
