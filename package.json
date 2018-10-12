@@ -1,17 +1,17 @@
 {
-    "name": "link",
+    "name": "Knotter",
     "version": "0.1.0",
     "description": "Financial manager",
-    "main": "server.js",
+    "main": "knotter.js",
     "engines": {
         "node": ">=8.0.0"
     },
     "scripts": {
-        "start": "node server.js",
+        "start": "node knotter.js",
         "test": "mocha"
     },
     "author": "Evan Lewis, Eli Weinberger, Ryan Tom",
-    "repository": "https://github.com/ehlewis/link",
+    "repository": "https://github.com/ehlewis/knotter",
     "license": "ISC",
     "dependencies": {
         "@google-cloud/logging-winston": "^0.10.2",
