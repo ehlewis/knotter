@@ -32,7 +32,13 @@ module.exports = function() {
     MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
         if (err) throw err;
 
-        db = client.db('link');
+        if (process.env.SERVICE_CONNECTION === "local-sandbox" || process.env.SERVICE_CONNECTION === "remote-sandbox"){
+            db = client.db('linkSANDBOX');
+        }
+        else if (process.env.SERVICE_CONNECTION === "remote-dev"){
+            db = client.db('linkDEV');
+        }
+
         global.collection = db.collection('users');
         logger.info("Connected to DB!");
     });
