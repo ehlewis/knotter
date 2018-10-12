@@ -46,6 +46,7 @@ if(process.env.SERVICE_CONNECTION === "local-sandbox"){
 
     var SSL_PORT = 443;
     var HTTP_PORT = 80;
+
 }
 else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
     global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
@@ -55,6 +56,7 @@ else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
 
     var SSL_PORT = 8443;
     var HTTP_PORT = 8080;
+
 }
 else if(process.env.SERVICE_CONNECTION === "remote-dev"){
     global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
@@ -279,6 +281,13 @@ app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
     front_end_functions.create_transaction_graph_data(request, response, next);
 });
 
+app.get('/api/env',  function(request, response) {
+    logger.info("Hey there");
+      response.json({
+          env : process.env.SERVICE_CONNECTION
+      });
+});
+
 //=====API Post=====
 
 app.post('/api/name', function(request, response, next) {
@@ -330,13 +339,13 @@ app.post('/login', function (req, res){
             return res.send({ response: "Error" });
         }
         if (!user){
-            return res.send({ response: "User doesn't exist" });
+            return res.send({ response: "Login failed" });
         }
 
         else {
             req.login(user, function(err) {
               if (err){
-                  return res.send({ response: "Password is incorrect" });
+                  return res.send({ response: "Login failed" });
                   //return next(err);
               }
               return res.send({ response: "authd" });

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html id="tag-home">
 
 <head>
   <title>Link</title>
@@ -74,7 +74,7 @@
       <div id="login-form" class="form">
         <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
         <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
-        <button type="submit" id="login-submit" class="btn btn-warning btn-lg">Login</button>
+        <button type="submit" id="login-submit" class="btn btn-warning btn-lg" onclick="login()">Login</button>
         <p class="message">Not registered? <a id="already-sign-up">Sign Up</a></p>
       </div>
     </div>
@@ -106,34 +106,49 @@
 </html>
 
 <script>
-  $('#login-submit').click(function() {
-    console.log("clciked");
-    $.ajax({
-      url: "/login",
-      type: "POST",
-      dataType: "html",
-      data: {
-        email: $('#login-name').val(),
-        password: $('#login-pass').val()
-      },
-      cache: false,
-      timeout: 5000,
-      success: function(data) {
-        console.log(data);
-        if (data === '{"response":"authd"}') {
-          console.log("replace");
-          window.location.replace("/");
-        }
-      },
+//window.onload = env();
 
-      error: function() {
-        console.log('process error');
-      },
-    });
-  })
-  $('#login-form').keyup(function(e) {
-    if(e.keyCode == 13){
-    console.log("clciked");
+$('#login-submit').click(login());
+$('#login-form').keyup(function(e) {
+  if(e.keyCode == 13){
+    login();
+  }
+}
+);
+
+$('#login-name').click(clear('login-name'));
+
+function clear(elem){
+  var input = document.getElementById(elem);
+  console.log("clear");
+  input.style.border = "none";
+  input.value = "";
+}
+
+// function env(){
+//   $.ajax({
+//     url: "/api/env",
+//     type: "GET",
+//     success: function(service){
+//       console.log(service);
+//       var parent = document.getElementById('tag-home');
+//       tag = document.createElement('p');
+//       tag.innerHTML = service;
+//       parent.insertBefore(tag, parent.firstChild);
+//     }
+//   })
+// }
+
+$.getJSON("/api/env", function(data) {
+      console.log(data);
+      var parent = document.getElementById('tag-home');
+      tag = document.createElement('p');
+      tag.innerHTML = data.env;
+      parent.insertBefore(tag, parent.firstChild);
+
+});
+
+  function login() {
     $.ajax({
       url: "/login",
       type: "POST",
@@ -146,10 +161,23 @@
       timeout: 5000,
       success: function(data) {
         console.log(data);
+        var email = document.getElementById("login-name");
+        var password = document.getElementById("login-pass");
         if (data === '{"response":"authd"}') {
-          console.log("replace");
           window.location.replace("/");
         }
+        else if (data === '{"response":"Login failed"}') {
+          email.style.border = "1px solid red";
+          password.style.border = "1px solid red";
+          // email.value = "";
+          // password.value = "";
+          //password.style.border = "none";
+        }
+        // else if (data === '{"response":"Password is incorrect"}') {
+        //   password.style.border = "1px solid red";
+        //   email.style.border = "none";
+        //   console.log("maybe");
+        // }
       },
 
       error: function() {
@@ -157,5 +185,4 @@
       },
     });
   }
-  })
 </script>
