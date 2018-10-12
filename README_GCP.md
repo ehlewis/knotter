@@ -22,7 +22,7 @@ sudo apt-get install pm2
 ### To start
 Do not run in sudo
 ```
-SERVICE_CONNECTION="remote-staging" pm2 server.js
+SERVICE_CONNECTION="remote-staging" pm2 knotter.js
 ```
 
 ### To stop:

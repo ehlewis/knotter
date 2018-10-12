@@ -42,9 +42,9 @@ To view all keys in the redis cache from the cli: ```keys *```
 
 ## Start the web server
 make sure in the .env the SERVICE_CONNECTION is "local_sandbox"
-from the web-app server file ```sudo node server.js```
+from the web-app server file ```sudo node knotter.js```
 
 #### Go to 127.0.0.1
 
 ## Debugging
-```sudo DEBUG=* node server.js```
+```sudo DEBUG=* node knotter.js```
