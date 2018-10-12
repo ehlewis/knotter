@@ -13,6 +13,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   max-width: 1000px;
   margin: auto;
+
+  /*THIS ACCOUNTS FOR THE SERVICE TAG. REMOVE WHEN RELEASE */
+  margin-top: -18px;
 }
 
 a{
@@ -24,6 +27,10 @@ a{
   /* background: inherit; */
   max-width: 1000px;
   margin: auto;
+}
+
+#tag-home p{
+  margin: 0;
 }
 
 .nav-bar{
@@ -125,7 +132,10 @@ a{
   min-width: 600px;
   margin: 0 auto;
   padding-top: 100px;
+}
 
+.center-text p{
+  padding-bottom: 18px;
 }
 
 .action-buttons{
