@@ -47,7 +47,16 @@ if(process.env.SERVICE_CONNECTION === "local-sandbox"){
     var SSL_PORT = 443;
     var HTTP_PORT = 80;
 }
-else if(process.env.SERVICE_CONNECTION === "remote-staging"){
+else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
+    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
+    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
+    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
+    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
+
+    var SSL_PORT = 8443;
+    var HTTP_PORT = 8080;
+}
+else if(process.env.SERVICE_CONNECTION === "remote-dev"){
     global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
     global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
     global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
