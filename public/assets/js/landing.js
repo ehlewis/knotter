@@ -9,8 +9,9 @@ var alreadySignupBtn = document.getElementById('already-sign-up');
 
 var signupName = document.getElementById('sign-up-name');
 var signupPass = document.getElementById('sign-up-pass');
-var confirmPass = document.getElementById('confirm-pass');
 var signupEmail = document.getElementById('sign-up-email');
+var loginName = document.getElementById('login-name');
+var loginPass = document.getElementById('login-pass');
 var loginForm = document.getElementById('login-form');
 var signupForm = document.getElementById('sign-up-form');
 
@@ -28,6 +29,8 @@ function showPass(){
     hideIcon.src = "assets/graphics/hide.svg";
   }
 }
+
+
 
 loginBtn.onclick = function() {
   loginModal.style.display = "block";
@@ -70,5 +73,7 @@ window.onclick = function(event) {
     signupEmail.style.border = "0px";
     signupName.style.border = "0px";
     signupPass.style.border = "0px";
+    loginName.style.border = "0px";
+    loginPass.style.border = "0px";
   }
 }

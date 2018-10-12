@@ -321,13 +321,13 @@ app.post('/login', function (req, res){
             return res.send({ response: "Error" });
         }
         if (!user){
-            return res.send({ response: "User doesn't exist" });
+            return res.send({ response: "Login failed" });
         }
 
         else {
             req.login(user, function(err) {
               if (err){
-                  return res.send({ response: "Password is incorrect" });
+                  return res.send({ response: "Login failed" });
                   //return next(err);
               }
               return res.send({ response: "authd" });
