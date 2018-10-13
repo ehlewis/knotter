@@ -53,9 +53,13 @@ sudo pkill nginx
 ```
 then run certbot
 ```
+sudo ./certbot-auto certonly --standalone --email ehlewis@me.com -d knotter.co
+```
+or
+```
 sudo certbot certonly --standalone --preferred-challenges http -d knotter.co
 ```
-Ensure the new keys are linked to the server and restart nginx
+And restart nginx
 
 ## Extras:
 
