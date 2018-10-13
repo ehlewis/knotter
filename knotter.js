@@ -44,6 +44,9 @@ if(process.env.SERVICE_CONNECTION === "local-sandbox"){
     global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
     global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
 
+    var ssl_key = './key.pem';
+    var ss_cert = './cert.pem';
+
     var SSL_PORT = 443;
     var HTTP_PORT = 80;
 
@@ -54,6 +57,9 @@ else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
     global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
     global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
 
+    var ssl_key = '/etc/letsencrypt/keys/0001_key-certbot.pem';
+    var ss_cert = '/etc/letsencrypt/csr/0001_csr-certbot.pem';
+
     var SSL_PORT = 8443;
     var HTTP_PORT = 8080;
 
@@ -63,6 +69,9 @@ else if(process.env.SERVICE_CONNECTION === "remote-dev"){
     global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
     global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
     global.PLAID_ENV = process.env.DEV_PLAID_ENV;
+
+    var ssl_key = '/etc/letsencrypt/keys/0001_key-certbot.pem';
+    var ss_cert = '/etc/letsencrypt/csr/0001_csr-certbot.pem';
 
     var SSL_PORT = 8443;
     var HTTP_PORT = 8080;
@@ -85,8 +94,8 @@ var https = require('https');
 var helmet = require("helmet");
 var fs = require("fs");
 const httpsOptions = {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./cert.pem')
+    key: fs.readFileSync(ssl_key),
+    cert: fs.readFileSync(ssl_cert)
 };
 
 

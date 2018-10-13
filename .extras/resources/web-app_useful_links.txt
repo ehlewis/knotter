@@ -91,3 +91,5 @@ https://gist.github.com/nikmartin/5902176
 https://mediatemple.net/community/products/developer/204405534/install-nginx-on-ubuntu
 
 https://stackoverflow.com/questions/35942754/how-to-save-username-and-password-in-git
+
+https://www.digitalocean.com/community/tutorials/how-to-use-certbot-standalone-mode-to-retrieve-let-s-encrypt-ssl-certificates-on-ubuntu-16-04

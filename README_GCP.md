@@ -42,7 +42,20 @@ pm2 stop server
 git pull
 pm2 restart server
 ```
-
+## SSL
+stop nginx
+```
+sudo service stop nginx
+```
+But this doesn't always work, so less gracefully
+```
+sudo pkill nginx
+```
+then run certbot
+```
+sudo certbot certonly --standalone --preferred-challenges http -d knotter.co
+```
+Ensure the new keys are linked to the server and restart nginx
 
 ## Extras:
 
