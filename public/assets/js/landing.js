@@ -77,3 +77,49 @@ window.onclick = function(event) {
     loginPass.style.border = "0px";
   }
 }
+
+function login() {
+    $.ajax({
+        url: "/login",
+        type: "POST",
+        dataType: "html",
+        data: {
+            email: $('#login-name').val(),
+            password: $('#login-pass').val()
+        },
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+            console.log(data);
+            var email = document.getElementById("login-name");
+            var password = document.getElementById("login-pass");
+            if (data === '{"response":"authd"}') {
+                window.location.replace("/");
+            } else if (data === '{"response":"Login failed"}') {
+                email.style.border = "1px solid red";
+                password.style.border = "1px solid red";
+            }
+            /*else if (data === '{"response":"Password is incorrect"}') {
+                password.style.border = "1px solid red";
+                email.style.border = "none";
+                console.log("maybe");
+            }*/
+        },
+
+        error: function() {
+            console.log('process error');
+        },
+    });
+}
+
+function clearLoginEmail(elem) {
+    var input = document.getElementById(elem);
+    input.style.border = "none";
+    input.value = "";
+}
+
+function clearLoginPass(elem) {
+    var input = document.getElementById(elem);
+    input.style.border = "none";
+    input.value = "";
+}

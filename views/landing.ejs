@@ -119,32 +119,6 @@
         clearLoginPass('login-pass');
     });
 
-    function clearLoginEmail(elem) {
-        var input = document.getElementById(elem);
-        input.style.border = "none";
-        input.value = "";
-    }
-
-    function clearLoginPass(elem) {
-        var input = document.getElementById(elem);
-        input.style.border = "none";
-        input.value = "";
-    }
-
-    // function env(){
-    //   $.ajax({
-    //     url: "/api/env",
-    //     type: "GET",
-    //     success: function(service){
-    //       console.log(service);
-    //       var parent = document.getElementById('tag-home');
-    //       tag = document.createElement('p');
-    //       tag.innerHTML = service;
-    //       parent.insertBefore(tag, parent.firstChild);
-    //     }
-    //   })
-    // }
-
     $.getJSON("/api/env", function(data) {
         console.log(data);
         var parent = document.getElementById('tag-home');
@@ -153,41 +127,6 @@
         parent.insertBefore(tag, parent.firstChild);
 
     });
-    function login() {
-        $.ajax({
-            url: "/login",
-            type: "POST",
-            dataType: "html",
-            data: {
-                email: $('#login-name').val(),
-                password: $('#login-pass').val()
-            },
-            cache: false,
-            timeout: 5000,
-            success: function(data) {
-                console.log(data);
-                var email = document.getElementById("login-name");
-                var password = document.getElementById("login-pass");
-                if (data === '{"response":"authd"}') {
-                    window.location.replace("/");
-                } else if (data === '{"response":"Login failed"}') {
-                    email.style.border = "1px solid red";
-                    password.style.border = "1px solid red";
-                    // email.value = "";
-                    // password.value = "";
-                    //password.style.border = "none";
-                }
-                // else if (data === '{"response":"Password is incorrect"}') {
-                //   password.style.border = "1px solid red";
-                //   email.style.border = "none";
-                //   console.log("maybe");
-                // }
-            },
 
-            error: function() {
-                console.log('process error');
-            },
-        });
-    }
 
 </script>
