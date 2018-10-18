@@ -30,6 +30,7 @@ var logger = require('./app/config/logger');
 logger.info("Starting with " + SERVICE_CONNECTION);*/
 
 //Set up environment variables
+var fs = require("fs");
 var envvar = require('envvar');
 var dotenv = require('dotenv').config();
 if (dotenv.error) {
@@ -46,8 +47,19 @@ if(process.env.SERVICE_CONNECTION === "local-sandbox"){
 
     var SSL_PORT = 443;
     var HTTP_PORT = 80;
+
 }
-else if(process.env.SERVICE_CONNECTION === "remote-staging"){
+else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
+    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
+    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
+    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
+    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
+
+    var SSL_PORT = 8443;
+    var HTTP_PORT = 8080;
+
+}
+else if(process.env.SERVICE_CONNECTION === "remote-dev"){
     global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
     global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
     global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
@@ -72,10 +84,13 @@ console.warn(plaid_client);
 //Set up HTTPS
 var https = require('https');
 var helmet = require("helmet");
-var fs = require("fs");
+
+var ssl_key = fs.readFileSync('./ssl/localhost.key');
+var ssl_cert = fs.readFileSync('./ssl/localhost.crt');
+
 const httpsOptions = {
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./cert.pem')
+    key: ssl_key,
+    cert: ssl_cert
 };
 
 
@@ -181,31 +196,10 @@ app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
     });
 });
 
-/*app.get('/loginbuffer', isLoggedIn, function(request, response, next) {
-    response.render('loginbuffer.ejs', {
-        user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
-    });
-});*/
 
 app.get('/workinprogress', function(request, response, next) {
     response.render('workinprogress.ejs', {});
 });
-
-
-/*app.get('/login', function(request, response) {
-    // render the page and pass in any flash data if it exists
-    response.render('login.ejs', {
-        message: request.flash('loginMessage')
-    });
-});
-app.get('/signup', function(request, response) {
-    // render the page and pass in any flash data if it exists
-    response.render('signup.ejs', {
-        message: request.flash('signupMessage')
-    });
-});*/
 
 
 // we will want this protected so you have to be logged in to visit
@@ -270,6 +264,16 @@ app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
     front_end_functions.create_transaction_graph_data(request, response, next);
 });
 
+app.get('/api/env',  function(request, response) {
+    response.json({
+      env : process.env.SERVICE_CONNECTION
+    });
+});
+
+app.get('/api/health_check', function(request, response, next) {
+    response.sendStatus(200);
+});
+
 //=====API Post=====
 
 app.post('/api/name', function(request, response, next) {
@@ -321,13 +325,13 @@ app.post('/login', function (req, res){
             return res.send({ response: "Error" });
         }
         if (!user){
-            return res.send({ response: "User doesn't exist" });
+            return res.send({ response: "Login failed" });
         }
 
         else {
             req.login(user, function(err) {
               if (err){
-                  return res.send({ response: "Password is incorrect" });
+                  return res.send({ response: "Login failed" });
                   //return next(err);
               }
               return res.send({ response: "authd" });

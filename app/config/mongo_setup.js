@@ -11,9 +11,14 @@ mongoose.Promise = require('bluebird');
 if (process.env.SERVICE_CONNECTION === "local-sandbox"){
     var mongo_url = process.env.DB_SANDBOX; // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
 }
-else if (process.env.SERVICE_CONNECTION === "remote-staging"){
+else if (process.env.SERVICE_CONNECTION === "remote-sandbox"){
     //var mongo_url = "mongodb://link_server:link_server@linkcluster0-shard-00-00-97dei.gcp.mongodb.net/link";
-    var mongo_url = process.env.DB_REMOTE_STAGING; // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
+    var mongo_url = process.env.DB_REMOTE_SANDBOX; // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
+
+}
+else if (process.env.SERVICE_CONNECTION === "remote-dev"){
+    //var mongo_url = "mongodb://link_server:link_server@linkcluster0-shard-00-00-97dei.gcp.mongodb.net/link";
+    var mongo_url = process.env.DB_REMOTE_DEV; // looks like mongodb://<user>:<pass>@mongo.onmodulus.net:27017/Mikha4ot
 
 }
 if (process.env.SERVICE_CONNECTION === "production"){
@@ -27,7 +32,13 @@ module.exports = function() {
     MongoClient.connect(mongo_url, { useNewUrlParser: true }, function(err, client) {
         if (err) throw err;
 
-        db = client.db('link');
+        if (process.env.SERVICE_CONNECTION === "local-sandbox" || process.env.SERVICE_CONNECTION === "remote-sandbox"){
+            db = client.db('linkSANDBOX');
+        }
+        else if (process.env.SERVICE_CONNECTION === "remote-dev"){
+            db = client.db('linkDEV');
+        }
+
         global.collection = db.collection('users');
         logger.info("Connected to DB!");
     });

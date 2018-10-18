@@ -41,10 +41,16 @@ To access the redis cli: ```redis-cli```
 To view all keys in the redis cache from the cli: ```keys *```
 
 ## Start the web server
-make sure in the .env the SERVICE_CONNECTION is "local_sandbox"
-from the web-app server file ```sudo node server.js```
+```sudo SERVICE_CONNECTION="local-sandbox" node knotter.js```
 
 #### Go to 127.0.0.1
 
-## Debugging
-```sudo DEBUG=* node server.js```
+## Extras
+
+### Debugging
+```sudo DEBUG=* node knotter.js
+```
+
+### Health Check
+```curl -Ik https://127.0.0.1/health_check
+```

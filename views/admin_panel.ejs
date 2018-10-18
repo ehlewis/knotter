@@ -61,12 +61,14 @@ $.getJSON("api/user_data", function(data) {
     }
 });
 
+
+
 var handler = Plaid.create({
     apiVersion: 'v2',
     clientName: 'Plaid Walkthrough Demo',
-    env: '<%= process.env.PLAID_ENV %>',
+    env: '<%= PLAID_ENV %>',
     product: ['transactions'],
-    key: '<%= process.env.PLAID_PUBLIC_KEY %>',
+    key: '<%= PLAID_PUBLIC_KEY %>',
     onSuccess: function(public_token) {
       $.post('/get_access_token', {
         public_token: public_token
