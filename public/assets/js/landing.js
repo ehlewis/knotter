@@ -112,6 +112,41 @@ function login() {
     });
 }
 
+function signup() {
+    $.ajax({
+        url: "/signup",
+        type: "POST",
+        dataType: "html",
+        data: {
+            email: $('#sign-up-email').val(),
+            password: $('#sign-up-pass').val(),
+            username: $('#sign-up-name').val(),
+        },
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+            console.log(data);
+            var email = document.getElementById("sign-up-name");
+            var password = document.getElementById("sign-up-pass");
+            if (data === '{"response":"authd"}') {
+                window.location.replace("/");
+            } else if (data === '{"response":"Login failed"}') {
+                email.style.border = "1px solid red";
+                password.style.border = "1px solid red";
+            }
+            /*else if (data === '{"response":"Password is incorrect"}') {
+                password.style.border = "1px solid red";
+                email.style.border = "none";
+                console.log("maybe");
+            }*/
+        },
+
+        error: function() {
+            console.log('process error');
+        },
+    });
+}
+
 function clearLoginEmail(elem) {
     var input = document.getElementById(elem);
     input.style.border = "none";

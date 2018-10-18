@@ -85,12 +85,12 @@
     <div id="sign-up-modal" class="modal">
         <div class="modal-content">
             <div class="form">
-                <form id="sign-up-form" action="/signup" method="post" class="form">
+                <form id="sign-up-form" class="form">
                     <input id="sign-up-name" type="text" placeholder="Username" name="username" required />
                     <input id="sign-up-email" type="email" placeholder="Email" name="email" required />
                     <input id="sign-up-pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password" placeholder="Password" name="password" required>
                     <img id="hide-icon" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
-                    <button id="create-button">Create</button>
+                    <button id="create-button" onclick="signup()">Create</button>
                     <p class="message">Already registered? <a id="already-login">Login</a></p>
                 </form>
             </div>
@@ -106,6 +106,17 @@
 
 <script>
     //window.onload = env();
+    $('#sign-up-form').keyup(function(e) {
+        if (e.keyCode == 13) {
+            signup();
+        }
+    });
+    $('#sign-up-name').click(function(e) {
+        clearLoginEmail('sign-up-name');
+    });
+    $('#sign-up-pass').click(function(e) {
+        clearLoginPass('sign-up-pass');
+    });
 
     $('#login-form').keyup(function(e) {
         if (e.keyCode == 13) {

@@ -311,33 +311,48 @@ app.post('/transactions', function(request, response, next) {
 });
 
 
-app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/dashboard', // redirect to the secure profile section
-    failureRedirect: '/', // redirect back to the signup page if there is an error
-    failureFlash: true // allow flash messages
-}));
+app.post('/signup', function (request, response){
+    passport.authenticate('local-signup', function(err, user, info){
+    if (err){
+        return response.send({ response: "Error" });
+    }
+    if (!user){
+        return response.send({ response: "Login failed" });
+    }
+
+    else {
+        console.log("continue");
+        request.login(user, function(err) {
+          if (err){
+              return response.send({ response: "Login failed" });
+              //return next(err);
+          }
+          return response.send({ response: "authd" });
+        });
+    }
+    })(request, response);});
 
 
 // process the login form
-app.post('/login', function (req, res){
+app.post('/login', function (request, response){
     passport.authenticate('local-login', function(err, user, info){
         if (err){
-            return res.send({ response: "Error" });
+            return response.send({ response: "Error" });
         }
         if (!user){
-            return res.send({ response: "Login failed" });
+            return response.send({ response: "Login failed" });
         }
 
         else {
-            req.login(user, function(err) {
+            request.login(user, function(err) {
               if (err){
-                  return res.send({ response: "Login failed" });
+                  return response.send({ response: "Login failed" });
                   //return next(err);
               }
-              return res.send({ response: "authd" });
+              return response.send({ response: "authd" });
             });
         }
-    })(req, res);});
+    })(request, response);});
 
 //404
 app.get('*', function(request, response) {
