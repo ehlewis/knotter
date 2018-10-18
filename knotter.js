@@ -316,12 +316,11 @@ app.post('/signup', function (request, response){
     if (err){
         return response.send({ response: "Error" });
     }
-    if (!user){
-        return response.send({ response: "Login failed" });
+    if (user){
+        return response.send({ response: "User exists" });
     }
 
     else {
-        console.log("continue");
         request.login(user, function(err) {
           if (err){
               return response.send({ response: "Login failed" });
