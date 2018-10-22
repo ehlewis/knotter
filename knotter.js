@@ -316,10 +316,9 @@ app.post('/signup', function (request, response){
     if (err){
         return response.send({ response: "Error" });
     }
-    if (user){
+    if (!user){
         return response.send({ response: "User exists" });
     }
-
     else {
         request.login(user, function(err) {
           if (err){
@@ -328,6 +327,7 @@ app.post('/signup', function (request, response){
           }
           return response.send({ response: "authd" });
         });
+
     }
     })(request, response);});
 
