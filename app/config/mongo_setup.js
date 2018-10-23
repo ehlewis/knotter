@@ -40,6 +40,6 @@ module.exports = function() {
         }
 
         global.collection = db.collection('users');
-        logger.info("Connected to DB!");
+        logger.info("Connected to DB on URL: " + mongo_url);
     });
 }

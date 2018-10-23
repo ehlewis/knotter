@@ -79,8 +79,6 @@ global.redis = require("redis");
 var redis_setup = require('./app/config/redis_setup')();
 var plaid_setup = require("./app/config/plaid_setup");
 
-console.warn(plaid_client);
-
 //Set up HTTPS
 var https = require('https');
 var helmet = require("helmet");
