@@ -7,20 +7,15 @@
     <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 
 <body>
-    <div class="top-bar">
-        <div class="logo">
-            <a href="/"><img src="assets/graphics/knotter_brand_white.png" width="200px" style="float: left; "></a>
-        </div class>
-        <div class="nav-bar">
-            <!-- <a href="/workinprogress">Plans</a>
-      <a href="/workinprogress">Business</a>
-      <a href="/workinprogress">About</a>
-      <a href="/workinprogress">Contact Us</a> -->
-            <a id="pro-button" href="/workinprogress">Knotter Pro</a>
-        </div>
+    <div class="top-bar h-center">
+      <a href="/"><img src="assets/graphics/knotter_brand_white.png" width="20%" class="left"></a>
+      <a id="pro-button" class="button v-center right" href="/workinprogress">Knotter Pro</a>
+    </div>
         <!-- <div class="pro-button">
       <a href="http://google.com" style="float:right">Lucidity Pro</a>
     </div> -->
@@ -44,28 +39,21 @@
 
         <div class="info-section">
             <div class="info-box">
-                <img src="assets/graphics/hub_icon.png" width="75px;">
+                <img src="assets/graphics/hub_icon.png">
                 <h2>Save time, reduce hassle</h2>
                 <p>Link brings all of your accounts to one centralized hub.</p>
             </div>
             <div class="info-box">
-                <img src="assets/graphics/exchange_icon.png" width="75px">
+                <img src="assets/graphics/exchange_icon.png">
                 <h2>Built with your privacy in mind</h2>
                 <p>Your financial data is deleted as soon as you log out</p>
             </div>
             <div class="info-box">
-                <img src="assets/graphics/analytics_icon.png" width="75px">
+                <img src="assets/graphics/analytics_icon.png">
                 <h2>See where your money is</h2>
                 <p>Keep track of your money and receive detailed analytics on it.</p>
             </div>
         </div>
-
-    </div>
-    <div class="center-text">
-        <p>Save yourself the stress</p>
-    </div>
-    <div>
-        <p>More text</p>
     </div>
 
     <!-- Login modal -->
@@ -134,6 +122,7 @@
         console.log(data);
         var parent = document.getElementById('tag-home');
         tag = document.createElement('p');
+        tag.style.fontSize = "10px";
         tag.innerHTML = data.env;
         parent.insertBefore(tag, parent.firstChild);
 

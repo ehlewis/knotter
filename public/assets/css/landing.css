@@ -11,7 +11,7 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  max-width: 1000px;
+  max-width: 70%;
   margin: auto;
 
   /*THIS ACCOUNTS FOR THE SERVICE TAG. REMOVE WHEN RELEASE */
@@ -22,57 +22,46 @@ a{
   text-decoration: none;
 }
 
-.top-bar{
-  height: 100px;
-  /* background: inherit; */
-  max-width: 1000px;
+/*POSITIONS*/
+.left{
+  float: left;
+}
+
+.right{
+  float: right;
+}
+
+.top{
+  top: 0;
+}
+
+.bottom{
+  bottom: 0;
+}
+
+.h-center{
   margin: auto;
 }
 
+.v-center{
+  margin:auto;
+}
+
+/*------------------------------------------------------------------*/
+
+
+/* SERVICE TAG */
 #tag-home p{
   margin: 0;
 }
 
-.nav-bar{
-  margin-left: 150px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  min-width: 650px;
-
+.top-bar{
+  height: 6em;
 }
 
 
-.nav-bar a{
-  background: inherit;
-  border: none;
-  color:white;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
-  font-size: 18px;
-  transition-duration: 0.2s;
-}
-
-.nav-bar a:hover{
-  background-color: #ffffff33;
-  /* color: #00b09b; */
-
-}
-
-#pro-button{
-  background: inherit;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border: 1px solid white;
-  color:white;
-  position: absolute;
-  right: 10px;
-  top: -10px;
+ #pro-button{
+   margin-top: 1em;
 }
 
 #pro-button:hover{
@@ -81,32 +70,26 @@ a{
 
 
 .logo{
-  float: left;
-  padding-left: 20px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-top: 1em;
 }
 
 
 .button{
   border: 1px solid white;
-  width: 130px;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  width: 7em;
+  padding-top: .4em;
+  padding-bottom: .4em;
   color:white;
   text-align: center;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 15pt;
   background: inherit;
   transition-duration: 0.4s;
   border-radius: 4px;
 }
 
 .button:hover{
-  /* border: 1px solid black; */
   background-color: #00b09b;
-  /* color: black; */
 }
 
 .button:focus {
@@ -126,10 +109,10 @@ a{
 
 .center-text{
   color: white;
-  font-size: 40px;
+  font-size: 2.5vw;
   text-align: center;
-  max-width: 700px;
-  min-width: 600px;
+  max-width: 70%;
+  min-width: 40%;
   margin: 0 auto;
   padding-top: 100px;
 }
@@ -140,7 +123,7 @@ a{
 
 .action-buttons{
   margin: 0 auto;
-  max-width: 300px;
+  max-width: 40%;
 }
 
 .info-section{
@@ -149,7 +132,7 @@ a{
   padding-right: 5%; */
   display: flex;
   justify-content: space-between;
-  min-width: 800px;
+  min-width: 70%;
 
 }
 
@@ -159,7 +142,11 @@ a{
   max-width: 250px;
   text-align: center;
   line-height: 20px;
-  font-size: 16px;
+  font-size: 1vw;
+}
+
+.info-box img{
+  width: 5em;
 }
 
 .modal{
