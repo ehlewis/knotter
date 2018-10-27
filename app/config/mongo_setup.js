@@ -4,7 +4,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 //var User = mongoose.model('User');
 //var configDB = require('./database.js');
-var collection = null;
 var logger = require('./logger.js');
 
 mongoose.Promise = require('bluebird');
