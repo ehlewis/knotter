@@ -20,5 +20,12 @@ module.exports = function() {
         port: service_port,
         password: 'thispasswordissuperlongandshouldbereallyreallyhardtofigureoutespeciallysinceitsinplaintext'
     });
-    logger.log("info","Connected to redis!");
+    redis_client.ping(function (err, result) {
+        if (result == "PONG"){
+            logger.info("Connected to Redis on IP:" + service_host + " Port: " + service_port);
+        }
+        else{
+            logger.error("Could not connect to Redis on IP:" + service_host + " Port: " + service_port);
+        }
+ });
 }

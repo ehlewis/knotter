@@ -25,6 +25,12 @@ To rename an attribute
 db.users.updateMany({}, {$rename: {"from":"to"}})
 ```
 
+To remove and entry
+```show dbs
+use linkDEV
+db.users.remove( {"_id": ObjectId("5bc01bd8839da308ed4d817a")});
+```
+
 To drop the db (don't do this unless you have to)
 ```
 use link
