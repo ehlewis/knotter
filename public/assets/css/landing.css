@@ -170,7 +170,6 @@ body{
 }
 
 .creds{
-  /* padding: 50px 50px 20px 50px; */
   line-height: 75px;
 }
 
@@ -216,14 +215,6 @@ body{
     float: none;
     width: 370px;
     margin: auto;
-  }
-
-  .modal{
-    width: 100%;
-  }
-
-  .fkcred{
-    width: 200px;
   }
 
 }

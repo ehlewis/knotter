@@ -16,6 +16,12 @@ function showPass(){
   }
 }
 
+$('#login-form').keyup(function(e) {
+        if (e.keyCode == 13) {
+            login();
+        }
+    });
+
 
 function login() {
     $.ajax({
@@ -23,15 +29,15 @@ function login() {
         type: "POST",
         dataType: "html",
         data: {
-            email: $('#login-name').val(),
-            password: $('#login-pass').val()
+            email: $('#email').val(),
+            password: $('#pass').val()
         },
         cache: false,
         timeout: 5000,
         success: function(data) {
             console.log(data);
-            var email = document.getElementById("login-name");
-            var password = document.getElementById("login-pass");
+            var email = document.getElementById("email");
+            var password = document.getElementById("passbox");
             if (data === '{"response":"authd"}') {
                 window.location.replace("/");
             } else if (data === '{"response":"Login failed"}') {
@@ -57,15 +63,15 @@ function signup() {
         type: "POST",
         dataType: "html",
         data: {
-            email: $('#sign-up-email').val(),
-            password: $('#sign-up-pass').val(),
+            email: $('#email').val(),
+            password: $('#pass').val(),
         },
         cache: false,
         timeout: 5000,
         success: function(data) {
             console.log(data);
-            var email = document.getElementById("sign-up-email");
-            var password = document.getElementById("sign-up-pass");
+            var email = document.getElementById("email");
+            var password = document.getElementById("passbox");
             if (data === '{"response":"authd"}') {
                 window.location.replace("/");
             } else if (data === '{"response":"Login failed"}') {

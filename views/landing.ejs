@@ -22,16 +22,16 @@
     </div>
 
     <div class="sec2 hcenter" style="width:300px;">
-      <div class="creds hcenter">
+      <div id="login-form" class="creds hcenter">
         <input id="email" class="cred fradius" type="email" placeholder="Email" name="email" required />
-        <div class="cred fradius">
+        <div id="passbox" class="cred fradius">
           <input id="pass" class="fkcred top" type="password" placeholder="Password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
           <img id="hide-icon" class="right" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
         </div>
       </div>
       <div class="subbtns hcenter">
-        <button id="login-button" class="button1 button fradius hcenter">Login</a></button>
-        <button id="sign-up-button" class="button2 button fradius hcenter">Sign Up</a></button>
+        <button id="login-button" class="button1 button fradius hcenter" onclick="login()">Login</a></button>
+        <button id="sign-up-button" class="button2 button fradius hcenter" onclick="signup()">Sign Up</a></button>
       </div>
     </div>
     <div class="sec3 infosec maxwidth">
