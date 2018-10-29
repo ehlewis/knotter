@@ -62,5 +62,5 @@ sudo DEBUG=* node knotter.js
 
 ### Health Check
 ```
-curl -Ik https://127.0.0.1/health_check
+curl -Ik https://127.0.0.1/api/health_check
 ```
