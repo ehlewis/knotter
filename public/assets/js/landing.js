@@ -1,59 +1,21 @@
-var modal = document.getElementById('modal');
-
 var loginBtn = document.getElementById('login-button');
 var signupBtn = document.getElementById('sign-up-button');
 
 var email = document.getElementById('email');
 var pass = document.getElementById('pass');
 
-var loginSubmit = document.getElementById('loginSubmit');
-var signupSubmit = document.getElementById('signupSubmit');
-
-
 var hideIcon = document.getElementById('hide-icon');
 
 function showPass(){
-  if (signupPass.type == "password"){
-    signupPass.type = "text";
+  if (pass.type == "password"){
+    pass.type = "text";
     hideIcon.src = "assets/graphics/hidden.svg";
   }else {
-    signupPass.type = "password";
+    pass.type = "password";
     hideIcon.src = "assets/graphics/hide.svg";
   }
 }
 
-
-
-loginBtn.onclick = function() {
-  modal.style.display = "block";
-  loginSubmit.style.display = "block";
-}
-
-signupBtn.onclick = function() {
-  modal.style.display = "block";
-  signupSubmit.style.display = "block";
-}
-
-
-window.onclick = function(event) {
-  if (event.target == modal){
-    modal.style.display = "none";
-    loginSubmit.style.display = "none";
-    signupSubmit.style.display = "none";
-    email.value = "";
-    pass.value = "";
-    // document.getElementById("login-name").value = "";
-    // document.getElementById("login-pass").value = "";
-    // document.getElementById("sign-up-email").value = "";
-    // document.getElementById("sign-up-name").value = "";
-    // document.getElementById("sign-up-pass").value = "";
-    // signupEmail.style.border = "0px";
-    // signupName.style.border = "0px";
-    // signupPass.style.border = "0px";
-    // loginName.style.border = "0px";
-    // loginPass.style.border = "0px";
-  }
-}
 
 function login() {
     $.ajax({

@@ -76,7 +76,7 @@ body{
   font-family: "Ubuntu", sans-serif;
   border: 1px solid #69d651;
   border-radius: 4px;
-  width: 7em;
+  width: 100%;
   padding-top: .4em;
   padding-bottom: .4em;
   font-size: 12pt;
@@ -96,11 +96,6 @@ body{
   background: #69d651;
 }
 
-.button3{
-  display: none;
-  color:white;
-  background: #69d651;
-}
 
 .button:hover{
   background-color: #4c9b3b;
@@ -111,6 +106,12 @@ body{
 
 .button:focus {
   outline: 0;
+}
+
+.subbtns{
+  line-height: 40px;
+  overflow: auto;
+  margin: 10px 0 0 0;
 }
 
 
@@ -141,6 +142,10 @@ body{
   background-color: #00b09b;
 }
 
+.sec6{
+  height: 75px;
+}
+
 .about{
   padding: 0 10px 0 10px;
 }
@@ -150,10 +155,6 @@ body{
   font-size: 12pt;
   line-height: 20pt;
   color: white;
-}
-
-.sec6{
-  height: 75px;
 }
 
 .footer{
@@ -168,31 +169,8 @@ body{
   padding:
 }
 
-/*  MODALS  */
-
-.modalbg{
-  display: none;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal{
-  height: 300px;
-  width: 600px;
-
-  position: fixed;
-  background-color: white;
-
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.3s;
-  animation-name: animatetop;
-  animation-duration: 0.3s;
-}
-
 .creds{
-  padding: 50px 50px 20px 50px;
+  /* padding: 50px 50px 20px 50px; */
   line-height: 75px;
 }
 
@@ -202,29 +180,18 @@ body{
   height: 50px;
   padding: 15px;
   border: 1px solid grey;
+  position: relative;
 }
 
 .fkcred{
   outline: none;
   border: none;
   height: 48px;
-  width: 440px;
-  margin: -24px 0 0 0;
+  width: 230px;
+  position: relative;
+  top: -29px;
 }
 
-.submit{
-  display: none;
-}
-
-@-webkit-keyframes animatetop {
-    from {top:-100%; opacity:0}
-    to {top:0; opacity:1}
-}
-
-@keyframes animatetop {
-    from {top:-100%; opacity:0}
-    to {top:0; opacity:1}
-}
 
 
 @media only screen and (max-width:1020px) {
