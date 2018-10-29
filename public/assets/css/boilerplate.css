@@ -1,0 +1,123 @@
+* {
+  box-sizing: border-box;
+}
+
+html{
+  /* background: linear-gradient(to bottom right, #00b09b, #96d03d); */
+}
+
+body{
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+}
+
+#tag{
+  font-size: 8pt;
+  height: 0;
+}
+
+.top{
+  top: 0;
+}
+
+.bottom{
+  bottom: 0;
+}
+
+.left{
+  float: left;
+  left: 0;
+}
+
+.right{
+  float: right;
+  right: 0;
+}
+
+.hcenter{
+  margin: auto;
+}
+
+.vcenter{
+  position: absolute;
+  top: 50%;
+}
+
+.topbar{
+  height: 75px;
+  position: relative;
+  padding: 0 10px 0 10px;
+}
+
+.nwidth{
+  max-width: 1000px;
+}
+
+.maxwidth{
+  width: 100%;
+}
+
+.maxheight{
+  height: 100%;
+}
+
+.txtcenter{
+  text-align: center;
+}
+
+.txtleft{
+  text-align: left;
+}
+
+.txtright{
+  text-align: right;
+}
+
+.fradius{
+  border-radius: 4px;
+}
+
+.footer{
+  line-height: 75px;
+  text-align: center;
+}
+
+.footer a{
+  text-decoration: none;
+  color: grey;
+  font-size: 8pt;
+  padding: 0 10px 0 10px;
+}
+
+
+@media only screen and (max-width:1020px) {
+  /* For tablets: */
+  .infosec{
+    height: 200px;
+    padding: 0 0 0 0;
+  }
+
+  .about {
+    color: white;
+
+  }
+
+  .aboutimg{
+    display: none;
+  }
+
+  .blurb{
+    font-size: 12pt;
+    line-height: 20pt;
+    float: none;
+    width: 370px;
+    margin: auto;
+  }
+
+}
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .menu, .main{
+    width: 100%;
+  }
+}
