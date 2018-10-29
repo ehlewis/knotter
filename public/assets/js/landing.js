@@ -106,3 +106,8 @@ function clearLoginPass(elem) {
     input.style.border = "none";
     input.value = "";
 }
+
+$.getJSON("/api/env", function(data) {
+       var parent = document.getElementById('tag');
+       parent.innerHTML = data.env;
+   });

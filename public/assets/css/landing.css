@@ -11,6 +11,11 @@ body{
     margin: 0;
 }
 
+#tag{
+  font-size: 8pt;
+  height: 0;
+}
+
 .top{
   top: 0;
 }
