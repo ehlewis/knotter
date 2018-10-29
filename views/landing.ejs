@@ -1,3 +1,5 @@
+<!doctype html>
+<html>
 <head>
     <title>Knotter</title>
     <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
@@ -5,6 +7,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -18,8 +21,8 @@
       <h2 style="color: #69d651"> Manage all your personal finances in one place </h1>
     </div>
     <div class="sec2 hcenter" style="width:300px;">
-      <button id="login-button" class="button1 button left">Login</a></button>
-      <button id="sign-up-button" class="button2 button right">Sign Up</a></button>
+      <button id="login-button" class="button1 button fradius left">Login</a></button>
+      <button id="sign-up-button" class="button2 button fradius right">Sign Up</a></button>
     </div>
     <div class="sec3 infosec maxwidth">
       <div class="about nwidth hcenter ">
@@ -71,3 +74,31 @@
       </div>
     </div>
   </div>
+
+
+<!-- MODALS -->
+
+  <div id="modal" class="modalbg maxwidth maxheight">
+    <div class="modal fradius left right top bottom hcenter">
+      <div class="creds hcenter">
+        <input id="email" class="cred fradius" type="email" placeholder="Email" name="email" required />
+        <div class="cred fradius">
+          <input id="pass" class="fkcred vcenter" type="password" placeholder="Password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+          <img id="hide-icon" class="right" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
+        </div>
+      </div>
+      <!-- LOGIN  -->
+      <div class="submit">
+        <button id="loginSubmit" class="button button3 hcenter"> Login </button>
+      </div>
+      <!-- SIGNUP -->
+      <div class="submit">
+        <button id="signupSubmit" class="button button3 hcenter"> Sign Up </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/landing.js"></script>
+
+</body>
+</html>
