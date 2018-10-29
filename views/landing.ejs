@@ -1,143 +1,96 @@
 <!doctype html>
-<html id="tag-home">
-
+<html lang="en">
 <head>
     <title>Knotter</title>
     <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/landing.css">
+    <link rel="stylesheet" type="text/css" href= "assets/css/landing.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#69d651">
 </head>
 
 <body>
-    <div class="top-bar">
-        <div class="logo">
-            <a href="/"><img src="assets/graphics/knotter_brand_white.png" width="200px" style="float: left; "></a>
-        </div class>
-        <div class="nav-bar">
-            <!-- <a href="/workinprogress">Plans</a>
-      <a href="/workinprogress">Business</a>
-      <a href="/workinprogress">About</a>
-      <a href="/workinprogress">Contact Us</a> -->
-            <a id="pro-button" href="/workinprogress">Knotter Pro</a>
+  <div id="tag">
+  </div>
+
+  <div class="topbar nwidth hcenter">
+    <a href="/"><img src="assets/graphics/knotter_brand_green.png" class="left vcenter" alt="Knotter" style="height:50px; margin:-25px 0 0 10px;"></a>
+    <!-- <a href="/workinprogress" class="button2 button vcenter right" style="margin:-16px 10px 0 0; ">Knotter Pro</a> -->
+  </div>
+  <div class="container1 hcenter">
+    <div class=" sec1 nwidth hcenter txtcenter">
+      <h2 style="color: #69d651"> Manage all your personal finances in one place </h1>
+    </div>
+
+    <div class="sec2 hcenter" style="width:300px;">
+      <div id="login-form" class="creds hcenter">
+        <input id="email" class="cred fradius" type="email" placeholder="Email" name="email" required />
+        <div id="passbox" class="cred fradius">
+          <input id="pass" class="fkcred top" type="password" placeholder="Password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+          <img id="hide-icon" class="right" src="assets/graphics/hide.svg" width="20px" alt="show password" style="cursor: pointer;" onClick="showPass()">
         </div>
-        <!-- <div class="pro-button">
-      <a href="http://google.com" style="float:right">Lucidity Pro</a>
-    </div> -->
-        <!-- <div class="top-buttons">
-      <button class="button" type="button">Login</button>
-      <div class="vertical-line"></div>
-      <button class="button" type="button">Sign Up</button>
-    </div> -->
+      </div>
+      <div class="subbtns hcenter">
+        <button id="login-button" class="button1 button fradius hcenter" onclick="login()">Login</a></button>
+        <button id="sign-up-button" class="button2 button fradius hcenter" onclick="signup()">Sign Up</a></button>
+      </div>
     </div>
-    <div class="body-white">
-
-        <div class="center-text">
-            <p>Manage all your finances in one place.</p>
-            <div class="action-buttons">
-                <button id="login-button" class="button" style="float: left;">Login</a></button>
-                <button id="sign-up-button" class="button" style="float: right; ">Sign Up</a></button>
-                <!-- <button class="button" type="button">Login</button> -->
-                <!-- <button class="button" type="button" style="float: right;">Sign Up</button> -->
-            </div>
+    <div class="sec3 infosec maxwidth">
+      <div class="about nwidth hcenter ">
+        <div class="blurb left">
+          <h2> Save time </h2>
+          <p> Keeping track of all your bank accounts is a hastle. <br>
+            We're here to help with that. <br>
+            Login once. Check as many times as you want. <br>
+            Keep track of all accounts in one simple place. </p>
         </div>
-
-        <div class="info-section">
-            <div class="info-box">
-                <img src="assets/graphics/hub_icon.png" width="75px;">
-                <h2>Save time, reduce hassle</h2>
-                <p>Link brings all of your accounts to one centralized hub.</p>
-            </div>
-            <div class="info-box">
-                <img src="assets/graphics/exchange_icon.png" width="75px">
-                <h2>Built with your privacy in mind</h2>
-                <p>Your financial data is deleted as soon as you log out</p>
-            </div>
-            <div class="info-box">
-                <img src="assets/graphics/analytics_icon.png" width="75px">
-                <h2>See where your money is</h2>
-                <p>Keep track of your money and receive detailed analytics on it.</p>
-            </div>
+        <div class="aboutimg right">
+          <img src="assets/graphics/happy-lady.jpg" alt="happy woman" style="height:285px; width: auto;">
         </div>
-
+      </div>
     </div>
-    <div class="center-text">
-        <p>Save yourself the stress</p>
-    </div>
-    <div>
-        <p>More text</p>
-    </div>
-
-    <!-- Login modal -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <div id="login-form" class="form">
-                <input id="login-name" type="text" class="form-control" name="email" placeholder="Email">
-                <input id="login-pass" type="password" class="form-control" name="password" placeholder="Password">
-                <button type="submit" id="login-submit" class="btn btn-warning btn-lg" onclick="login()">Login</button>
-                <p class="message">Not registered? <a id="already-sign-up">Sign Up</a></p>
-            </div>
+    <div class="sec4 infosec maxwidth">
+      <div class="about nwidth hcenter">
+        <div class="blurb right" style="color:black;">
+          <h2> Analytics </h2>
+          <p> We make it easy to see what your money is doing.<br>
+            You'll receive detailed analytics on your money.<br>
+            See whats coming in and going out. <br>
+            And follow your balances easilty. </p>
         </div>
-    </div>
-
-
-    <!-- Sign up modal -->
-    <div id="sign-up-modal" class="modal">
-        <div class="modal-content">
-            <div class="form">
-                <div id="sign-up-form" class="form">
-                    <h1>Sign Up</h1>
-                    <input id="sign-up-email" type="email" placeholder="Email" name="email" required />
-                    <input id="sign-up-pass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" type="password" placeholder="Password" name="password" required>
-                    <img id="hide-icon" src="assets/graphics/hide.svg" width="20px" onClick="showPass()">
-                    <button id="create-button" onclick="signup()">Create</button>
-                    <p class="message">Already registered? <a id="already-login">Login</a></p>
-                </div>
-            </div>
+        <div class="aboutimg left">
+          <img src="assets/graphics/analytics.jpg" alt="analytics" style="height:285px; width: auto;">
         </div>
+      </div>
     </div>
+    <div class="sec5 infosec maxwidth">
+      <div class="about nwidth hcenter ">
+        <div class="blurb left">
+          <h2> Security </h2>
+          <p> Security is our top priority. <br>
+            We never even look at youyr data. <br>
+            We simply pass your info straight from your bank to you. <br>
+            Rest assured we got ya back. </p>
+        </div>
+        <div class="aboutimg right">
+          <img src="assets/graphics/security.jpg" alt="security" style="height:285px; width: auto;">
+        </div>
+      </div>
+    </div>
+    <div class="sec6 maxwidth">
+      <div class="footer hcenter nwidth">
+        <a href="/workinprogress"> Contact Us </a>
+        <a href="/workinprogress"> Leave Feedback </a>
+        <a href="/workinprogress"> FAQ </a>
+      </div>
+    </div>
+  </div>
 
 
-    <script src="assets/js/landing.js"></script>
+  <script src="assets/js/landing.js"></script>
 
 </body>
-
 </html>
-
-<script>
-    //window.onload = env();
-    $('#sign-up-form').keyup(function(e) {
-        if (e.keyCode == 13) {
-            signup();
-        }
-    });
-    $('#sign-up-name').click(function(e) {
-        clearLoginEmail('sign-up-name');
-    });
-    $('#sign-up-pass').click(function(e) {
-        clearLoginPass('sign-up-pass');
-    });
-
-    $('#login-form').keyup(function(e) {
-        if (e.keyCode == 13) {
-            login();
-        }
-    });
-    $('#login-name').click(function(e) {
-        clearLoginEmail('login-name');
-    });
-    $('#login-pass').click(function(e) {
-        clearLoginPass('login-pass');
-    });
-
-    $.getJSON("/api/env", function(data) {
-        console.log(data);
-        var parent = document.getElementById('tag-home');
-        tag = document.createElement('p');
-        tag.innerHTML = data.env;
-        parent.insertBefore(tag, parent.firstChild);
-
-    });
-
-
-</script>

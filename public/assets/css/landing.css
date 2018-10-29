@@ -1,286 +1,231 @@
+* {
+  box-sizing: border-box;
+}
+
 html{
-  background: linear-gradient(to bottom right, #00b09b, #96d03d);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  height: 100%;
-  align-items: center;
+  /* background: linear-gradient(to bottom right, #00b09b, #96d03d); */
 }
 
-body {
-  font-family: "Roboto", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  max-width: 1000px;
-  margin: auto;
-
-  /*THIS ACCOUNTS FOR THE SERVICE TAG. REMOVE WHEN RELEASE */
-  margin-top: -18px;
+body{
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
 }
 
-a{
-  text-decoration: none;
+#tag{
+  font-size: 8pt;
+  height: 0;
 }
 
-.top-bar{
-  height: 100px;
-  /* background: inherit; */
-  max-width: 1000px;
-  margin: auto;
+.top{
+  top: 0;
 }
 
-#tag-home p{
-  margin: 0;
+.bottom{
+  bottom: 0;
 }
 
-.nav-bar{
-  margin-left: 150px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  min-width: 650px;
-
-}
-
-
-.nav-bar a{
-  background: inherit;
-  border: none;
-  color:white;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
-  font-size: 18px;
-  transition-duration: 0.2s;
-}
-
-.nav-bar a:hover{
-  background-color: #ffffff33;
-  /* color: #00b09b; */
-
-}
-
-#pro-button{
-  background: inherit;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border: 1px solid white;
-  color:white;
-  position: absolute;
-  right: 10px;
-  top: -10px;
-}
-
-#pro-button:hover{
-  background-color: #4dc3ff;
-}
-
-
-.logo{
+.left{
   float: left;
-  padding-left: 20px;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 0;
 }
 
+.right{
+  float: right;
+  right: 0;
+}
 
-.button{
-  border: 1px solid white;
-  width: 130px;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  color:white;
+.hcenter{
+  margin: auto;
+}
+
+.vcenter{
+  position: absolute;
+  top: 50%;
+}
+
+.topbar{
+  height: 75px;
+  position: relative;
+  padding: 0 10px 0 10px;
+}
+
+.nwidth{
+  max-width: 1000px;
+}
+
+.maxwidth{
+  width: 100%;
+}
+
+.maxheight{
+  height: 100%;
+}
+
+.txtcenter{
   text-align: center;
-  text-decoration: none;
-  font-size: 20px;
-  background: inherit;
-  transition-duration: 0.4s;
+}
+
+.txtleft{
+  text-align: left;
+}
+
+.txtright{
+  text-align: right;
+}
+
+.fradius{
   border-radius: 4px;
 }
 
+.button{
+  font-family: "Ubuntu", sans-serif;
+  border: 1px solid #69d651;
+  border-radius: 4px;
+  width: 100%;
+  padding-top: .4em;
+  padding-bottom: .4em;
+  font-size: 12pt;
+  text-align: center;
+  text-decoration: none;
+  transition-duration: 0.4s;
+}
+
+
+.button1{
+  color:#69d651;
+  background: white;
+}
+
+.button2{
+  color:white;
+  background: #69d651;
+}
+
+
 .button:hover{
-  /* border: 1px solid black; */
-  background-color: #00b09b;
-  /* color: black; */
+  background-color: #4c9b3b;
+  border: 1px solid #4c9b3b;
+  color: white;
+
 }
 
 .button:focus {
   outline: 0;
 }
 
-#sign-up-button{
-  color: #00b09b;
-  background-color: white;
-}
-
-#sign-up-button:hover{
-  color: white;
-  background-color: #00b09b;
-}
-
-
-.center-text{
-  color: white;
-  font-size: 40px;
-  text-align: center;
-  max-width: 700px;
-  min-width: 600px;
-  margin: 0 auto;
-  padding-top: 100px;
-}
-
-.center-text p{
-  padding-bottom: 18px;
-}
-
-.action-buttons{
-  margin: 0 auto;
-  max-width: 300px;
-}
-
-.info-section{
-  padding-top: 100px;
-  /* padding-left: 5%;
-  padding-right: 5%; */
-  display: flex;
-  justify-content: space-between;
-  min-width: 800px;
-
-}
-
-.info-box{
-  color:white;
-  float: left;
-  max-width: 250px;
-  text-align: center;
-  line-height: 20px;
-  font-size: 16px;
-}
-
-.modal{
-  position: fixed;
-  display: none;
-  z-index: 1;
-  padding-top: 120px;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
+.subbtns{
+  line-height: 40px;
   overflow: auto;
-  background-color: black;
-  background-color: rgba(0,0,0,0.5);
-
-}
-
-.modal-content{
-  position: relative;
-  background-color: white;
-  margin: auto;
-  padding: 0;
-  width: 550px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-  -webkit-animation-name: animatetop;
-  -webkit-animation-duration: 0.4s;
-  animation-name: animatetop;
-  animation-duration: 0.4s
-}
-
-@-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
-}
-
-@keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
-}
-
-.field-icon {
-  float: right;
-  margin-top: -45px;
-  position: relative;
-  z-index: 2;
+  margin: 10px 0 0 0;
 }
 
 
-.form{
-  padding: 30px;
-  padding-bottom: 20px;
-  padding-top: 35px;
-  text-align: center;
+.infosec{
+  height: 500px;
+  padding: 108px 0 0 0;
+  overflow: hidden;
 }
 
-.form form{
+.sec1{
+  padding: 75px 0 0 0;
+}
+
+.sec2{
+  padding: 20px 0 100px 0;
+  overflow: auto;
+}
+
+.sec3{
+  background-color: #69d651;
+}
+
+.sec4{
   background-color: white;
 }
 
-.form input{
-  outline: 0;
-  background: #f2f2f2;
-  width: 100%;
-  border: 0;
-  margin: 0 0 15px;
-  padding: 15px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
-
-
-.form button{
-  border: 1px solid white;
-  width: 120px;
-  height: 35px;
-  margin-top: 15px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  color:white;
-  text-align: center;
-  text-decoration: none;
-  font-size: 20px;
+.sec5{
   background-color: #00b09b;
-  transition-duration: 0.4s;
-  cursor: pointer;
 }
 
-.form p{
-  font-size: 12px;
-  margin: 0;
-  color: lightgrey;
-  padding-top: 30px;
+.sec6{
+  height: 75px;
 }
 
-.form a{
-  color: blue;
-  cursor: pointer;
+.about{
+  padding: 0 10px 0 10px;
 }
 
-
-.loader{
-  display: block;
+.blurb{
   margin: auto;
-  margin-top: 100px;
-  width: 50%;
-}
-
-.loader img{
-  display: block;
-  margin: auto;
-  width: 30%;
-}
-
-.loader p {
-  font-size: 25px;
+  font-size: 12pt;
+  line-height: 20pt;
   color: white;
+}
+
+.footer{
+  line-height: 75px;
   text-align: center;
 }
 
-.loader h2 {
-  font-size: 50px;
-  color: white;
-  text-align: center;
+.footer a{
+  text-decoration: none;
+  color: grey;
+  font-size: 8pt;
+  padding: 0 10px 0 10px;
+}
+
+.creds{
+  line-height: 75px;
+}
+
+.cred{
+  outline: 0;
+  width: 100%;
+  height: 50px;
+  padding: 15px;
+  border: 1px solid grey;
+  position: relative;
+}
+
+.fkcred{
+  outline: none;
+  border: none;
+  height: 48px;
+  width: 230px;
+  position: relative;
+  top: -29px;
+}
+
+
+
+@media only screen and (max-width:1020px) {
+  /* For tablets: */
+  .infosec{
+    height: 200px;
+    padding: 0 0 0 0;
+  }
+
+  .about {
+    color: white;
+
+  }
+
+  .aboutimg{
+    display: none;
+  }
+
+  .blurb{
+    font-size: 12pt;
+    line-height: 20pt;
+    float: none;
+    width: 370px;
+    margin: auto;
+  }
+
+}
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .menu, .main{
+    width: 100%;
+  }
 }
