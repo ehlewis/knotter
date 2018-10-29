@@ -1,113 +1,90 @@
 <!doctype html>
-<html>
-
+<html lang="en">
 <head>
     <title>Knotter</title>
     <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
-    <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href= "assets/css/boilerplate.css">
+    <link rel="stylesheet" type="text/css" href= "assets/css/dashboard.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-    <script src="assets/js/dashboard.js"></script>
-    <script src="assets/js/inactivity_timer.js"></script>
+    <script src="path/to/chartjs/dist/Chart.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#69d651">
 </head>
 
-<script>
-    getUserDataFromCache();
+<body>
+  <div class="topbar nwidth hcenter">
+    <a href="/" ><img src="assets/graphics/knotter_brand_green.png" class="left vcenter" alt="Knotter" style="height:50px; margin:-25px 0 0 10px;"></a>
+    <!-- <a href="/workinprogress" class="button2 button vcenter right" style="margin:-16px 10px 0 0; ">Knotter Pro</a> -->
+    <a href="/dashboard" class="links left" style="margin: 0 0 0 160px; background-color:rgb(105, 214, 81, 0.5);">Breakdown</a>
+    <a href="/accounts" class="links left">Accounts</a>
+    <a href="/api/logout" class="links right">Logout</a>
+  </div>
+<div class="container1 hcenter">
+  <div class="breakdown nwidth hcenter">
+    <div class="pie hcenter">
+<canvas id="pie1" height="285" width="333"></canvas>
+    </div>
+    <div class="pie hcenter">
+      <canvas id="pie2" height="285" width="333"></canvas>
 
-    $(document).ready(inactivity_timer());
+    </div>
+  </div>
+
+
+</div>
+  <div class="footer maxwidth bottom">
+    <div class="footerlnks hcenter nwidth">
+      <a href="/workinprogress"> Contact Us </a>
+      <a href="/workinprogress"> Leave Feedback </a>
+      <a href="/workinprogress"> FAQ </a>
+    </div>
+  </div>
+
+
+
+<script src="assets/js/.js"></script>
+<script>
+var ctx = document.getElementById("myChart");
+
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
 </script>
 
-<body>
-    <div class="top-bar">
-        <div class="logo">
-            <a href="/"><img src="assets/graphics/knotter_brand_white.png" width="200px" style="float: left; "></a>
-        </div class>
-        <div class="nav-bar">
-            <a href="/dashboard">Dashboard</a>
-            <!-- <a href="/workinprogress">Business</a>
-      <a href="/workinprogress">About</a>-->
-            <a href="/api/logout" id="logout">Logout</a>
-            <a id="pro-button" href="/workinprogress">Knotter Pro</a>
-        </div>
-    </div>
-    </div>
-    <div class="white-body">
-        <button id="link-btn"><img src="assets/graphics/add.svg"></button>
-        <div class="content" id="container_block">
-
-            <!-- accounts cards get inserted here in the javascript -->
-        </div>
-    </div>
-
-    <script>
-        var handler = Plaid.create({
-            apiVersion: 'v2',
-            clientName: 'Plaid Walkthrough Demo',
-            env: '<%= PLAID_ENV %>',
-            product: ['transactions'],
-            key: '<%= PLAID_PUBLIC_KEY %>',
-            onSuccess: function(public_token) {
-                $.post('/get_access_token', {
-                    public_token: public_token
-                }, function() {
-                    $('#container').fadeOut('fast', function() {
-                        $('#intro').hide();
-                        $('#app, #steps').fadeIn('slow');
-                    });
-                    $.get("/api/refresh_cache").success(
-                        function(success) {
-                            getUserDataFromCache()
-                        });
-                });
-            },
-            onExit: function(error, metadata) {
-                /*error = {
-                 display_message: "The credentials were ...",
-                 error_code: "INVALID_CREDENTIALS",
-                 error_message: "the credentials were ...",
-                 error_type: "ITEM_ERROR",
-                }
-                metadata = {
-                 link_session_id: "dc21685c-192e-4969-b4e9-bab890daae31",
-                 institution: {
-                  name: "Wells Fargo",
-                  institution_id: "ins_4"
-                 },
-                 status: "requires_credentials"
-                }
-
-                Save data from the onExit handler*/
-                console.log(error);
-                console.log(metadata);
-                /*supportHandler.report({
-                    error: error,
-                    institution: metadata.institution,
-                    link_session_id: metadata.link_session_id,
-                    status: metadata.status,
-                });*/
-            }
-        });
-
-        $('#link-btn').on('click', function(e) {
-            handler.open();
-        });
-
-        handler.onExit
-    </script>
-
-    <div id="more-info-modal" class="modal">
-        <div class="modal-content">
-            <div class="side-info">
-                <img id="info_modal_img" src="assets/cardLogos/default_card.svg">
-                <div class="vl"></div>
-            </div>
-            <h1> BOLD TEXT</h1>
-        </div>
-    </div>
-
-
 </body>
-
-
 </html>
