@@ -92,32 +92,10 @@ body{
 
 @media only screen and (max-width:1020px) {
   /* For tablets: */
-  .infosec{
-    height: 200px;
-    padding: 0 0 0 0;
-  }
 
-  .about {
-    color: white;
-
-  }
-
-  .aboutimg{
-    display: none;
-  }
-
-  .blurb{
-    font-size: 12pt;
-    line-height: 20pt;
-    float: none;
-    width: 370px;
-    margin: auto;
-  }
 
 }
 @media only screen and (max-width:500px) {
   /* For mobile phones: */
-  .menu, .main{
-    width: 100%;
-  }
+
 }
