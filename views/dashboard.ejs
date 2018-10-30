@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/graphics.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#69d651">
 </head>
@@ -54,16 +56,18 @@
     </div>
   </div>
 
-
-
-<script src="assets/js/dashboard.js"></script>
 <script>
 var aggregateUserIncome = [0, 10, 20];
 var aggregateUserOutcome = [10, 10, 0];
 //drawIn(aggregateUserIncome);
-drawPieChart(aggregateUserIncome, "donut1");
+drawPieChart(aggregateUserIncome, "donut1", [
+  'rgb(105, 214, 81)',
+  'rgb(0, 176, 155)',
+  'rgb(0, 73, 176)'
+]);
 drawOut(aggregateUserOutcome);
-drawInOut(aggregateUserIncome, aggregateUserOutcome);
+//drawInOut(aggregateUserIncome, aggregateUserOutcome);
+drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
 </script>
 
 
