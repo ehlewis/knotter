@@ -19,25 +19,75 @@ svg > g > g:last-child { pointer-events: none }
   background-color: lightgrey;
 }
 
+.container1{
+  display: flex;
+  justify-content: center;
+}
+
 .breakdown{
-  margin: 40px auto 20px auto;
+  margin: 40px 0 20px 0;
+  display: inline-block;
 }
 
 .charts{
-  /* overflow: auto; */
   display: inline-block;
   position: relative;
 }
 
-.chart{
-  height: var(--chart-height);
-  width: var(--chart-width);
-  position: relative;
-}
 
 .total{
   position: absolute;
   z-index: 1;
   top:67px;
   left: 115px;
+}
+
+.menubtn{
+  display: none;
+  border: none;
+  background: none;
+  outline: none;
+  margin: -15px 10px 0 0;
+}
+
+.menu{
+  display: none;
+}
+
+.moblinks{
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px;
+  color: black;
+  background-color: lightgrey;
+}
+
+.moblinks:hover{
+   background-color:rgb(105, 214, 81, 0.5);
+}
+
+
+
+@media only screen and (max-width:1020px) {
+  /* For tablets: */
+    #lineshw{
+      display: none;
+    }
+
+
+
+}
+@media only screen and (max-width:675px) {
+  /* For mobile phones: */
+  .charts{
+    display: block;
+  }
+  .links{
+    display: none;
+  }
+  .menubtn{
+    display: block;
+  }
+
 }

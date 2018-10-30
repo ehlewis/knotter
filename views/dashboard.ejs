@@ -20,28 +20,32 @@
     <a href="/dashboard" class="links left" style="margin: 0 0 0 160px; background-color:rgb(105, 214, 81, 0.5);">Breakdown</a>
     <a href="/accounts" class="links left">Accounts</a>
     <a href="/api/logout" class="links right">Logout</a>
+    <button class="menubtn right vcenter" onclick="displayMenu()"><img src="assets/graphics/menu.png"/></button>
   </div>
-<div class="container1 hcenter">
-  <div class="breakdown nwidth hcenter">
-    <div class="charts hcenter">
-      <canvas id="donut1" height="250" width="333"></canvas>
-      <div class="total">
-        <h1 style="color:green;"> $3,402 </h1>
+  <div id="menu" class="menu">
+    <a href="/dashboard" class="moblinks hcenter">Breakdown</a>
+    <a href="/accounts" class="moblinks hcenter">Accounts</a>
+    <a href="/api/logout" class="moblinks hcenter">Logout</a>
+  </div>
+  <div class="container1 hcenter">
+    <div class="breakdown hcenter">
+      <div class="charts hcenter">
+        <canvas id="donut1" height="250" width="333"></canvas>
+        <div class="total">
+          <h1 style="color:green;"> $3,402 </h1>
+        </div>
+      </div>
+      <div class="charts hcenter">
+        <canvas id="donut2" height="250" width="333"></canvas>
+        <div class="total">
+          <h1 style="color:red;"> $2,832 </h1>
+        </div>
+      </div>
+      <div id="lineshw" class="charts hcenter">
+        <canvas id="line" height="250" width="300"></canvas>
       </div>
     </div>
-    <div class="charts hcenter">
-      <canvas id="donut2" height="250" width="333"></canvas>
-      <div class="total">
-        <h1 style="color:red;"> $2,832 </h1>
-      </div>
-    </div>
-    <div class="charts hcenter">
-      <canvas id="line" height="250" width="300"></canvas>
-    </div>
   </div>
-
-
-</div>
   <div class="footer maxwidth bottom">
     <div class="footerlnks hcenter nwidth">
       <a href="/workinprogress"> Contact Us </a>
