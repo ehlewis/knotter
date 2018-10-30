@@ -7,52 +7,6 @@ function displayMenu() {
     }
 }
 
-function getUserTransactions() {
-    //Gets users transactions and handles if the cache is empty by refreshing it
-    $.getJSON("/api/user_data", function(data) {
-        // Make sure the data contains the data as expected before using it
-        if (data.user.items.length != 0) {
-            //If there are items linked
-            $.get('/api/get_cached_transactions').success(function(success) {
-                if (success != null) {
-                    return success;
-                } else {
-                    //If there are items but nothing in the cache
-                    $.get('/api/refresh_cache').success(function(refresh_success) {
-                        //Cache refreshes
-                        $.get('/api/get_cached_transactions').success
-                            //We try again
-                            function(success_transactions) {
-                                if (success_transactions != null) {
-                                    return success_transactions;
-                                }
-                                else{
-                                    cosnole.log("Error: Could not get transactions after cache refresh");
-                                }
-                            }).error(
-                            function(error) {
-                                console.log(error)
-                            });
-                    });
-                }
-            }).error(
-                function(error) {
-                    console.log(error);
-                });
-        } else {
-            //Runs if there are no items linked
-            console.log("Loaded nothing linked");
-            document.getElementById('container_block').innerHTML = 'Link an account by pressing the + below'
-        }
-    });
-}
-
-function getUser() {
-    $.getJSON("api/user_data", function(data) {
-        // Make sure the data contains the username as expected before using it
-        return data;
-    });
-}
 
 function createInstitutionDivs() {
     $.getJSON("api/user_data", function(data) {
