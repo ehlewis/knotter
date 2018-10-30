@@ -1,4 +1,4 @@
-function drawPieChart(userData, chart, colors){
+function drawPieChart(userData, chart, colors, labels){
     var myDoughnutChart = new Chart(document.getElementById(chart), {
         type: 'doughnut',
         data: {
@@ -10,14 +10,8 @@ function drawPieChart(userData, chart, colors){
                 ],
                 borderWidth: 4
             }],
-
             // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-                'Credit',
-                'Savings',
-                'Investments',
-                'Loans'
-            ]
+            labels: labels
         },
         options: {
           legend:{
@@ -197,4 +191,12 @@ function drawInOut(userDataIn, userDataOut){
           }
         }
     });
+}
+
+
+function createPieChartData(userData){
+    //['Credit','Savings','Investments','Loans']
+    var chartData = [];
+
+    return chartData;
 }
