@@ -58,16 +58,24 @@
   </div>
 
 <script>
-console.log(getUserTransactions());
+//console.log(getUserTransactions());
 var aggregateUserIncome = [0, 10, 20];
 var aggregateUserOutcome = [10, 10, 0];
 var labels = ['Credit','Savings','Investments','Loans'];
 var colors = ['rgb(105, 214, 81)','rgb(0, 176, 155)','rgb(0, 73, 176)'];
 //drawIn(aggregateUserIncome);
-drawPieChart(aggregateUserIncome, "donut1", colors, labels);
+
 drawOut(aggregateUserOutcome);
 //drawInOut(aggregateUserIncome, aggregateUserOutcome);
 drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
+
+var userData = getUserAccounts().then(function(success){
+    createPieChartData(success).then(function(successData){
+        drawPieChart(successData, "donut1", colors, labels);
+    })
+});
+
+
 </script>
 
 

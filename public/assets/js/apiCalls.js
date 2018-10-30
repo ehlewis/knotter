@@ -40,6 +40,24 @@ function getUserTransactionsSafe() {
     });
 }
 
+function getUserAccounts() {
+    //Gets users transactions and handles if the cache is empty by refreshing it
+    return new Promise(function(resolve, reject) {
+        $.get('/api/get_cached_user_accounts').success(function(success) {
+            if (success != null) {
+                resolve(success);
+            } else {
+                reject();
+            }
+        }).error(
+            function(error) {
+                console.log(error);
+                reject(error);
+            });
+
+    });
+}
+
 function getUserTransactions() {
     //Gets users transactions and handles if the cache is empty by refreshing it
     return new Promise(function(resolve, reject) {

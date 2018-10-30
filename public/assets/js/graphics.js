@@ -196,7 +196,28 @@ function drawInOut(userDataIn, userDataOut){
 
 function createPieChartData(userData){
     //['Credit','Savings','Investments','Loans']
-    var chartData = [];
-
-    return chartData;
+    return new Promise(function(resolve, reject) {
+        var chartData = [0,0,0];
+        for (var i = 0; i < userData.length; i++) {
+            for (var j = 0; j < userData[i].length; j++) {
+                if(userData[i][j].subtype == "checking"){
+                    chartData[1] += userData[i][j].balances.current;
+                }
+                else if(userData[i][j].subtype == "savings"){
+                    chartData[1] += userData[i][j].balances.current;
+                }
+                else if(userData[i][j].subtype == "cd" || userData[i][j].subtype == "money market"){
+                    chartData[2] += userData[i][j].balances.current;
+                }
+                else if(userData[i][j].subtype == "credit" || userData[i][j].subtype == "credit card"){
+                    chartData[0] += userData[i][j].balances.current;
+                }
+                else{
+                    console.log(userData[i][j].subtype);
+                }
+            }
+        }
+        console.log(chartData);
+        resolve(chartData);
+    });
 }
