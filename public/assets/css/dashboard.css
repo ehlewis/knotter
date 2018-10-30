@@ -47,7 +47,9 @@ svg > g > g:last-child { pointer-events: none }
   border: none;
   background: none;
   outline: none;
-  margin: -15px 10px 0 0;
+  cursor: pointer;
+  margin: -36px 0 0 0;
+  padding: 20px 20px 20px 10px;
 }
 
 .menu{
@@ -68,15 +70,17 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 
+@media only screen and (min-width:675px) {
+  #menu{
+    display: none;
+  }
+}
 
 @media only screen and (max-width:1020px) {
   /* For tablets: */
     #lineshw{
       display: none;
     }
-
-
-
 }
 @media only screen and (max-width:675px) {
   /* For mobile phones: */
