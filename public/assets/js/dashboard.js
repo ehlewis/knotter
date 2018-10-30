@@ -123,10 +123,10 @@ var myDoughnutChart = new Chart(line, {
 
 function displayMenu(){
   var menu = document.getElementById('menu');
-  if(menu.style.display == "none"){
-    menu.style.display = "block";
+  if(menu.style.height == "0px"){
+    menu.style.height = "115px";
   }else{
-    menu.style.display = "none";
+    menu.style.height = "0px";
   }
 }
 
