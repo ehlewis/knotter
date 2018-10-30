@@ -1,3 +1,113 @@
+var donut1 = document.getElementById("donut1");
+
+var myDoughnutChart = new Chart(donut1, {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [10, 25, 30],
+            backgroundColor:[
+              'rgb(105, 214, 81)',
+              'rgb(0, 176, 155)',
+              'rgb(0, 73, 176)'
+            ],
+            borderColor:[
+              'white'
+            ],
+            borderWidth: 4
+        }],
+
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: [
+            'Credit',
+            'Savings',
+            'Investments'
+        ]
+    },
+    options: {
+      legend:{
+        position:'bottom',
+        labels:{
+          boxWidth: 20,
+        }
+      }
+    }
+});
+
+var donut2 = document.getElementById("donut2");
+
+var myDoughnutChart = new Chart(donut2, {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [30, 5, 10],
+            backgroundColor:[
+              'rgb(224, 47, 47)',
+              'rgb(224, 108, 47)',
+              'rgb(224, 200, 47)'
+            ],
+            borderColor:[
+              'white'
+            ],
+            borderWidth: 4
+        }],
+
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: [
+            'Credit',
+            'Savings',
+            'Investments'
+        ]
+    },
+    options: {
+      legend:{
+        position:'bottom',
+        labels:{
+          boxWidth: 20,
+        }
+      }
+    }
+});
+
+var line = document.getElementById("line");
+
+var myDoughnutChart = new Chart(line, {
+    type: 'line',
+    data: {
+        datasets: [{
+            data: [30, 5, 10],
+            backgroundColor:[
+              'rgb(224, 47, 47)',
+              'rgb(224, 108, 47)',
+              'rgb(224, 200, 47)'
+            ],
+            borderColor:[
+              'white'
+            ],
+            borderWidth: 4
+        }],
+
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: [
+            'Credit',
+            'Savings',
+            'Investments'
+        ]
+    },
+    options: {
+      legend:{
+        position:'bottom',
+        labels:{
+          boxWidth: 20,
+        }
+      }
+    }
+});
+
+
+
+
+
+
 function getUserDataFromCache() {
   $.getJSON("api/user_data", function(data) {
     // Make sure the data contains the username as expected before using it
@@ -125,65 +235,3 @@ function collapseSubsection(subsection_id, showbtn_id, hidebtn_id) {
   hidebtn.style.display = "none";
   subsection.className = "ins-subsection";
 }
-
-
-
-//  MORE INFO MODAL STARTS HERE
-
-// var info_modal = document.getElementById("more-info-modal");
-//
-// function createMoreInfoModal(selected_id) {
-//   var parent_card = document.getElementById(selected_id);
-//   var parent_img = document.getElementById("img" + selected_id);
-//   var info_modal = document.getElementById("more-info-modal");
-//   var info_modal_img = document.getElementById("info_modal_img");
-//
-//   info_modal.style.display = "block";
-//   info_modal_img.src = parent_img.src;
-// }
-//
-// window.onclick = function(event) {
-//   if (event.target == document.getElementById("more-info-modal")) {
-//     document.getElementById("more-info-modal").style.display = "none";
-//   }
-// }
-
-
-
-var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});

@@ -1,5 +1,5 @@
 :root{
-  --chart-height: 300px;
+  --chart-height: 250px;
   --chart-width: 333px;
 }
 
@@ -20,10 +20,24 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .breakdown{
-  /* display: inline-block; */
+  margin: 40px auto 20px auto;
 }
 
-.pie{
+.charts{
+  /* overflow: auto; */
   display: inline-block;
+  position: relative;
+}
+
+.chart{
+  height: var(--chart-height);
   width: var(--chart-width);
+  position: relative;
+}
+
+.total{
+  position: absolute;
+  z-index: 1;
+  top:67px;
+  left: 115px;
 }
