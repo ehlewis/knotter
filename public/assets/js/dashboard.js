@@ -73,31 +73,48 @@ var line = document.getElementById("line");
 var myDoughnutChart = new Chart(line, {
     type: 'line',
     data: {
-        datasets: [{
-            data: [30, 5, 10],
-            backgroundColor:[
-              'rgb(224, 47, 47)',
-              'rgb(224, 108, 47)',
-              'rgb(224, 200, 47)'
-            ],
-            borderColor:[
-              'white'
-            ],
-            borderWidth: 4
-        }],
+        datasets: [
+          {
+             data: [100, 342, 490, 490, 490, 830, 1830, 1830, 3300, 3402, 3402],
+             backgroundColor:['rgb(105, 214, 81, 0)'],
+             borderColor:['rgb(105, 214, 81)'],
+             borderWidth: 2,
+             label: 'In',
+         },
+         {
+            data: [20, 52, 73, 123, 200, 532, 632, 632, 982, 1320, 2832],
+            backgroundColor:['rgb(105, 214, 81, 0)'],
+            borderColor:['rgb(224, 47, 47)'],
+            borderWidth: 2,
+            label: 'Out',
+        }
+        ],
 
         // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: [
-            'Credit',
-            'Savings',
-            'Investments'
-        ]
+            '1st',
+            '3rd',
+            '6th',
+            '9th',
+            '12th',
+            '15th',
+            '18th',
+            '21st',
+            '24th',
+            '27th',
+            '30th'
+        ],
     },
     options: {
       legend:{
         position:'bottom',
         labels:{
           boxWidth: 20,
+        }
+      },
+      elements:{
+        line:{
+          tension:0,
         }
       }
     }
