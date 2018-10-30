@@ -4,11 +4,15 @@
 
 html{
   /* background: linear-gradient(to bottom right, #00b09b, #96d03d);  69d651*/
+  height: 100%;
 }
 
 body{
     font-family: "Ubuntu", sans-serif;
     margin: 0;
+    padding-bottom: var(--footer-height);
+    position: relative;
+    min-height: 100%;
 }
 
 :root{
@@ -83,7 +87,8 @@ body{
 }
 
 .footer{
-  position: relative;
+  position: absolute;
+  bottom: 0;
 }
 
 .footerlnks{
