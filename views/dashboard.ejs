@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
     <script src="assets/js/dashboard.js"></script>
     <script src="assets/js/graphics.js"></script>
     <script src="assets/js/apiCalls.js"></script>
@@ -32,21 +33,41 @@
     <a href="/api/logout" class="moblinks hcenter">Logout</a>
   </div>
   <!-- END MOBILE NAV -->
-  <div class="container1 hcenter">
-    <div class="breakdown hcenter">
-      <div class="charts hcenter">
+  <div class="container1 nwidth hcenter">
+    <div class="detailbtns">
+      <div class="cats">
+        <h2> Categorical transactions </h2>
+        <div class="catbtns">
+          <a href="#"> Savings </a>
+          <a href="#"> Checking </a>
+          <a href="#"> Investments </a>
+        </div>
+      </div>
+      <div class="cats">
+        <h2> Institional transactions</h2>
+        <div class="catbtns">
+          <a href="#"> Bank of America </a>
+          <a href="#"> Discover </a>
+          <a href="#"> Fidelity </a>
+          <a href="#"> Chase </a>
+          <a id="link-btn"> + </a>
+        </div>
+      </div>
+    </div>
+    <div class="breakdown">
+      <div class="chart hcenter">
         <canvas id="donut1" height="250" width="333"></canvas>
         <div class="total">
           <h1 style="color:green;"> $3,402 </h1>
         </div>
       </div>
-      <div class="charts hcenter">
+      <div class="chart hcenter">
         <canvas id="donut2" height="250" width="333"></canvas>
         <div class="total">
           <h1 style="color:red;"> $2,832 </h1>
         </div>
       </div>
-      <div id="lineshw" class="charts hcenter">
+      <div id="lineshw" class="chart hcenter">
         <canvas id="line" height="250" width="300"></canvas>
       </div>
     </div>
@@ -65,20 +86,73 @@ var aggregateUserIncome = [0, 10, 20];
 var aggregateUserOutcome = [10, 10, 0];
 var labels = ['Credit','Savings','Investments','Loans'];
 var colors = ['rgb(105, 214, 81)','rgb(0, 176, 155)','rgb(0, 73, 176)'];
-//drawIn(aggregateUserIncome);
-
-drawOut(aggregateUserOutcome);
+drawIn(aggregateUserIncome);
+//
+ drawOut(aggregateUserOutcome);
 //drawInOut(aggregateUserIncome, aggregateUserOutcome);
 drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
-
-var userData = getUserAccounts().then(function(success){
-    createPieChartData(success).then(function(successData){
-        drawPieChart(successData, "donut1", colors, labels);
-    })
-});
+//
+// var userData = getUserAccounts().then(function(success){
+//     createPieChartData(success).then(function(successData){
+//         drawPieChart(successData, "donut1", colors, labels);
+//     })
+// });
 
 
 </script>
+
+<script>
+       var handler = Plaid.create({
+           apiVersion: 'v2',
+           clientName: 'Plaid Walkthrough Demo',
+           env: '<%= PLAID_ENV %>',
+           product: ['transactions'],
+           key: '<%= PLAID_PUBLIC_KEY %>',
+           onSuccess: function(public_token) {
+               $.post('/get_access_token', {
+                   public_token: public_token
+               }, function() {
+                   $('#container').fadeOut('fast', function() {
+                       $('#intro').hide();
+                       $('#app, #steps').fadeIn('slow');
+                   });
+                   $.get("/api/refresh_cache").success(
+                       function(success) {
+                           getUserDataFromCache()
+                       });
+               });
+           },
+           onExit: function(error, metadata) {
+               /*error = {
+                display_message: "The credentials were ...",
+                error_code: "INVALID_CREDENTIALS",
+                error_message: "the credentials were ...",
+                error_type: "ITEM_ERROR",
+               }
+               metadata = {
+                link_session_id: "dc21685c-192e-4969-b4e9-bab890daae31",
+                institution: {
+                 name: "Wells Fargo",
+                 institution_id: "ins_4"
+                },
+                status: "requires_credentials"
+               }
+               Save data from the onExit handler*/
+               console.log(error);
+               console.log(metadata);
+               /*supportHandler.report({
+                   error: error,
+                   institution: metadata.institution,
+                   link_session_id: metadata.link_session_id,
+                   status: metadata.status,
+               });*/
+           }
+       });
+       $('#link-btn').on('click', function(e) {
+           handler.open();
+       });
+       handler.onExit
+   </script>
 
 
 </body>

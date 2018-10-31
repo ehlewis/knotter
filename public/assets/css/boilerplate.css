@@ -18,6 +18,7 @@ body{
 :root{
   --topbar-height: 75px;
   --footer-height: 75px;
+  --nwidth: 1000px;
 }
 
 #tag{
@@ -59,7 +60,7 @@ body{
 }
 
 .nwidth{
-  max-width: 1000px;
+  max-width: var(--nwidth);
 }
 
 .maxwidth{

@@ -20,20 +20,56 @@ svg > g > g:last-child { pointer-events: none }
 }
 
 .container1{
-  display: flex;
-  justify-content: center;
+}
+
+.detailbtns{
+  width: calc(var(--nwidth) - var(--chart-width) - 4px);
+  margin: 40px 0 20px 0;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.cats{
+  display: inline-block;
+}
+
+.catbtns{
+  display: block;
+}
+
+.catbtns a{
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  line-height: 100px;
+  height: 100px;
+  width: 215px;
+  color: grey;
+
+  transition: .3s;
+}
+.catbtns a:hover{
+  background-color: lightgrey;
+}
+
+#link-btn{
+  background-color:rgb(105, 214, 81, 0.5);
+}
+
+#link-btn:hover{
+  background-color:rgb(105, 214, 81);
 }
 
 .breakdown{
+  width: var(--chart-width);
   margin: 40px 0 20px 0;
-  display: block;
+  display: inline-block;
 }
 
-.charts{
+.chart{
   display: block;
   position: relative;
 }
-
 
 .total{
   position: absolute;
