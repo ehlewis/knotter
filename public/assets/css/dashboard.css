@@ -26,11 +26,11 @@ svg > g > g:last-child { pointer-events: none }
 
 .breakdown{
   margin: 40px 0 20px 0;
-  display: inline-block;
+  display: block;
 }
 
 .charts{
-  display: inline-block;
+  display: block;
   position: relative;
 }
 
