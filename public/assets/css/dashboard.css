@@ -109,27 +109,50 @@ svg > g > g:last-child { pointer-events: none }
 
 
 @media only screen and (min-width:675px) {
-  #menu{
+  .menu{
     display: none;
   }
 }
 
 @media only screen and (max-width:1020px) {
   /* For tablets: */
-    #lineshw{
-      display: none;
+
+    .detailbtns{
+      display: block;
+      width: 333px;
+      margin: auto auto 100px auto;
+    }
+
+    .cats{
+      margin: auto;
+      display: block;
+    }
+
+    .cats h2{
+      text-align: center;
+    }
+
+    .catbtns a{
+      width: 49%;
+    }
+
+    .breakdown{
+      display: block;
+      margin: auto;
     }
 }
 @media only screen and (max-width:675px) {
   /* For mobile phones: */
-  .charts{
-    display: block;
-  }
   .links{
     display: none;
   }
   .menubtn{
     display: block;
   }
+  .breakdown{
+    margin: auto;
+  }
+
+
 
 }
