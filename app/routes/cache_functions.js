@@ -1,4 +1,4 @@
-var link_functions = require('./link_functions');
+var dataset_functions = require('./dataset_functions');
 var logger = require('../config/logger');
 var BPromise = require('bluebird');
 
@@ -20,14 +20,17 @@ async function cache_user_data(request, response, next) {
     return new Promise(function (resolve, reject) {
         var myPromises = [];
         num = request.user.items.length; //get num items to iterate through
-        myPromises.push(link_functions.cache_user_institutions(request, response, num, function(){
+        myPromises.push(dataset_functions.cache_user_institutions(request, response, num, function(){
             return;
         }));
-        myPromises.push(link_functions.cache_user_accounts(request, response, num, function(){
+        myPromises.push(dataset_functions.cache_user_accounts(request, response, num, function(){
             return;
         }));
-        //myPromises.push(link_functions.cache_items(request, response, next, num));
-        myPromises.push(link_functions.cache_transactions(request, response, num, function(){
+        //myPromises.push(dataset_functions.cache_items(request, response, next, num));
+        myPromises.push(dataset_functions.cache_transactions(request, response, num, function(){
+            return;
+        }));
+        myPromises.push(dataset_functions.plaid_to_knotter_json(request, response, num, function(){
             return;
         }));
 

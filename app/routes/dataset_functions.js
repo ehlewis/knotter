@@ -286,21 +286,30 @@ module.exports = {
     },
 
     plaid_to_knotter_json: function(request, response, next) {
-        redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
-            // reply is null when the key is missing
-            if (err != null) {
-                logger.error(request.user._id + " error" + err);
+        return new Promise(function (resolve, reject) {
+            var response_array = [];
+            var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+            var endDate = moment().format('YYYY-MM-DD');
+            for (var i = 0; i < num; i++) {
+                myPromises.push(
+                    plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
+                        count: 250,
+                        offset: 0,
+                    }, function(error, transactionsResponse) {
+                        if (error != null) {
+                            logger.error(request.user._id + error);
+                            response_array.push(request.user._id + error);
+                            return;
+                        }
+                        response_array.push(transactionsResponse);
+                        return;
+                    }));
             }
-            if (reply == '') {
-                logger.debug(request.user._id + " no data stored");
-                return;
-            } else {
-                logger.silly(request.user._id + " Pulled cached transactions");
-                redis_client.expire(request.user._id.toString() + "transactions", 1200);
-                plaidData = JSON.parse(reply);
-                knotterJSON = plaidData;
-                knotterJSON[0].accounts[0].transactions = new Array();
-                knotterJSON[0].accounts[0].transactions.push("BBB");
+            BPromise.all(myPromises).then(function() {
+
+                plaidData = JSON.parse(JSON.stringify(response_array));
+                var knotterJSON = plaidData;
+
                 for (var i = 0; i < knotterJSON.length; i++) {
                     for (var j = 0; j < knotterJSON[i].accounts.length; j++) {
                         knotterJSON[i].accounts[j].transactions = new Array();
@@ -318,20 +327,38 @@ module.exports = {
                     delete knotterJSON[institutionCounter].transactions;
                 }
 
-                response.json(knotterJSON);
+                redis_client.set(request.user._id.toString() + "knotterdata", JSON.stringify(knotterJSON), redis.print);
+                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
 
-            }
+                resolve();
+            });
         });
+
+
+
+
+
 
 
     },
 
     get_knotter_data: function(request, response, next) {
-        knotterJSON = new Object();
-        knotterJSON.temp.accounts = new Array();
-        knotterJSON.temp.accounts.push("BBB");
-        knotterJSON.temp.accounts.push("CCCCC");
-        response.json(knotterJSON);
+        redis_client.get(request.user._id.toString() + "knotterdata", function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                logger.error(request.user._id + " error" + err);
+            }
+            if (reply == '') {
+                logger.debug(request.user._id + " no data stored");
+                return;
+            } else {
+                logger.silly(request.user._id + " Pulled cached knotterdata");
+                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+
+                response.json(JSON.parse(reply));
+
+            }
+        });
 
 
     },
