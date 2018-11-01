@@ -258,6 +258,10 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
     link_functions.get_cached_transactions(request, response, next);
 });
 
+app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
+    link_functions.get_knotter_data(request, response, next);
+});
+
 app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
     front_end_functions.create_transaction_graph_data(request, response, next);
 });

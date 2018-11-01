@@ -285,6 +285,24 @@ module.exports = {
         });
     },
 
+    plaid_to_knotter_json: function(request, response, next) {
+        knotterJSON = new Object();
+        knotterJSON.temp = "AAA";
+        response.json(knotterJSON);
+
+
+    },
+
+    get_knotter_data: function(request, response, next) {
+        knotterJSON = new Object();
+        knotterJSON.temp = "AAA";
+        knotterJSON.temp.accounts = [];
+        knotterJSON.temp.accounts[knotterJSON.temp.accounts.length] = "CCCCC";
+        response.json(knotterJSON);
+
+
+    },
+
     get_institution_by_id: function(request, response, ins_id, next) {
         plaid_client.getInstitutionById(ins_id, function(err, instRes) {
             if (err != null) {
