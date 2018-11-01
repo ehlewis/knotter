@@ -286,18 +286,51 @@ module.exports = {
     },
 
     plaid_to_knotter_json: function(request, response, next) {
-        knotterJSON = new Object();
-        knotterJSON.temp = "AAA";
-        response.json(knotterJSON);
+        redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                logger.error(request.user._id + " error" + err);
+            }
+            if (reply == '') {
+                logger.debug(request.user._id + " no data stored");
+                return;
+            } else {
+                logger.silly(request.user._id + " Pulled cached transactions");
+                redis_client.expire(request.user._id.toString() + "transactions", 1200);
+                plaidData = JSON.parse(reply);
+                knotterJSON = plaidData;
+                knotterJSON[0].accounts[0].transactions = new Array();
+                knotterJSON[0].accounts[0].transactions.push("BBB");
+                for (var i = 0; i < knotterJSON.length; i++) {
+                    for (var j = 0; j < knotterJSON[i].accounts.length; j++) {
+                        knotterJSON[i].accounts[j].transactions = new Array();
+                        //knotterJSON[i].accounts[j].transactions.push("AAAAA");
+                    }
+                }
+                for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
+                    for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                        for (var transactionCounter = 0; transactionCounter < knotterJSON[institutionCounter].transactions.length; transactionCounter++) {
+                            if (knotterJSON[institutionCounter].accounts[accountCounter].account_id == knotterJSON[institutionCounter].transactions[transactionCounter].account_id){
+                                knotterJSON[institutionCounter].accounts[accountCounter].transactions.push(knotterJSON[institutionCounter].transactions[transactionCounter]);
+                            }
+                        }
+                    }
+                    delete knotterJSON[institutionCounter].transactions;
+                }
+
+                response.json(knotterJSON);
+
+            }
+        });
 
 
     },
 
     get_knotter_data: function(request, response, next) {
         knotterJSON = new Object();
-        knotterJSON.temp = "AAA";
-        knotterJSON.temp.accounts = [];
-        knotterJSON.temp.accounts[knotterJSON.temp.accounts.length] = "CCCCC";
+        knotterJSON.temp.accounts = new Array();
+        knotterJSON.temp.accounts.push("BBB");
+        knotterJSON.temp.accounts.push("CCCCC");
         response.json(knotterJSON);
 
 

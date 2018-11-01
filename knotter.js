@@ -259,7 +259,7 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
 });
 
 app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
-    link_functions.get_knotter_data(request, response, next);
+    link_functions.plaid_to_knotter_json(request, response, next);
 });
 
 app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
