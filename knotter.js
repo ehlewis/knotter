@@ -16,7 +16,7 @@ var session = require('express-session');
 
 //Set up services
 var redis_store = require('connect-redis')(session);
-var link_functions = require('./app/routes/link_functions');
+var dataset_functions = require('./app/routes/dataset_functions');
 var cache_functions = require('./app/routes/cache_functions');
 var front_end_functions = require('./app/routes/front_end_functions');
 
@@ -222,7 +222,7 @@ app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear re
 app.get('/api/accounts', isLoggedIn, function(request, response, next) {
     // Retrieve high-level account information and account and routing numbers
     // for each account associated with the Item.
-    link_functions.get_cached_user_institutions(request, response, next);
+    dataset_functions.get_cached_user_institutions(request, response, next);
 });
 
 app.get('/api/user_data', isLoggedIn, function(request, response) {
@@ -243,19 +243,23 @@ app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
 });
 
 app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
-    link_functions.get_cached_user_accounts(request, response, next);
+    dataset_functions.get_cached_user_accounts(request, response, next);
 });
 
 app.get('/api/get_cached_user_institutions', isLoggedIn, function(request, response, next) {
-    link_functions.get_cached_user_institutions(request, response, next);
+    dataset_functions.get_cached_user_institutions(request, response, next);
 });
 
 app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
-    link_functions.get_cached_items(request, response, next);
+    dataset_functions.get_cached_items(request, response, next);
 });
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
-    link_functions.get_cached_transactions(request, response, next);
+    dataset_functions.get_cached_transactions(request, response, next);
+});
+
+app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
+    dataset_functions.get_knotter_data(request, response, next);
 });
 
 app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
@@ -294,18 +298,18 @@ app.post('/api/name', function(request, response, next) {
 //=====POSTS=====
 
 app.post('/get_access_token', function(request, response, next) {
-    link_functions.get_access_token(request, response, next);
+    dataset_functions.get_access_token(request, response, next);
 });
 
 app.post('/item', function(request, response, next) {
     // Pull the Item - this includes information about available products,
     // billed products, webhook information, and more.
-    link_functions.item(request, response, next);
+    dataset_functions.item(request, response, next);
 });
 
 app.post('/transactions', function(request, response, next) {
     // Pull transactions for the Item for the last 30 days
-    link_functions.transactions(request, response, next);
+    dataset_functions.transactions(request, response, next);
 });
 
 

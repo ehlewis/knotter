@@ -25,6 +25,7 @@
         <button id="get-cached-transactions-btn" class="btn btn-default btn-sm">Get Cached Transactions</button>
         <button id="get-cached-items-btn" class="btn btn-default btn-sm">Get Cached Items</button>
         <button id="create-graph-btn" class="btn btn-default btn-sm">Get Graph Data</button>
+        <button id="get-knotter-data-btn" class="btn btn-default btn-sm">Get Graph Data</button>
     </div>
 
     <div class="row">
@@ -144,6 +145,18 @@ $('#create-graph-btn').on('click', function(e) {
             console.log(error)
         });
 });
+
+
+$('#get-knotter-data-btn').on('click', function(e) {
+      $.get('/api/get_knotter_data').success(
+      function(success){
+          console.log(success)
+      }).error(
+        function(error){
+            console.log(error)
+        });
+});
+
 
 </script>
 
