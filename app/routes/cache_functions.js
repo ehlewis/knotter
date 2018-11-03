@@ -4,13 +4,13 @@ var BPromise = require('bluebird');
 
 module.exports = {
     //Deletes existing keys and replaces them, does NOT fail if they keys don't exist
-    refresh_cache : function(request, response, next){
+    refresh_knotterdata_cache : function(request, response, next){
         redis_client.del(request.user._id.toString() + "knotterdata");
         logger.debug(request.user._id + " knotterdata was emptied");
         cache_user_knotter_data(request, response, next);
     },
 
-    refresh_all_cache : function(request, response, next){
+    refresh_all_plaid_cache : function(request, response, next){
         redis_client.del(request.user._id.toString() + "institutions");
         redis_client.del(request.user._id.toString() + "accounts");
         redis_client.del(request.user._id.toString() + "item");

@@ -215,9 +215,10 @@ app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear re
     redis_client.del(request.user._id.toString() + "accounts");
     redis_client.del(request.user._id.toString() + "item");
     redis_client.del(request.user._id.toString() + "transactions");
+    redis_client.del(request.user._id.toString() + "knotterdata");
     request.logout();
     response.redirect('/');
-});
+}); //Dumps everything in the cache that we store if it exists
 
 app.get('/api/accounts', isLoggedIn, function(request, response, next) {
     // Retrieve high-level account information and account and routing numbers
@@ -238,40 +239,45 @@ app.get('/api/user_data', isLoggedIn, function(request, response) {
 });
 
 app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
-    console.debug(request.user._id + " Cache refreshing");
-    cache_functions.refresh_cache(request, response, next);
-});
+    console.debug(request.user._id + " Cached Knotter data refreshing");
+    cache_functions.refresh_knotterdata_cache(request, response, next);
+}); //This dumps (if there is already data) and repopulates the cached data in the custom format that we convert the Plaid data to to make it useable to the frontend
+
+app.get('/api/refresh_plaid_cache', isLoggedIn, function(request, response, next) {
+    console.debug(request.user._id + " Cached Plaid data refreshing");
+    cache_functions.refresh_all_plaid_cache(request, response, next);
+}); //This dumps (if there is already data) and repopulates all the cached data that comes raw from Plaid (Accounts, Institutions, Items, and Transactions
 
 app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
     dataset_functions.get_cached_user_accounts(request, response, next);
-});
+}); //Fetches the raw array of Plaid Accounts endpoint responses from the cache, null if there is no cache hit
 
 app.get('/api/get_cached_user_institutions', isLoggedIn, function(request, response, next) {
     dataset_functions.get_cached_user_institutions(request, response, next);
-});
+}); //Fetches the raw array of Plaid Institutions endpoint responses from the cache, null if there is no cache hit
 
 app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
     dataset_functions.get_cached_items(request, response, next);
-});
+}); //Fetches the raw array of Plaid Items endpoint responses from the cache, null if there is no cache hit
 
 app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
     dataset_functions.get_cached_transactions(request, response, next);
-});
+}); //Fetches the raw array of Plaid Transactions endpoint responses from the cache, null if there is no cache hit
 
 app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
     dataset_functions.get_knotter_data(request, response, next);
-});
+}); //Fetches the raw array of Knotterdata in custom format from the cache, null if there is no cache hit
 
 
 app.get('/api/env',  function(request, response) {
     response.json({
       env : process.env.SERVICE_CONNECTION
     });
-});
+}); //Returns the version that we are running in (local-sandbox, remote-sandbox, remote-dev, or remote-productions)
 
 app.get('/api/health_check', function(request, response, next) {
     response.sendStatus(200);
-});
+}); //Returns status code 200 if the server is alive
 
 //=====API Post=====
 
@@ -290,7 +296,7 @@ app.post('/api/name', function(request, response, next) {
     logger.debug("inserted username: " + request.body.name + " for user " + request.user._id);
 
     response.redirect('/profile');
-});
+}); //Takes the name from the POST request and inserts it in the DB under the user's entry
 
 //=====POSTS=====
 
@@ -355,7 +361,7 @@ app.post('/login', function (request, response){
 //404
 app.get('*', function(request, response) {
     response.render('404.ejs');
-});
+}); //If NOTHING hits then we render the 404 page
 
 // =====launch=====
 
