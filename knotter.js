@@ -279,14 +279,13 @@ app.get('/api/health_check', function(request, response, next) {
 //=====API Post=====
 
 app.post('/api/remove_item', function(request, response, next) {
-    logger.debug(request.body.item_id);
-    logger.debug(request.user);
-    //gonna try to find 'kWNrE3dMbLT4EQeKeG8WCGPgBwBZ5McWDxlwl'
-    console.log(
-        collection.find({
-            '_id': request.user._id
-        })
-    );
+    collection.update({
+        '_id': request.user._id
+    }, {
+        $pull: {
+            'items': {'item_id': request.body.item_id}
+        }
+    });
 
     logger.debug(request.user._id + " removed item: " + request.body.item_id);
     response.sendStatus(200);
