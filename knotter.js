@@ -221,10 +221,8 @@ app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear re
 }); //Dumps everything in the cache that we store if it exists
 
 app.get('/api/accounts', isLoggedIn, function(request, response, next) {
-    // Retrieve high-level account information and account and routing numbers
-    // for each account associated with the Item.
     dataset_functions.get_cached_user_institutions(request, response, next);
-});
+}); // Retrieve high-level account information and account and routing numbers for each account associated with the Item.
 
 app.get('/api/user_data', isLoggedIn, function(request, response) {
     if (request.user === undefined) {
@@ -236,7 +234,7 @@ app.get('/api/user_data', isLoggedIn, function(request, response) {
             //num_of_accounts: request.user.items.length
         });
     }
-});
+}); //Returns the user object to the browser. Used mostly for debugging
 
 app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
     console.debug(request.user._id + " Cached Knotter data refreshing");
@@ -300,6 +298,8 @@ app.post('/api/name', function(request, response, next) {
 
 //=====POSTS=====
 
+
+//THE FOLLOWING ARE DEPRECIATED
 app.post('/get_access_token', function(request, response, next) {
     dataset_functions.get_access_token(request, response, next);
 });
@@ -314,7 +314,7 @@ app.post('/transactions', function(request, response, next) {
     // Pull transactions for the Item for the last 30 days
     dataset_functions.transactions(request, response, next);
 });
-
+//THE ABOVE ARE DEPRECIATED
 
 app.post('/signup', function (request, response){
     passport.authenticate('local-signup', function(err, user, info){
@@ -334,7 +334,8 @@ app.post('/signup', function (request, response){
         });
 
     }
-    })(request, response);});
+    })(request, response);}
+); //Takes the POST data and passes it through the passport.authenticate function defined in ./app/config/passport.js which will pass back a user object representing the user if it does not exist yet in our DB, or no user if the requested email already exists in our DB. If the user does not exist in the DB then it is created and that new user object is passed back and passed to request.login which will log in the user.
 
 
 // process the login form
@@ -356,7 +357,8 @@ app.post('/login', function (request, response){
               return response.send({ response: "authd" });
             });
         }
-    })(request, response);});
+    })(request, response);}
+); //Takes the POST data and passes it through the passport.authenticate function defined in ./app/config/passport.js which will pass back a user object representing the user exists in our DB, or no user if the requested email does not exist in our DB. If the user exists in the DB then the user object for that email is passed back and passed to request.login which will log in the user if the password validates.
 
 //404
 app.get('*', function(request, response) {
