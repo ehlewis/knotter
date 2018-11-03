@@ -261,7 +261,7 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
     dataset_functions.get_cached_transactions(request, response, next);
 }); //Fetches the raw array of Plaid Transactions endpoint responses from the cache, null if there is no cache hit
 
-app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
+app.get('/api/get_cached_knotter_data', isLoggedIn, function(request, response, next) {
     dataset_functions.get_knotter_data(request, response, next);
 }); //Fetches the raw array of Knotterdata in custom format from the cache, null if there is no cache hit
 
