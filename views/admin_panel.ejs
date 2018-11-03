@@ -10,6 +10,7 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+    <script src="assets/js/apiCalls.js"></script>
 </head>
 <body>
 <div class="container">
@@ -143,6 +144,22 @@ $('#get-knotter-data-btn').on('click', function(e) {
             console.log(error)
         });
 });
+
+
+getUserKnotterdataSafe().then(function(knotterJSON){
+    console.log(knotterJSON);
+    for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
+        console.log(knotterJSON[institutionCounter].item.institution_id + " " + knotterJSON[institutionCounter].item.item_id)
+    }
+});
+
+/*
+
+$.post('/api/remove_item', {
+    item_id: remove_item_id
+}, function() {
+
+});*/
 
 
 </script>

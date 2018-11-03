@@ -261,7 +261,7 @@ app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, 
     dataset_functions.get_cached_transactions(request, response, next);
 }); //Fetches the raw array of Plaid Transactions endpoint responses from the cache, null if there is no cache hit
 
-app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
+app.get('/api/get_cached_knotter_data', isLoggedIn, function(request, response, next) {
     dataset_functions.get_knotter_data(request, response, next);
 }); //Fetches the raw array of Knotterdata in custom format from the cache, null if there is no cache hit
 
@@ -277,6 +277,19 @@ app.get('/api/health_check', function(request, response, next) {
 }); //Returns status code 200 if the server is alive
 
 //=====API Post=====
+
+app.post('/api/remove_item', function(request, response, next) {
+    collection.update({
+        '_id': request.user._id
+    }, {
+        $pull: {
+            'items': {'item_id': request.body.item_id}
+        }
+    });
+
+    logger.debug(request.user._id + " removed item: " + request.body.item_id);
+    response.sendStatus(200);
+}); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
 
 app.post('/api/name', function(request, response, next) {
     logger.debug(request.body.name);

@@ -97,3 +97,5 @@ https://www.digitalocean.com/community/tutorials/how-to-use-certbot-standalone-m
 https://community.letsencrypt.org/t/node-express-server-pem-read-bio-no-start-line/41175/3
 
 https://hackernoon.com/understanding-promises-in-javascript-13d99df067c1
+
+https://stackoverflow.com/questions/43385349/remove-from-array-of-objectid-using-update-mongodb
