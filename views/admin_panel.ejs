@@ -145,30 +145,18 @@ $('#get-knotter-data-btn').on('click', function(e) {
         });
 });
 
-/*$.get('/api/refresh_cache').success(
-function(success){
-    $.get('/api/get_knotter_data').success(
-    function(knotterJSON){
-        console.log(knotterJSON)
-        for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
-            console.log(knotterJSON[institutionCounter].item.institution_id + " " + knotterJSON[institutionCounter].item.item_id)
-        }
-
-
-    }).error(
-      function(error){
-          console.log(error)
-      });
-}).error(
-  function(error){
-      console.log(error)
-  });*/
 
 getUserKnotterdataSafe().then(function(knotterJSON){
     console.log(knotterJSON);
     for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
         console.log(knotterJSON[institutionCounter].item.institution_id + " " + knotterJSON[institutionCounter].item.item_id)
     }
+});
+
+$.post('/api/remove_item', {
+    item_id: "test"
+}, function() {
+
 });
 
 

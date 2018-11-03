@@ -278,6 +278,20 @@ app.get('/api/health_check', function(request, response, next) {
 
 //=====API Post=====
 
+app.post('/api/remove_item', function(request, response, next) {
+    logger.debug(request.body.item_id);
+    logger.debug(request.user);
+    //gonna try to find 'kWNrE3dMbLT4EQeKeG8WCGPgBwBZ5McWDxlwl'
+    console.log(
+        collection.find({
+            '_id': request.user._id
+        })
+    );
+
+    logger.debug(request.user._id + " removed item: " + request.body.item_id);
+    response.sendStatus(200);
+}); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
+
 app.post('/api/name', function(request, response, next) {
     logger.debug(request.body.name);
     logger.debug(request.user);
