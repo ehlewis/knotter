@@ -18,7 +18,7 @@ var session = require('express-session');
 var redis_store = require('connect-redis')(session);
 var dataset_functions = require('./app/routes/dataset_functions');
 var cache_functions = require('./app/routes/cache_functions');
-var front_end_functions = require('./app/routes/front_end_functions');
+//var front_end_functions = require('./app/routes/front_end_functions');
 
 //Set up Logging
 var colors = require('colors');
@@ -262,9 +262,6 @@ app.get('/api/get_knotter_data', isLoggedIn, function(request, response, next) {
     dataset_functions.get_knotter_data(request, response, next);
 });
 
-app.get('/api/get_graph_data', isLoggedIn, function(request, response, next) {
-    front_end_functions.create_transaction_graph_data(request, response, next);
-});
 
 app.get('/api/env',  function(request, response) {
     response.json({

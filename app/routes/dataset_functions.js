@@ -285,7 +285,7 @@ module.exports = {
         });
     },
 
-    plaid_to_knotter_json: function(request, response, next) {
+    plaid_to_knotter_json: function(request, response, num, next) {
         return new Promise(function (resolve, reject) {
             var response_array = [];
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
