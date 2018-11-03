@@ -18,7 +18,6 @@ var session = require('express-session');
 var redis_store = require('connect-redis')(session);
 var dataset_functions = require('./app/routes/dataset_functions');
 var cache_functions = require('./app/routes/cache_functions');
-//var front_end_functions = require('./app/routes/front_end_functions');
 
 //Set up Logging
 var colors = require('colors');
