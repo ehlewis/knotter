@@ -37,7 +37,7 @@ svg > g > g:last-child { pointer-events: none }
   display: block;
 }
 
-.catbtns a{
+/* .catbtns a{
   display: inline-block;
   text-decoration: none;
   text-align: center;
@@ -50,15 +50,72 @@ svg > g > g:last-child { pointer-events: none }
 }
 .catbtns a:hover{
   background-color: lightgrey;
+} */
+
+.cardcontainer{
+  height: 175px;
+  width: 175px;
+  display: inline-block;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: 0.2s;
+  margin: 0 10px 20px 10px;
+  cursor: pointer;
+}
+
+.cardcontainer hr{
+  margin: 0;
+}
+
+.cardcontainer:hover{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.banklogo{
+  display: block;
+  margin: 0;
+}
+
+.category{
+  line-height: calc(85px - 2em);
+  font-weight: 300;
+  font-size: 16pt;
+  text-align: center;
+}
+
+.logosvg{
+  display: block;
+  margin: auto;
+  height: 85px;
+  width: 85px;
+}
+
+.totals{
+  margin: 0;
+  display: block;
+}
+
+.bnktotal{
+  width: 48%;
+  display: inline-block;
+  text-align: center;
 }
 
 #link-btn{
-  background-color:rgb(105, 214, 81, 0.5);
+  background-color:rgb(105, 214, 81, 0.1);
+  text-align: center;
+  line-height: 150px;
+  font-size: 80pt;
+  color: #69d651;
+
 }
 
-#link-btn:hover{
-  background-color:rgb(105, 214, 81);
+#link-btn p{
+  margin: 0;
 }
+
+/* #link-btn:hover{
+  background-color:rgb(105, 214, 81, 0.5);
+} */
 
 .breakdown{
   width: var(--chart-width);
@@ -117,23 +174,20 @@ svg > g > g:last-child { pointer-events: none }
 @media only screen and (max-width:1020px) {
   /* For tablets: */
 
+    .cats{
+      display: block;
+    }
+
     .detailbtns{
       display: block;
-      width: 333px;
-      margin: auto auto 100px auto;
+      width: 90%;
+      margin: auto auto 60px auto;
     }
 
-    .cats{
-      margin: auto;
-      display: block;
-    }
-
-    .cats h2{
-      text-align: center;
-    }
-
-    .catbtns a{
-      width: 49%;
+    .cardcontainer{
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      margin: 0 2px 15px 2px;
+      width: 48%;
     }
 
     .breakdown{
