@@ -56,18 +56,21 @@ svg > g > g:last-child { pointer-events: none }
   height: 175px;
   width: 175px;
   display: inline-block;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
   transition: 0.2s;
   margin: 0 10px 20px 10px;
   cursor: pointer;
+  border: 1px solid #EEEEEE;
+  overflow: auto;
 }
 
 .cardcontainer hr{
   margin: 0;
+  border-color: lightgrey;
 }
 
 .cardcontainer:hover{
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
 .banklogo{
@@ -106,16 +109,12 @@ svg > g > g:last-child { pointer-events: none }
   line-height: 150px;
   font-size: 80pt;
   color: #69d651;
-
 }
 
 #link-btn p{
   margin: 0;
 }
 
-/* #link-btn:hover{
-  background-color:rgb(105, 214, 81, 0.5);
-} */
 
 .breakdown{
   width: var(--chart-width);
@@ -185,9 +184,9 @@ svg > g > g:last-child { pointer-events: none }
     }
 
     .cardcontainer{
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      margin: 0 2px 15px 2px;
-      width: 48%;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+      margin: 0 5px 15px 5px;
+      width: 46%;
     }
 
     .breakdown{
