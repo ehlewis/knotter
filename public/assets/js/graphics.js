@@ -337,3 +337,46 @@ function createInstitutionOutData(userData, insId){
         resolve(accountData);
     });
 }
+
+function createCategoryBalanceData(userData){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var categoryData = [0,0,0];
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                if(userData[institution].accounts[account].subtype == "checking"){
+                        categoryData[0] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else if(userData[institution].accounts[account].subtype == "savings"){
+                        categoryData[1] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else if(userData[institution].accounts[account].subtype == "cd" || userData[institution].accounts[account].subtype == "money market"){
+                        categoryData[2] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else if(userData[institution].accounts[account].subtype == "credit" || userData[institution].accounts[account].subtype == "credit card"){
+                        categoryData[3] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else{
+                    console.log(userData[i][j].subtype);
+                }
+            }
+        }
+        console.log(categoryData);
+        resolve(categoryData);
+    });
+}
+
+function createAccountBalanceData(userData, account){
+    return new Promise(function(resolve, reject) {
+        var categoryData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                if(userData[institution].accounts[account].account_id == account){
+                        categoryData0 += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+            }
+        }
+        console.log(categoryData);
+        resolve(categoryData);
+    });
+}
