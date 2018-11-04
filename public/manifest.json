@@ -6,7 +6,7 @@
   "display": "fullscreen",
   "orientation": "portrait",
   "Scope": "/",
-  "start_url": "views/landing.ejs",
+  "start_url": "views/landing",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",
