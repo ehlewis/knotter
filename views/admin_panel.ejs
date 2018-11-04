@@ -154,6 +154,7 @@ getUserKnotterdataSafe().then(function(knotterJSON){
     for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
         console.log(knotterJSON[institutionCounter].item.institution_id + " " + knotterJSON[institutionCounter].item.item_id)
     }
+    createInstitutionInData(knotterJSON,"ins_3");
 });
 
 

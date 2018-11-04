@@ -257,3 +257,83 @@ function createCategoryOutData(userData){
         resolve(categoryData);
     });
 }
+
+function createAccountInData(userData, accountId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                if(userData[institution].accounts[account].account_id == accountId){
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}
+
+function createAccountOutData(userData, accountId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                if(userData[institution].accounts[account].account_id == accountId){
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}
+
+function createInstitutionInData(userData, insId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            if(userData[institution].item.institution_id == insId){
+                for (var account = 0; account < userData[institution].accounts.length; account++) {
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}
+
+function createInstitutionOutData(userData, insId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            if(userData[institution].item.institution_id == insId){
+                for (var account = 0; account < userData[institution].accounts.length; account++) {
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}

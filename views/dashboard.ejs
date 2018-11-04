@@ -48,11 +48,11 @@
             <div class="totals">
               <div class="bnktotal">
                 <p>In:</p>
-                <p>$3,402</p>
+                <p id="savingsIn"></p>
               </div>
               <div class="bnktotal">
                 <p>Out:</p>
-                <p>$2,832</p>
+                <p id="savingsOut"></p>
               </div>
             </div>
           </div>
@@ -65,11 +65,28 @@
             <div class="totals">
               <div class="bnktotal">
                 <p>In:</p>
-                <p>$3,402</p>
+                <p id="checkingIn"></p>
               </div>
               <div class="bnktotal">
                 <p>Out:</p>
-                <p>$2,832</p>
+                <p id="checkingOut"></p>
+              </div>
+            </div>
+          </div>
+          <!-- NEXT CARD -->
+          <div class="cardcontainer fradius">
+            <div class="category hcenter">
+              <p> Investments <p>
+            </div>
+            <hr>
+            <div class="totals">
+              <div class="bnktotal">
+                <p>In:</p>
+                <p id="investmentsIn"></p>
+              </div>
+              <div class="bnktotal">
+                <p>Out:</p>
+                <p id="investmentsOut"></p>
               </div>
             </div>
           </div>
@@ -200,6 +217,21 @@ drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
 //         drawPieChart(successData, "donut1", colors, labels);
 //     })
 // });
+
+
+getUserKnotterdataSafe().then(function(knotterJSON){
+    console.log(knotterJSON);
+    createCategoryInData(knotterJSON).then(function(userIn){
+        document.getElementById("checkingIn").innerHTML = userIn[0];
+        document.getElementById("savingsIn").innerHTML = userIn[1];
+        document.getElementById("investmentsOut").innerHTML = userIn[2];
+    });
+    createCategoryOutData(knotterJSON).then(function(userOut){
+        document.getElementById("checkingOut").innerHTML = userOut[0];
+        document.getElementById("savingsOut").innerHTML = userOut[1];
+        document.getElementById("investmentsOut").innerHTML = userOut[2];
+    });
+});
 
 
 </script>
