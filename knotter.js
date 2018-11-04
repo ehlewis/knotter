@@ -169,6 +169,11 @@ app.get('/landing', function(request, response, next) {
     response.render('landing.ejs', {});
 });
 
+
+app.get('/views/landing.ejs', function(request, response, next) {
+    response.render('landing.ejs', {});
+});
+
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
         user: request.user, // get the user out of session and pass to template
