@@ -385,5 +385,35 @@ module.exports = {
                 });
             }
         });
+    },
+
+    remove_item: function(request, response, next) {
+        return new Promise(function (resolve, reject) {
+            for (var item = 0; item < request.user.items.length; item++) {
+                if(request.user.items[item].item_id == request.body.item_id){
+                    plaid_client.removeItem(request.user.items[item].access_token, (err, result) => {
+                        // Handle err
+                        // The Item has been removed and the
+                        // access token is now invalid
+                        if(err){
+                            logger.error(err);
+                        }
+                        else{
+                            collection.updateOne({
+                                '_id': request.user._id
+                            }, {
+                                $pull: {
+                                    'items': {'item_id': request.body.item_id}
+                                }
+                            });
+
+                            logger.debug(request.user._id + " removed item: " + request.body.item_id);
+                        }
+                        const isRemoved = result.removed;
+                        resolve(isRemoved);
+                    });
+                }
+            }
+        });
     }
 };

@@ -99,3 +99,7 @@ https://community.letsencrypt.org/t/node-express-server-pem-read-bio-no-start-li
 https://hackernoon.com/understanding-promises-in-javascript-13d99df067c1
 
 https://stackoverflow.com/questions/43385349/remove-from-array-of-objectid-using-update-mongodb
+
+https://stackoverflow.com/questions/17303833/mongodb-nested-array-query
+
+https://stackoverflow.com/questions/14040562/how-to-search-in-array-of-object-in-mongodb
