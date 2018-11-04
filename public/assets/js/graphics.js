@@ -194,30 +194,146 @@ function drawInOut(userDataIn, userDataOut){
 }
 
 
-function createPieChartData(userData){
-    //['Credit','Savings','Investments','Loans']
+function createCategoryInData(userData){
+    //['Checking','Savings','Investments','Loans']
     return new Promise(function(resolve, reject) {
-        var chartData = [0,0,0];
-        for (var i = 0; i < userData.length; i++) {
-            for (var j = 0; j < userData[i].length; j++) {
-                if(userData[i][j].subtype == "checking"){
-                    chartData[1] += userData[i][j].balances.current;
-                }
-                else if(userData[i][j].subtype == "savings"){
-                    chartData[1] += userData[i][j].balances.current;
-                }
-                else if(userData[i][j].subtype == "cd" || userData[i][j].subtype == "money market"){
-                    chartData[2] += userData[i][j].balances.current;
-                }
-                else if(userData[i][j].subtype == "credit" || userData[i][j].subtype == "credit card"){
-                    chartData[0] += userData[i][j].balances.current;
-                }
-                else{
-                    console.log(userData[i][j].subtype);
+        var categoryData = [0,0,0];
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                    if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                        if(userData[institution].accounts[account].subtype == "checking"){
+                                categoryData[0] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else if(userData[institution].accounts[account].subtype == "savings"){
+                                categoryData[1] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else if(userData[institution].accounts[account].subtype == "cd" || userData[institution].accounts[account].subtype == "money market"){
+                                categoryData[2] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else if(userData[institution].accounts[account].subtype == "credit" || userData[institution].accounts[account].subtype == "credit card"){
+                                categoryData[3] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else{
+                            console.log(userData[i][j].subtype);
+                        }
+                    }
                 }
             }
         }
-        console.log(chartData);
-        resolve(chartData);
+        console.log(categoryData);
+        resolve(categoryData);
+    });
+}
+
+function createCategoryOutData(userData){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var categoryData = [0,0,0];
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                    if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                        if(userData[institution].accounts[account].subtype == "checking"){
+                                categoryData[0] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else if(userData[institution].accounts[account].subtype == "savings"){
+                                categoryData[1] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else if(userData[institution].accounts[account].subtype == "cd" || userData[institution].accounts[account].subtype == "money market"){
+                                categoryData[2] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else if(userData[institution].accounts[account].subtype == "credit" || userData[institution].accounts[account].subtype == "credit card"){
+                                categoryData[3] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                        else{
+                            console.log(userData[i][j].subtype);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(categoryData);
+        resolve(categoryData);
+    });
+}
+
+function createAccountInData(userData, accountId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                if(userData[institution].accounts[account].account_id == accountId){
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}
+
+function createAccountOutData(userData, accountId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                if(userData[institution].accounts[account].account_id == accountId){
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}
+
+function createInstitutionInData(userData, insId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            if(userData[institution].item.institution_id == insId){
+                for (var account = 0; account < userData[institution].accounts.length; account++) {
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
+    });
+}
+
+function createInstitutionOutData(userData, insId){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var accountData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            if(userData[institution].item.institution_id == insId){
+                for (var account = 0; account < userData[institution].accounts.length; account++) {
+                    for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
+                        if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                            accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
+                        }
+                    }
+                }
+            }
+        }
+        console.log(accountData);
+        resolve(accountData);
     });
 }
