@@ -103,3 +103,5 @@ https://stackoverflow.com/questions/43385349/remove-from-array-of-objectid-using
 https://stackoverflow.com/questions/17303833/mongodb-nested-array-query
 
 https://stackoverflow.com/questions/14040562/how-to-search-in-array-of-object-in-mongodb
+
+https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/registration-events/index.html
