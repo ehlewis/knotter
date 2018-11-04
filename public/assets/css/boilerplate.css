@@ -3,12 +3,22 @@
 }
 
 html{
-  /* background: linear-gradient(to bottom right, #00b09b, #96d03d); */
+  /* background: linear-gradient(to bottom right, #00b09b, #96d03d);  69d651*/
+  height: 100%;
 }
 
 body{
     font-family: "Ubuntu", sans-serif;
     margin: 0;
+    padding-bottom: var(--footer-height);
+    position: relative;
+    min-height: 100%;
+}
+
+:root{
+  --topbar-height: 75px;
+  --footer-height: 75px;
+  --nwidth: 1000px;
 }
 
 #tag{
@@ -44,13 +54,13 @@ body{
 }
 
 .topbar{
-  height: 75px;
+  height: var(--topbar-height);
   position: relative;
   padding: 0 10px 0 10px;
 }
 
 .nwidth{
-  max-width: 1000px;
+  max-width: var(--nwidth);
 }
 
 .maxwidth{
@@ -78,11 +88,16 @@ body{
 }
 
 .footer{
-  line-height: 75px;
+  position: absolute;
+  bottom: 0;
+}
+
+.footerlnks{
+  line-height: var(--footer-height);
   text-align: center;
 }
 
-.footer a{
+.footerlnks a{
   text-decoration: none;
   color: grey;
   font-size: 8pt;

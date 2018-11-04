@@ -95,3 +95,7 @@ https://stackoverflow.com/questions/35942754/how-to-save-username-and-password-i
 https://www.digitalocean.com/community/tutorials/how-to-use-certbot-standalone-mode-to-retrieve-let-s-encrypt-ssl-certificates-on-ubuntu-16-04
 
 https://community.letsencrypt.org/t/node-express-server-pem-read-bio-no-start-line/41175/3
+
+https://hackernoon.com/understanding-promises-in-javascript-13d99df067c1
+
+https://stackoverflow.com/questions/43385349/remove-from-array-of-objectid-using-update-mongodb

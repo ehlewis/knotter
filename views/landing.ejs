@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Knotter</title>
+    <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
     <link rel="stylesheet" type="text/css" href= "assets/css/boilerplate.css">
     <link rel="stylesheet" type="text/css" href= "assets/css/landing.css">
@@ -82,8 +83,8 @@
         </div>
       </div>
     </div>
-    <div class="sec6 maxwidth">
-      <div class="footer hcenter nwidth">
+    <div class="footer maxwidth bottom">
+      <div class="footerlnks hcenter nwidth">
         <a href="/workinprogress"> Contact Us </a>
         <a href="/workinprogress"> Leave Feedback </a>
         <a href="/workinprogress"> FAQ </a>
@@ -95,4 +96,17 @@
   <script src="assets/js/landing.js"></script>
 
 </body>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    console.log("Will the service worker register?");
+    navigator.serviceWorker.register('../serviceworker.js')
+      .then(function(reg){
+        console.log("Yes, it did.");
+      }).catch(function(err) {
+        console.log("No it didn't. This happened: ", err)
+      });
+  }
+</script>
+
 </html>
