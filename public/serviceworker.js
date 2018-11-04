@@ -1,9 +1,9 @@
 var CACHE_NAME = 'knotter-sw-cache';
 var urlsToCache = [
-  '/views/landing.ejs',
-  '/public/assets/css/boilerplate.css',
-  '/public/assets/css/landing.css',
-  '/public/assets/js/landing.js'
+  '/landing',
+  '/assets/css/boilerplate.css',
+  '/assets/css/landing.css',
+  '/assets/js/landing.js'
 ];
 
 self.addEventListener('install', function(event) {
