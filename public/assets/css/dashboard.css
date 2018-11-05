@@ -95,13 +95,26 @@ svg > g > g:last-child { pointer-events: none }
 .totals{
   margin: 0;
   display: block;
+  align-items: top;
 }
 
-.bnktotal{
+.bnknums{
   width: 48%;
   display: inline-block;
   text-align: center;
+  font-size: 11pt;
+
 }
+
+.bnktotal{
+  vertical-align: top;
+  line-height: 50px;
+}
+
+.inout{
+  line-height: 18px;
+}
+
 
 #link-btn{
   background-color:rgb(105, 214, 81, 0.1);
