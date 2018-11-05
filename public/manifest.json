@@ -3,7 +3,7 @@
   "short_name": "Knotter",
   "theme_color": "#69d651",
   "background_color": "#69d651",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait",
   "Scope": "/",
   "start_url": "/landing",
