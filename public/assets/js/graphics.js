@@ -341,16 +341,31 @@ function createInstitutionOutData(userData, insId){
 function createCategoryBalanceData(userData){
     //['Checking','Savings','Investments','Loans']
     return new Promise(function(resolve, reject) {
-        var balance = 0;
+        var categoryData = [0,0,0];
         for (var institution = 0; institution < userData.length; institution++) {
             for (var account = 0; account < userData[institution].accounts.length; account++) {
-                balance += userData[institution].accounts[account].balances.available;
+                if(userData[institution].accounts[account].subtype == "checking"){
+                        categoryData[0] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else if(userData[institution].accounts[account].subtype == "savings"){
+                        categoryData[1] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else if(userData[institution].accounts[account].subtype == "cd" || userData[institution].accounts[account].subtype == "money market"){
+                        categoryData[2] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else if(userData[institution].accounts[account].subtype == "credit" || userData[institution].accounts[account].subtype == "credit card"){
+                        categoryData[3] += parseFloat(userData[institution].accounts[account].balances.available);
+                }
+                else{
+                    console.log(userData[i][j].subtype);
+                }
             }
         }
-        console.log(balance);
-        resolve(balance);
+        console.log(categoryData);
+        resolve(categoryData);
     });
 }
+
 
 
 function renderInsCards(userData){
@@ -375,3 +390,4 @@ function renderInsCards(userData){
         </div>
     </div>
 </div>*/
+

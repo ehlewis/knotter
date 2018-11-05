@@ -279,16 +279,10 @@ app.get('/api/health_check', function(request, response, next) {
 //=====API Post=====
 
 app.post('/api/remove_item', function(request, response, next) {
-    collection.update({
-        '_id': request.user._id
-    }, {
-        $pull: {
-            'items': {'item_id': request.body.item_id}
-        }
+    dataset_functions.remove_item(request, response, next).then(function(isRemoved){
+        cache_functions.refresh_knotterdata_cache(request, response, next);
+        response.sendStatus(200);
     });
-
-    logger.debug(request.user._id + " removed item: " + request.body.item_id);
-    response.sendStatus(200);
 }); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
 
 app.post('/api/name', function(request, response, next) {
