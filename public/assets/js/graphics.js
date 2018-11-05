@@ -24,7 +24,7 @@ function drawPieChart(userData, chart, colors, labels){
     });
 }
 
-function drawIn(userData){
+/*function drawIn(){
     var donut1 = document.getElementById("donut1");
 
     var myDoughnutChart = new Chart(donut1, {
@@ -60,9 +60,9 @@ function drawIn(userData){
           }
         }
     });
-}
+}*/
 
-function drawOut(userData){
+function drawOut(){
     var donut2 = document.getElementById("donut2");
 
     var myDoughnutChart = new Chart(donut2, {
@@ -337,3 +337,41 @@ function createInstitutionOutData(userData, insId){
         resolve(accountData);
     });
 }
+
+function createCategoryBalanceData(userData){
+    //['Checking','Savings','Investments','Loans']
+    return new Promise(function(resolve, reject) {
+        var balance = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            for (var account = 0; account < userData[institution].accounts.length; account++) {
+                balance += userData[institution].accounts[account].balances.available;
+            }
+        }
+        console.log(balance);
+        resolve(balance);
+    });
+}
+
+
+function renderInsCards(userData){
+    for (var institution = 0; institution < userData.length; institution++) {
+        document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+userData[institution].item.institution_id+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'">Total: </p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'">In: </p><p id="bankOut_'+userData[institution].item.institution_id+'">Out: </p></div></div></div>'
+    }
+}
+
+// INS_CARDS Template
+/*<div class="cardcontainer fradius">
+    <div class="banklogo hcenter">
+        <img src="assets/bankLogos/BoA.svg" class="logosvg">
+    </div>
+    <hr noshade>
+    <div class="totals">
+        <div class="bnktotal bnknums">
+            <p id="bankTotal">Total: </p>
+        </div>
+        <div class="inout bnknums">
+            <p id="bankIn">In: </p>
+            <p id="bankOut">Out: </p>
+        </div>
+    </div>
+</div>*/
