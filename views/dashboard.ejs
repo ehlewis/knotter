@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>Knotter</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
-    <link rel="stylesheet" type="text/css" href= "assets/css/boilerplate.css">
-    <link rel="stylesheet" type="text/css" href= "assets/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/boilerplate.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
@@ -19,290 +20,221 @@
 </head>
 
 <body>
-  <div class="topbar nwidth hcenter">
-    <a href="/" ><img src="assets/graphics/knotter_brand_green.png" class="left vcenter" alt="Knotter" style="height:50px; margin:-25px 0 0 10px;"></a>
-    <!-- <a href="/workinprogress" class="button2 button vcenter right" style="margin:-16px 10px 0 0; ">Knotter Pro</a> -->
-    <a href="/dashboard" class="links left" style="margin: 0 0 0 160px; background-color:rgb(105, 214, 81, 0.5);">Breakdown</a>
-    <a href="/accounts" class="links left">Accounts</a>
-    <a href="/api/logout" class="links right">Logout</a>
-    <button class="menubtn right vcenter" onclick="displayMenu()"><img src="assets/graphics/menu.png"/></button>
-  </div>
-  <!-- MOBILE NAV -->
-  <div id="menu" class="menu" style="height:0px;">
-    <a href="/dashboard" class="moblinks hcenter">Breakdown</a>
-    <a href="/accounts" class="moblinks hcenter">Accounts</a>
-    <a href="/api/logout" class="moblinks hcenter">Logout</a>
-  </div>
-  <!-- END MOBILE NAV -->
-  <div class="container1 nwidth hcenter">
-    <div class="detailbtns hcenter">
-      <div class="cats">
-        <h2> Categorical transactions </h2>
-        <div class="catbtns">
-          <!-- CARD START -->
-          <div class="cardcontainer fradius">
-            <div class="category hcenter">
-              <p> Savings <p>
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="category hcenter">
-              <p> Checking <p>
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="checkingTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="checkingIn">In: </p>
-                <p id="checkingOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="category hcenter">
-              <p> Investment <p>
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="investmentTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="investmentIn">In: </p>
-                <p id="investmentOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-
-        </div>
-      </div>
-      <div class="cats">
-        <h2> Institutional transactions</h2>
-        <div class="catbtns">
-          <!-- CARD START -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
-              </div>
-              <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div id="link-btn" class="cardcontainer fradius">
-            <p> + </p>
-          </div>
-          <!-- NEXT CARD  -->
-        </div>
-      </div>
-      <!-- INSTITUTIONAL TRANSACTIONS END HERE -->
+    <div class="topbar nwidth hcenter">
+        <a href="/"><img src="assets/graphics/knotter_brand_green.png" class="left vcenter" alt="Knotter" style="height:50px; margin:-25px 0 0 10px;"></a>
+        <!-- <a href="/workinprogress" class="button2 button vcenter right" style="margin:-16px 10px 0 0; ">Knotter Pro</a> -->
+        <a href="/dashboard" class="links left" style="margin: 0 0 0 160px; background-color:rgb(105, 214, 81, 0.5);">Breakdown</a>
+        <a href="/accounts" class="links left">Accounts</a>
+        <a href="/api/logout" class="links right">Logout</a>
+        <button class="menubtn right vcenter" onclick="displayMenu()"><img src="assets/graphics/menu.png"/></button>
     </div>
-    <div class="breakdown">
-      <div class="chart hcenter">
-        <canvas id="donut1" height="250" width="333"></canvas>
-        <div class="total">
-          <h1 style="color:green;"> $3,402 </h1>
-        </div>
-      </div>
-      <div class="chart hcenter">
-        <canvas id="donut2" height="250" width="333"></canvas>
-        <div class="total">
-          <h1 style="color:red;"> $2,832 </h1>
-        </div>
-      </div>
-      <div id="lineshw" class="chart hcenter">
-        <canvas id="line" height="250" width="300"></canvas>
-      </div>
+    <!-- MOBILE NAV -->
+    <div id="menu" class="menu" style="height:0px;">
+        <a href="/dashboard" class="moblinks hcenter">Breakdown</a>
+        <a href="/accounts" class="moblinks hcenter">Accounts</a>
+        <a href="/api/logout" class="moblinks hcenter">Logout</a>
     </div>
-  </div>
-  <div class="footer maxwidth bottom">
-    <div class="footerlnks hcenter nwidth">
-      <a href="/workinprogress"> Contact Us </a>
-      <a href="/workinprogress"> Leave Feedback </a>
-      <a href="/workinprogress"> FAQ </a>
+    <!-- END MOBILE NAV -->
+    <div class="container1 nwidth hcenter">
+        <div class="detailbtns hcenter">
+            <div class="cats">
+                <h2> Categorical transactions </h2>
+                <div class="catbtns">
+                    <!-- CARD START -->
+                    <div class="cardcontainer fradius">
+                        <div class="category hcenter">
+                            <p> Savings
+                                <p>
+                        </div>
+                        <hr noshade>
+                        <div class="totals">
+                            <div class="bnktotal bnknums">
+                                <p id="savingsTotal">Total: </p>
+                            </div>
+                            <div class="inout bnknums">
+                                <p id="savingsIn">In: </p>
+                                <p id="savingsOut">Out: </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- NEXT CARD -->
+                    <div class="cardcontainer fradius">
+                        <div class="category hcenter">
+                            <p> Checking
+                                <p>
+                        </div>
+                        <hr noshade>
+                        <div class="totals">
+                            <div class="bnktotal bnknums">
+                                <p id="checkingTotal">Total: </p>
+                            </div>
+                            <div class="inout bnknums">
+                                <p id="checkingIn">In: </p>
+                                <p id="checkingOut">Out: </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- NEXT CARD -->
+                    <div class="cardcontainer fradius">
+                        <div class="category hcenter">
+                            <p> Investment
+                                <p>
+                        </div>
+                        <hr noshade>
+                        <div class="totals">
+                            <div class="bnktotal bnknums">
+                                <p id="investmentTotal">Total: </p>
+                            </div>
+                            <div class="inout bnknums">
+                                <p id="investmentIn">In: </p>
+                                <p id="investmentOut">Out: </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- NEXT CARD -->
+                </div>
+            </div>
+            <div class="cats">
+                <h2> Institutional transactions</h2>
+                <div class="catbtns" id="INS_CARDS">
+                    <!-- CARD START -->
+                    <!--<div class="cardcontainer fradius">
+                        <div class="banklogo hcenter">
+                            <img src="assets/bankLogos/BoA.svg" class="logosvg">
+                        </div>
+                        <hr noshade>
+                        <div class="totals">
+                            <div class="bnktotal bnknums">
+                                <p id="bankTotal">Total: </p>
+                            </div>
+                            <div class="inout bnknums">
+                                <p id="bankIn">In: </p>
+                                <p id="bankOut">Out: </p>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!-- NEXT CARD -->
+
+                    <!-- NEXT CARD -->
+                    <div id="link-btn" class="cardcontainer fradius">
+                        <p> + </p>
+                    </div>
+                    <!-- NEXT CARD  -->
+                </div>
+            </div>
+            <!-- INSTITUTIONAL TRANSACTIONS END HERE -->
+        </div>
+        <div class="breakdown">
+            <div class="chart hcenter">
+                <canvas id="donut1" height="250" width="333"></canvas>
+                <div class="total">
+                    <h1 style="color:green;" id="totalBalance">$</h1>
+                </div>
+            </div>
+            <div class="chart hcenter">
+                <canvas id="donut2" height="250" width="333"></canvas>
+                <div class="total">
+                    <h1 style="color:red;"> $2,832 </h1>
+                </div>
+            </div>
+            <div id="lineshw" class="chart hcenter">
+                <canvas id="line" height="250" width="300"></canvas>
+            </div>
+        </div>
     </div>
-  </div>
+    <div class="footer maxwidth bottom">
+        <div class="footerlnks hcenter nwidth">
+            <a href="/workinprogress"> Contact Us </a>
+            <a href="/workinprogress"> Leave Feedback </a>
+            <a href="/workinprogress"> FAQ </a>
+        </div>
+    </div>
 
-<script>
-//console.log(getUserTransactions());
-var aggregateUserIncome = [0, 10, 20];
-var aggregateUserOutcome = [10, 10, 0];
-var labels = ['Credit','Savings','Investments','Loans'];
-var colors = ['rgb(105, 214, 81)','rgb(0, 176, 155)','rgb(0, 73, 176)'];
-drawIn(aggregateUserIncome);
-//
- drawOut(aggregateUserOutcome);
-//drawInOut(aggregateUserIncome, aggregateUserOutcome);
-drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
-//
-// var userData = getUserAccounts().then(function(success){
-//     createPieChartData(success).then(function(successData){
-//         drawPieChart(successData, "donut1", colors, labels);
-//     })
-// });
+    <script>
+        var labels = ['Credit', 'Savings', 'Investments', 'Loans'];
+        var colors = ['rgb(105, 214, 81)', 'rgb(0, 176, 155)', 'rgb(0, 73, 176)'];
+        //drawIn(aggregateUserIncome);
+        //
+        //drawOut(aggregateUserOutcome);
+        //drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
 
 
-getUserKnotterdataSafe().then(function(knotterJSON){
-    console.log(knotterJSON);
-    createCategoryInData(knotterJSON).then(function(userIn){
-        document.getElementById("checkingIn").innerHTML += userIn[0];
-        document.getElementById("savingsIn").innerHTML += userIn[1];
-        document.getElementById("investmentsOut").innerHTML += userIn[2];
-    });
-    createCategoryOutData(knotterJSON).then(function(userOut){
-        document.getElementById("checkingOut").innerHTML += userOut[0];
-        document.getElementById("savingsOut").innerHTML += userOut[1];
-        document.getElementById("investmentsOut").innerHTML += userOut[2];
-    });
-    createCategoryBalanceData(knotterJSON).then(function(userTotal){
-        document.getElementById("checkingTotal").innerHTML += userTotal[0];
-        document.getElementById("savingsTotal").innerHTML += userTotal[1];
-        document.getElementById("investmentsTotal").innerHTML += userTotal[2];
-    });
-});
+        getUserKnotterdataSafe().then(function(knotterJSON) {
+            console.log(knotterJSON);
+            createCategoryInData(knotterJSON).then(function(userIn) {
+                document.getElementById("checkingIn").innerHTML += userIn[0];
+                document.getElementById("savingsIn").innerHTML += userIn[1];
+                document.getElementById("investmentIn").innerHTML += userIn[2];
+            });
+            createCategoryOutData(knotterJSON).then(function(userOut) {
+                document.getElementById("checkingOut").innerHTML += userOut[0];
+                document.getElementById("savingsOut").innerHTML += userOut[1];
+                document.getElementById("investmentOut").innerHTML += userOut[2];
+            });
+            createCategoryBalanceData(knotterJSON).then(function(userTotal) {
+                document.getElementById("checkingTotal").innerHTML += userTotal[0];
+                document.getElementById("savingsTotal").innerHTML += userTotal[1];
+                document.getElementById("investmentTotal").innerHTML += userTotal[2];
+                //drawPieChart(userTotal, "donut1", colors, labels);
+                document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2]));
+            });
+            renderInsCards(knotterJSON);
 
+        });
 
-</script>
-
-<script>
-       var handler = Plaid.create({
-           apiVersion: 'v2',
-           clientName: 'Plaid Walkthrough Demo',
-           env: '<%= PLAID_ENV %>',
-           product: ['transactions'],
-           key: '<%= PLAID_PUBLIC_KEY %>',
-           onSuccess: function(public_token) {
-               $.post('/get_access_token', {
-                   public_token: public_token
-               }, function() {
-                   $('#container').fadeOut('fast', function() {
-                       $('#intro').hide();
-                       $('#app, #steps').fadeIn('slow');
-                   });
-                   $.get("/api/refresh_cache").success(
-                       function(success) {
-                           //getUserDataFromCache()
-                       });
-               });
-           },
-           onExit: function(error, metadata) {
-               /*error = {
-                display_message: "The credentials were ...",
-                error_code: "INVALID_CREDENTIALS",
-                error_message: "the credentials were ...",
-                error_type: "ITEM_ERROR",
-               }
-               metadata = {
-                link_session_id: "dc21685c-192e-4969-b4e9-bab890daae31",
-                institution: {
-                 name: "Wells Fargo",
-                 institution_id: "ins_4"
-                },
-                status: "requires_credentials"
-               }
-               Save data from the onExit handler*/
-               console.log(error);
-               console.log(metadata);
-               /*supportHandler.report({
-                   error: error,
-                   institution: metadata.institution,
-                   link_session_id: metadata.link_session_id,
-                   status: metadata.status,
-               });*/
-           }
-       });
-       $('#link-btn').on('click', function(e) {
-           handler.open();
-       });
-       handler.onExit
-   </script>
+        var handler = Plaid.create({
+            apiVersion: 'v2',
+            clientName: 'Plaid Walkthrough Demo',
+            env: '<%= PLAID_ENV %>',
+            product: ['transactions'],
+            key: '<%= PLAID_PUBLIC_KEY %>',
+            onSuccess: function(public_token) {
+                $.post('/get_access_token', {
+                    public_token: public_token
+                }, function() {
+                    $('#container').fadeOut('fast', function() {
+                        $('#intro').hide();
+                        $('#app, #steps').fadeIn('slow');
+                    });
+                    $.get("/api/refresh_cache").success(
+                        function(success) {
+                            //getUserDataFromCache()
+                        });
+                });
+            },
+            onExit: function(error, metadata) {
+                /*error = {
+                 display_message: "The credentials were ...",
+                 error_code: "INVALID_CREDENTIALS",
+                 error_message: "the credentials were ...",
+                 error_type: "ITEM_ERROR",
+                }
+                metadata = {
+                 link_session_id: "dc21685c-192e-4969-b4e9-bab890daae31",
+                 institution: {
+                  name: "Wells Fargo",
+                  institution_id: "ins_4"
+                 },
+                 status: "requires_credentials"
+                }
+                Save data from the onExit handler*/
+                console.log(error);
+                console.log(metadata);
+                /*supportHandler.report({
+                    error: error,
+                    institution: metadata.institution,
+                    link_session_id: metadata.link_session_id,
+                    status: metadata.status,
+                });*/
+            }
+        });
+        $('#link-btn').on('click', function(e) {
+            handler.open();
+        });
+        handler.onExit
+    </script>
 
 
 </body>
+
 </html>
