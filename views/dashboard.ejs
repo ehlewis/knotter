@@ -46,13 +46,12 @@
             </div>
             <hr noshade>
             <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p id="savingsIn"></p>
+              <div class="bnktotal bnknums">
+                <p id="savingsTotal">Total: </p>
               </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p id="savingsOut"></p>
+              <div class="inout bnknums">
+                <p id="savingsIn">In: </p>
+                <p id="savingsOut">Out: </p>
               </div>
             </div>
           </div>
@@ -63,30 +62,28 @@
             </div>
             <hr noshade>
             <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p id="checkingIn"></p>
+              <div class="bnktotal bnknums">
+                <p id="checkingTotal">Total: </p>
               </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p id="checkingOut"></p>
+              <div class="inout bnknums">
+                <p id="checkingIn">In: </p>
+                <p id="checkingOut">Out: </p>
               </div>
             </div>
           </div>
           <!-- NEXT CARD -->
           <div class="cardcontainer fradius">
             <div class="category hcenter">
-              <p> Investments <p>
+              <p> Investment <p>
             </div>
             <hr noshade>
             <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p id="investmentsIn"></p>
+              <div class="bnktotal bnknums">
+                <p id="investmentTotal">Total: </p>
               </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p id="investmentsOut"></p>
+              <div class="inout bnknums">
+                <p id="investmentIn">In: </p>
+                <p id="investmentOut">Out: </p>
               </div>
             </div>
           </div>
@@ -104,67 +101,17 @@
             </div>
             <hr noshade>
             <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p>$3,402</p>
+              <div class="bnktotal bnknums">
+                <p id="bankTotal">Total: </p>
               </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p>$2,832</p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p>$3,402</p>
-              </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p>$2,832</p>
+              <div class="inout bnknums">
+                <p id="bankIn">In: </p>
+                <p id="bankOut">Out: </p>
               </div>
             </div>
           </div>
           <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p>$3,402</p>
-              </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p>$2,832</p>
-              </div>
-            </div>
-          </div>
-          <!-- NEXT CARD -->
-          <div class="cardcontainer fradius">
-            <div class="banklogo hcenter">
-              <img src="assets/bankLogos/BoA.svg" class="logosvg">
-            </div>
-            <hr noshade>
-            <div class="totals">
-              <div class="bnktotal">
-                <p>In:</p>
-                <p>$3,402</p>
-              </div>
-              <div class="bnktotal">
-                <p>Out:</p>
-                <p>$2,832</p>
-              </div>
-            </div>
-          </div>
+
           <!-- NEXT CARD -->
           <div id="link-btn" class="cardcontainer fradius">
             <p> + </p>
@@ -178,7 +125,7 @@
       <div class="chart hcenter">
         <canvas id="donut1" height="250" width="333"></canvas>
         <div class="total">
-          <h1 style="color:green;"> $3,402 </h1>
+          <h1 style="color:green;" id="totalBalance">$</h1>
         </div>
       </div>
       <div class="chart hcenter">
@@ -206,9 +153,9 @@ var aggregateUserIncome = [0, 10, 20];
 var aggregateUserOutcome = [10, 10, 0];
 var labels = ['Credit','Savings','Investments','Loans'];
 var colors = ['rgb(105, 214, 81)','rgb(0, 176, 155)','rgb(0, 73, 176)'];
-drawIn(aggregateUserIncome);
+    //drawIn(aggregateUserIncome);
 //
- drawOut(aggregateUserOutcome);
+    //drawOut(aggregateUserOutcome);
 //drawInOut(aggregateUserIncome, aggregateUserOutcome);
 drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
 //
@@ -222,14 +169,21 @@ drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
 getUserKnotterdataSafe().then(function(knotterJSON){
     console.log(knotterJSON);
     createCategoryInData(knotterJSON).then(function(userIn){
-        document.getElementById("checkingIn").innerHTML = userIn[0];
-        document.getElementById("savingsIn").innerHTML = userIn[1];
-        document.getElementById("investmentsOut").innerHTML = userIn[2];
+        document.getElementById("checkingIn").innerHTML += userIn[0];
+        document.getElementById("savingsIn").innerHTML += userIn[1];
+        document.getElementById("investmentIn").innerHTML += userIn[2];
     });
     createCategoryOutData(knotterJSON).then(function(userOut){
-        document.getElementById("checkingOut").innerHTML = userOut[0];
-        document.getElementById("savingsOut").innerHTML = userOut[1];
-        document.getElementById("investmentsOut").innerHTML = userOut[2];
+        document.getElementById("checkingOut").innerHTML += userOut[0];
+        document.getElementById("savingsOut").innerHTML += userOut[1];
+        document.getElementById("investmentOut").innerHTML += userOut[2];
+    });
+    createCategoryBalanceData(knotterJSON).then(function(userTotal){
+        document.getElementById("checkingTotal").innerHTML += userTotal[0];
+        document.getElementById("savingsTotal").innerHTML += userTotal[1];
+        document.getElementById("investmentTotal").innerHTML += userTotal[2];
+        drawPieChart(userTotal, "donut1", colors, labels);
+        document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0])+Number(userTotal[1])+Number(userTotal[2]));
     });
 });
 
@@ -253,7 +207,7 @@ getUserKnotterdataSafe().then(function(knotterJSON){
                    });
                    $.get("/api/refresh_cache").success(
                        function(success) {
-                           getUserDataFromCache()
+                           //getUserDataFromCache()
                        });
                });
            },
