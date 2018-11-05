@@ -63,11 +63,11 @@
             <hr noshade>
             <div class="totals">
               <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
+                <p id="checkingTotal">Total: </p>
               </div>
               <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
+                <p id="checkingIn">In: </p>
+                <p id="checkingOut">Out: </p>
               </div>
             </div>
           </div>
@@ -79,11 +79,11 @@
             <hr noshade>
             <div class="totals">
               <div class="bnktotal bnknums">
-                <p id="savingsTotal">Total: </p>
+                <p id="investmentTotal">Total: </p>
               </div>
               <div class="inout bnknums">
-                <p id="savingsIn">In: </p>
-                <p id="savingsOut">Out: </p>
+                <p id="investmentIn">In: </p>
+                <p id="investmentOut">Out: </p>
               </div>
             </div>
           </div>
@@ -231,14 +231,19 @@ drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
 getUserKnotterdataSafe().then(function(knotterJSON){
     console.log(knotterJSON);
     createCategoryInData(knotterJSON).then(function(userIn){
-        document.getElementById("checkingIn").innerHTML = userIn[0];
-        document.getElementById("savingsIn").innerHTML = userIn[1];
-        document.getElementById("investmentsOut").innerHTML = userIn[2];
+        document.getElementById("checkingIn").innerHTML += userIn[0];
+        document.getElementById("savingsIn").innerHTML += userIn[1];
+        document.getElementById("investmentsOut").innerHTML += userIn[2];
     });
     createCategoryOutData(knotterJSON).then(function(userOut){
-        document.getElementById("checkingOut").innerHTML = userOut[0];
-        document.getElementById("savingsOut").innerHTML = userOut[1];
-        document.getElementById("investmentsOut").innerHTML = userOut[2];
+        document.getElementById("checkingOut").innerHTML += userOut[0];
+        document.getElementById("savingsOut").innerHTML += userOut[1];
+        document.getElementById("investmentsOut").innerHTML += userOut[2];
+    });
+    createCategoryBalanceData(knotterJSON).then(function(userTotal){
+        document.getElementById("checkingTotal").innerHTML += userTotal[0];
+        document.getElementById("savingsTotal").innerHTML += userTotal[1];
+        document.getElementById("investmentsTotal").innerHTML += userTotal[2];
     });
 });
 
