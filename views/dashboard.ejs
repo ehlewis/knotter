@@ -175,7 +175,7 @@
                 document.getElementById("checkingTotal").innerHTML += userTotal[0];
                 document.getElementById("savingsTotal").innerHTML += userTotal[1];
                 document.getElementById("investmentTotal").innerHTML += userTotal[2];
-                //drawPieChart(userTotal, "donut1", colors, labels);
+                drawPieChart(userTotal, "donut1", colors, labels);
                 document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2]));
             });
             renderInsCards(knotterJSON);
