@@ -370,7 +370,12 @@ function createCategoryBalanceData(userData){
 
 function renderInsCards(userData){
     for (var institution = 0; institution < userData.length; institution++) {
-        document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+userData[institution].item.institution_id+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'">Total: </p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'">In: </p><p id="bankOut_'+userData[institution].item.institution_id+'">Out: </p></div></div></div>'
+        if (userData[institution] != null){
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+userData[institution].item.institution_id+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'">Total: </p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'">In: </p><p id="bankOut_'+userData[institution].item.institution_id+'">Out: </p></div></div></div>'
+        }
+        else{
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>Total: ERROR </p></div><div class="inout bnknums"><p">In: ERROR</p><p>Out: ERROR </p></div></div></div>'
+        }
     }
 }
 
@@ -390,4 +395,3 @@ function renderInsCards(userData){
         </div>
     </div>
 </div>*/
-

@@ -236,15 +236,7 @@
 
 
     <script>
-    // Create a public_token for use with Plaid Link's update mode
-    client.createPublicToken(ACCESS_TOKEN, (err, result) => {
-        // Handle err
-        // Use the generated public_token to initialize Plaid Link in update
-        // mode for a user's Item so that they can provide updated credentials
-        // or MFA information
-        const publicToken = result.public_token;
-        // Initialize Link with the token parameter
-        // set to the generated public_token for the Item
+    getPublicToken(access_token).then(function(token){
         var linkHandler = Plaid.create({
             env: '<%= PLAID_ENV %>',
             clientName: 'Knotter',
@@ -274,7 +266,9 @@
             // credential view to your user.
             linkHandler.open();
         };
+        // Create a public_token for use with Plaid Link's update mode
     });
+
 </script>
 
 

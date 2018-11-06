@@ -415,5 +415,20 @@ module.exports = {
                 }
             }
         });
-    }
+    },
+
+    createTempPublicToken: function(request, response, next){
+        return new Promise(function (resolve, reject) {
+            client.createPublicToken(request.body.access_token, (err, result) => {
+                // Handle err
+                // Use the generated public_token to initialize Plaid Link in update
+                // mode for a user's Item so that they can provide updated credentials
+                // or MFA information
+                const publicToken = result.public_token;
+                // Initialize Link with the token parameter
+                // set to the generated public_token for the Item
+                resolve(publicToken);
+            }
+        }
+    });
 };
