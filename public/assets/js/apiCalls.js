@@ -133,3 +133,48 @@ function getUser() {
         return data;
     });
 }
+
+function linkUpdateMode(item_id){
+
+    //Find the access_token associated with the ITEM_ID
+    
+
+    $.post('/api/get_public_token', {
+        access_token: access_token_ex
+    }, function(response) {
+        console.log(response);
+        var linkHandler = Plaid.create({
+            env: '<%= PLAID_ENV %>',
+            clientName: 'Knotter',
+            key: '<%= PLAID_PUBLIC_KEY %>',
+            product: ['transactions'],
+            token: response.publicToken,
+            onSuccess: function(public_token, metadata) {
+                // You do not need to repeat the /item/public_token/exchange
+                // process when a user uses Link in update mode.
+                // The Item's access_token has not changed.
+            },
+            onExit: function(err, metadata) {
+                // The user exited the Link flow.
+                if (err != null) {
+                    // The user encountered a Plaid API error prior
+                    // to exiting.
+                }
+                // metadata contains the most recent API request ID and the
+                // Link session ID. Storing this information is helpful
+                // for support.
+            }
+        });
+        // Trigger the authentication view
+
+            // Link will automatically detect the institution ID
+            // associated with the public token and present the
+            // credential view to your user.
+            document.getElementById('linkButton').onclick = function() {
+                // Link will automatically detect the institution ID
+                // associated with the public token and present the
+                // credential view to your user.
+                linkHandler.open();
+            };
+    });
+}
