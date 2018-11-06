@@ -78,16 +78,19 @@ global.redis = require("redis");
 var redis_setup = require('./app/config/redis_setup')();
 var plaid_setup = require("./app/config/plaid_setup");
 
-//Set up HTTPS
-var https = require('https');
+//Set up HTTPS and use HTTP2
+var spdy = require('spdy');
 var helmet = require("helmet");
 
 var ssl_key = fs.readFileSync('./ssl/localhost.key');
 var ssl_cert = fs.readFileSync('./ssl/localhost.crt');
 
-const httpsOptions = {
+const spdyOptions = {
     key: ssl_key,
-    cert: ssl_cert
+    cert: ssl_cert,
+    spdy: {
+        protocols: [ 'h2', 'http/1.1' ]
+    }
 };
 
 
@@ -373,7 +376,7 @@ app.get('*', function(request, response) {
 
 // =====launch=====
 
-const server = https.createServer(httpsOptions, app).listen(SSL_PORT, function() {
+const server = spdy.createServer(spdyOptions, app).listen(SSL_PORT, function() {
     logger.info('HTTPS server started on port 443');
 });
 
