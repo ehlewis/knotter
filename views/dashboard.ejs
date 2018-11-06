@@ -184,7 +184,7 @@
 
         var handler = Plaid.create({
             apiVersion: 'v2',
-            clientName: 'Plaid Walkthrough Demo',
+            clientName: 'Knotter',
             env: '<%= PLAID_ENV %>',
             product: ['transactions'],
             key: '<%= PLAID_PUBLIC_KEY %>',
@@ -233,6 +233,49 @@
         });
         handler.onExit
     </script>
+
+
+    <script>
+    // Create a public_token for use with Plaid Link's update mode
+    client.createPublicToken(ACCESS_TOKEN, (err, result) => {
+        // Handle err
+        // Use the generated public_token to initialize Plaid Link in update
+        // mode for a user's Item so that they can provide updated credentials
+        // or MFA information
+        const publicToken = result.public_token;
+        // Initialize Link with the token parameter
+        // set to the generated public_token for the Item
+        var linkHandler = Plaid.create({
+            env: '<%= PLAID_ENV %>',
+            clientName: 'Knotter',
+            key: '<%= PLAID_PUBLIC_KEY %>',
+            product: ['transactions'],
+            token: 'GENERATED_PUBLIC_TOKEN',
+            onSuccess: function(public_token, metadata) {
+                // You do not need to repeat the /item/public_token/exchange
+                // process when a user uses Link in update mode.
+                // The Item's access_token has not changed.
+            },
+            onExit: function(err, metadata) {
+                // The user exited the Link flow.
+                if (err != null) {
+                    // The user encountered a Plaid API error prior
+                    // to exiting.
+                }
+                // metadata contains the most recent API request ID and the
+                // Link session ID. Storing this information is helpful
+                // for support.
+            }
+        });
+        // Trigger the authentication view
+        document.getElementById('linkButton').onclick = function() {
+            // Link will automatically detect the institution ID
+            // associated with the public token and present the
+            // credential view to your user.
+            linkHandler.open();
+        };
+    });
+</script>
 
 
 </body>
