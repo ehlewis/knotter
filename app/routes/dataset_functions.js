@@ -256,8 +256,8 @@ module.exports = {
                         offset: 0,
                     }, function(error, transactionsResponse) {
                         if (error != null) {
-                            logger.error(request.user._id + error);
-                            response_array.push(request.user._id + error);
+                            logger.error(error);
+                            response_array.push(error);
                             return;
                         }
                         response_array.push(transactionsResponse);
@@ -305,8 +305,8 @@ module.exports = {
                         offset: 0,
                     }, function(error, transactionsResponse) {
                         if (error != null) {
-                            logger.error(request.user._id + error);
-                            response_array.push(request.user._id + error);
+                            logger.error(error);
+                            response_array.push(error);
                             return;
                         }
                         response_array.push(transactionsResponse);
@@ -318,21 +318,30 @@ module.exports = {
                 plaidData = JSON.parse(JSON.stringify(response_array));
                 var knotterJSON = plaidData;
 
-                for (var i = 0; i < knotterJSON.length; i++) {
-                    for (var j = 0; j < knotterJSON[i].accounts.length; j++) {
-                        knotterJSON[i].accounts[j].transactions = new Array();
-                        //knotterJSON[i].accounts[j].transactions.push("AAAAA");
+                for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
+                    if(knotterJSON[institutionCounter].accounts){
+                        for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                            knotterJSON[institutionCounter].accounts[accountCounter].transactions = new Array();
+                        }
+                    }
+                    else{
+                        //pass
                     }
                 }
                 for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
-                    for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
-                        for (var transactionCounter = 0; transactionCounter < knotterJSON[institutionCounter].transactions.length; transactionCounter++) {
-                            if (knotterJSON[institutionCounter].accounts[accountCounter].account_id == knotterJSON[institutionCounter].transactions[transactionCounter].account_id){
-                                knotterJSON[institutionCounter].accounts[accountCounter].transactions.push(knotterJSON[institutionCounter].transactions[transactionCounter]);
+                    if(knotterJSON[institutionCounter].accounts){
+                        for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                            for (var transactionCounter = 0; transactionCounter < knotterJSON[institutionCounter].transactions.length; transactionCounter++) {
+                                if (knotterJSON[institutionCounter].accounts[accountCounter].account_id == knotterJSON[institutionCounter].transactions[transactionCounter].account_id){
+                                    knotterJSON[institutionCounter].accounts[accountCounter].transactions.push(knotterJSON[institutionCounter].transactions[transactionCounter]);
+                                }
                             }
                         }
+                        delete knotterJSON[institutionCounter].transactions;
                     }
-                    delete knotterJSON[institutionCounter].transactions;
+                    else{
+                        //pass
+                    }
                 }
 
                 redis_client.set(request.user._id.toString() + "knotterdata", JSON.stringify(knotterJSON), redis.print);

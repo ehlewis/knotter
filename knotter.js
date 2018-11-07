@@ -276,6 +276,23 @@ app.get('/api/health_check', function(request, response, next) {
     response.sendStatus(200);
 }); //Returns status code 200 if the server is alive
 
+app.get('/api/sandbox_rest_login', function(request, response, next) {
+    plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response)
+    {
+      // Handle err
+      // create a public_token for the Item
+      console.log(reset_login_response);
+        // Handle err
+        // Use the generated public_token to
+        // initialize Link in update mode
+        response.sendStatus(200);
+
+    });
+
+
+}); //Returns status code 200 if the server is alive
+
+
 //=====API Post=====
 
 app.post('/api/remove_item', function(request, response, next) {
