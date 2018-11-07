@@ -304,9 +304,7 @@ function renderInsCards(userData){
 </div>*/
 
 function linkUpdateMode(access_token_update){
-
     //Find the access_token associated with the ITEM_ID
-    console.log(access_token_update);
     $.post('/api/get_public_token', {
         access_token: access_token_update
     }, function(response) {

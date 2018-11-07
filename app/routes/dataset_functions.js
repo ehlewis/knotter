@@ -299,18 +299,19 @@ module.exports = {
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
             for (var i = 0; i < num; i++) {
-                var a_token = request.user.items[i].access_token;
+                //var a_token = request.user.items[i].access_token; //creates the wrong access token because its outside of the for look
                 myPromises.push(
                     plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
                         count: 250,
                         offset: 0,
                     }, function(error, transactionsResponse) {
-                        if (error != null) {
+                        if (error) {
                             logger.error(error);
                             //console.log(a_token);
-                            //console.log(request.user.items[i].access_token);
+                            //console.log(i);
+                            //console.log(request.user.items[i].access_token); //need to find this value inside the promise
 
-                            error.access_token = a_token;
+                            //error.access_token = a_token;
                             response_array.push(error);
                             return;
                         }
