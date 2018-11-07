@@ -299,6 +299,7 @@ module.exports = {
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
             for (var i = 0; i < num; i++) {
+                var a_token = request.user.items[i].access_token;
                 myPromises.push(
                     plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
                         count: 250,
@@ -306,6 +307,10 @@ module.exports = {
                     }, function(error, transactionsResponse) {
                         if (error != null) {
                             logger.error(error);
+                            //console.log(a_token);
+                            //console.log(request.user.items[i].access_token);
+
+                            error.access_token = a_token;
                             response_array.push(error);
                             return;
                         }
@@ -350,13 +355,6 @@ module.exports = {
                 resolve();
             });
         });
-
-
-
-
-
-
-
     },
 
     get_knotter_data: function(request, response, next) {
@@ -430,13 +428,20 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             plaid_client.createPublicToken(request.body.access_token, (err, result) => {
                 // Handle err
+                if(err){
+                    logger.error("error");
+                    reject(err);
+                }
                 // Use the generated public_token to initialize Plaid Link in update
                 // mode for a user's Item so that they can provide updated credentials
                 // or MFA information
-                const publicToken = result.public_token;
+                else{
+                    const publicToken = result.public_token;
+                    resolve(publicToken);
+                }
                 // Initialize Link with the token parameter
                 // set to the generated public_token for the Item
-                resolve(publicToken);
+
             });
         });
     }
