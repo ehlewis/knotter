@@ -110,4 +110,8 @@ https://stackoverflow.com/questions/38190193/registering-service-worker-in-a-dif
 
 https://blog.cloudboost.io/mongodb-express-angularjs-1-6-and-nodejs-mean-part-2-be11709626fe
 
+https://cipherli.st/
+
 https://webapplog.com/http2-node/
+
+https://stackoverflow.com/questions/35318442/how-to-pass-parameter-to-a-promise-function

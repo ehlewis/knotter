@@ -60,7 +60,7 @@ function getUserKnotterdataSafe() {
                                     if (knotterdata != null) {
                                         resolve(knotterdata);
                                     } else {
-                                        cosnole.log("Error: Could not get transactions after cache refresh");
+                                        console.log("Error: Could not get transactions after cache refresh");
                                     }
                                 }).error(
                                 function(error) {
