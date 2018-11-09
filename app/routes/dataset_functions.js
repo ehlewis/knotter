@@ -301,23 +301,8 @@ module.exports = {
             for (var i = 0; i < num; i++) {
                 //var a_token = request.user.items[i].access_token; //creates the wrong access token because its outside of the for look
                 myPromises.push(
-                    plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
-                        count: 250,
-                        offset: 0,
-                    }, function(error, transactionsResponse) {
-                        if (error) {
-                            logger.error(error);
-                            //console.log(a_token);
-                            //console.log(i);
-                            //console.log(request.user.items[i].access_token); //need to find this value inside the promise
-
-                            //error.access_token = a_token;
-                            response_array.push(error);
-                            return;
-                        }
-                        response_array.push(transactionsResponse);
-                        return;
-                    }));
+                        getTransactionsHelper(request.user.items[i].access_token, startDate, endDate).then(function(answer){response_array.push(answer)})
+                    );
             }
             BPromise.all(myPromises).then(function() {
 
@@ -447,3 +432,19 @@ module.exports = {
         });
     }
 };
+
+function getTransactionsHelper(access_token, startDate, endDate){
+    return new Promise(function (resolve, reject) {
+        plaid_client.getTransactions(access_token, startDate, endDate, {
+            count: 250,
+            offset: 0,
+        }, function(error, transactionsResponse) {
+            if (error) {
+                logger.error(error);
+                error.access_token = access_token;
+                resolve(error);
+            }
+            resolve(transactionsResponse);
+        })
+    });
+}
