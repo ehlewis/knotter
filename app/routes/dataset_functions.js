@@ -256,8 +256,8 @@ module.exports = {
                         offset: 0,
                     }, function(error, transactionsResponse) {
                         if (error != null) {
-                            logger.error(request.user._id + error);
-                            response_array.push(request.user._id + error);
+                            logger.error(error);
+                            response_array.push(error);
                             return;
                         }
                         response_array.push(transactionsResponse);
@@ -299,40 +299,40 @@ module.exports = {
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
             for (var i = 0; i < num; i++) {
+                //var a_token = request.user.items[i].access_token; //creates the wrong access token because its outside of the for look
                 myPromises.push(
-                    plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
-                        count: 250,
-                        offset: 0,
-                    }, function(error, transactionsResponse) {
-                        if (error != null) {
-                            logger.error(request.user._id + error);
-                            response_array.push(request.user._id + error);
-                            return;
-                        }
-                        response_array.push(transactionsResponse);
-                        return;
-                    }));
+                        getTransactionsHelper(request.user.items[i].access_token, startDate, endDate).then(function(answer){response_array.push(answer)})
+                    );
             }
             BPromise.all(myPromises).then(function() {
 
                 plaidData = JSON.parse(JSON.stringify(response_array));
                 var knotterJSON = plaidData;
 
-                for (var i = 0; i < knotterJSON.length; i++) {
-                    for (var j = 0; j < knotterJSON[i].accounts.length; j++) {
-                        knotterJSON[i].accounts[j].transactions = new Array();
-                        //knotterJSON[i].accounts[j].transactions.push("AAAAA");
+                for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
+                    if(knotterJSON[institutionCounter].accounts){
+                        for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                            knotterJSON[institutionCounter].accounts[accountCounter].transactions = new Array();
+                        }
+                    }
+                    else{
+                        //pass
                     }
                 }
                 for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
-                    for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
-                        for (var transactionCounter = 0; transactionCounter < knotterJSON[institutionCounter].transactions.length; transactionCounter++) {
-                            if (knotterJSON[institutionCounter].accounts[accountCounter].account_id == knotterJSON[institutionCounter].transactions[transactionCounter].account_id){
-                                knotterJSON[institutionCounter].accounts[accountCounter].transactions.push(knotterJSON[institutionCounter].transactions[transactionCounter]);
+                    if(knotterJSON[institutionCounter].accounts){
+                        for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                            for (var transactionCounter = 0; transactionCounter < knotterJSON[institutionCounter].transactions.length; transactionCounter++) {
+                                if (knotterJSON[institutionCounter].accounts[accountCounter].account_id == knotterJSON[institutionCounter].transactions[transactionCounter].account_id){
+                                    knotterJSON[institutionCounter].accounts[accountCounter].transactions.push(knotterJSON[institutionCounter].transactions[transactionCounter]);
+                                }
                             }
                         }
+                        delete knotterJSON[institutionCounter].transactions;
                     }
-                    delete knotterJSON[institutionCounter].transactions;
+                    else{
+                        //pass
+                    }
                 }
 
                 redis_client.set(request.user._id.toString() + "knotterdata", JSON.stringify(knotterJSON), redis.print);
@@ -341,13 +341,6 @@ module.exports = {
                 resolve();
             });
         });
-
-
-
-
-
-
-
     },
 
     get_knotter_data: function(request, response, next) {
@@ -415,5 +408,43 @@ module.exports = {
                 }
             }
         });
+    },
+
+    createTempPublicToken: function(request, response, next){
+        return new Promise(function (resolve, reject) {
+            plaid_client.createPublicToken(request.body.access_token, (err, result) => {
+                // Handle err
+                if(err){
+                    logger.error("error");
+                    reject(err);
+                }
+                // Use the generated public_token to initialize Plaid Link in update
+                // mode for a user's Item so that they can provide updated credentials
+                // or MFA information
+                else{
+                    const publicToken = result.public_token;
+                    resolve(publicToken);
+                }
+                // Initialize Link with the token parameter
+                // set to the generated public_token for the Item
+
+            });
+        });
     }
 };
+
+function getTransactionsHelper(access_token, startDate, endDate){
+    return new Promise(function (resolve, reject) {
+        plaid_client.getTransactions(access_token, startDate, endDate, {
+            count: 250,
+            offset: 0,
+        }, function(error, transactionsResponse) {
+            if (error) {
+                logger.error(error);
+                error.access_token = access_token;
+                resolve(error);
+            }
+            resolve(transactionsResponse);
+        })
+    });
+}
