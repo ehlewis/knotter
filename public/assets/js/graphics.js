@@ -27,7 +27,7 @@ function drawPieChart(userData, chart, colors, labels){
 
 //Creates OUT data by CATEGORY by for'ing through each account and then for'ing through it's transactions, matching each account to it's category and then summing all POSITIVE transactions to the appropriate entry in the running category total array.
 function createCategoryInData(userData){
-    //['Checking','Savings','Investments','Loans']
+    //['Checking','Savings','Investments','Credit']
     return new Promise(function(resolve, reject) {
         var categoryData = [0,0,0,0];
         for (var institution = 0; institution < userData.length; institution++) {
@@ -60,13 +60,14 @@ function createCategoryInData(userData){
                 }
             }
         }
-        resolve(parseFloat(categoryData).toFixed(2));
+        resolve(categoryData);
+        //resolve(parseFloat(categoryData).toFixed(2));
     });
 }
 
 //Creates OUT data by CATEGORY by for'ing through each account and then for'ing through it's transactions, matching each account to it's category and then summing all NEGATIVE transactions to the appropriate entry in the running category total array.
 function createCategoryOutData(userData){
-    //['Checking','Savings','Investments','Loans']
+    //['Checking','Savings','Investments','Credit']
     return new Promise(function(resolve, reject) {
         var categoryData = [0,0,0,0];
         for (var institution = 0; institution < userData.length; institution++) {
@@ -99,7 +100,7 @@ function createCategoryOutData(userData){
                 }
             }
         }
-        resolve(parseFloat(categoryData).toFixed(2));
+        resolve(categoryData);
     });
 }
 
@@ -172,7 +173,6 @@ function createInstitutionInData(userData, insId){
                 }
             }
         }
-        console.log(accountData);
         resolve(accountData);
     });
 }
@@ -198,14 +198,13 @@ function createInstitutionOutData(userData, insId){
                 }
             }
         }
-        console.log(accountData);
         resolve(accountData);
     });
 }
 
 // Creates BALANCE data by CATEGORY by for'ing through each account and matching the account.subtype to a category then adding its available balance to the appropriate entry in the running category total array.
 function createCategoryBalanceData(userData){
-    //['Checking','Savings','Investments','Loans']
+    //['Checking','Savings','Investments','Credit']
     return new Promise(function(resolve, reject) {
         var categoryData = [0,0,0,0];
         for (var institution = 0; institution < userData.length; institution++) {
