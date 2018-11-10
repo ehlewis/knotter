@@ -116,7 +116,7 @@
                     <!-- NEXT CARD -->
 
                     <!-- NEXT CARD -->
-                    <div id="link-btn" class="cardcontainer fradius">
+                    <div id="link-btn" class="cardcontainer fradius" onclick="handlerOpen()">
                         <p> + </p>
                     </div>
                     <!-- NEXT CARD  -->
@@ -153,10 +153,7 @@
     <script>
         var labels = ['Credit', 'Savings', 'Investments', 'Loans'];
         var colors = ['rgb(105, 214, 81)', 'rgb(0, 176, 155)', 'rgb(0, 73, 176)'];
-        //drawIn(aggregateUserIncome);
-        //
-        //drawOut(aggregateUserOutcome);
-        //drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
+
 
 
         getUserKnotterdataSafe().then(function(knotterJSON) {
@@ -179,8 +176,6 @@
                 document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2]));
             });
             renderInsCards(knotterJSON);
-
-
         });
 
         var handler = Plaid.create({
@@ -204,23 +199,12 @@
                 });
             },
             onExit: function(error, metadata) {
-                /*error = {
-                 display_message: "The credentials were ...",
-                 error_code: "INVALID_CREDENTIALS",
-                 error_message: "the credentials were ...",
-                 error_type: "ITEM_ERROR",
+                if (error) {
+                    $.post('/api/log_error', {
+                        error: error,
+                        metadata: metadata
+                    });
                 }
-                metadata = {
-                 link_session_id: "dc21685c-192e-4969-b4e9-bab890daae31",
-                 institution: {
-                  name: "Wells Fargo",
-                  institution_id: "ins_4"
-                 },
-                 status: "requires_credentials"
-                }
-                Save data from the onExit handler*/
-                console.log(error);
-                console.log(metadata);
                 /*supportHandler.report({
                     error: error,
                     institution: metadata.institution,
@@ -229,10 +213,10 @@
                 });*/
             }
         });
-        $('#link-btn').on('click', function(e) {
+
+        function handlerOpen(){
             handler.open();
-        });
-        handler.onExit
+        }
     </script>
 
 
@@ -256,22 +240,20 @@
                     // process when a user uses Link in update mode.
                     // The Item's access_token has not changed.
                 },
-                onExit: function(err, metadata) {
+                onExit: function(error, metadata) {
                     // The user exited the Link flow.
-                    if (err != null) {
-                        // The user encountered a Plaid API error prior
-                        // to exiting.
+                    if (error) {
+                        $.post('/api/log_error', {
+                            error: error,
+                            metadata: metadata
+                        });
                     }
                     // metadata contains the most recent API request ID and the
                     // Link session ID. Storing this information is helpful
                     // for support.
                 }
             });
-            // Trigger the authentication view
 
-            // Link will automatically detect the institution ID
-            // associated with the public token and present the
-            // credential view to your user.
             document.getElementById(access_token_update).onclick = function() {
                 // Link will automatically detect the institution ID
                 // associated with the public token and present the

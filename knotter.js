@@ -279,7 +279,7 @@ app.get('/api/health_check', function(request, response, next) {
     response.sendStatus(200);
 }); //Returns status code 200 if the server is alive
 
-app.get('/api/sandbox_rest_login', function(request, response, next) {
+app.get('/api/sandbox_reset_login', function(request, response, next) {
     plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response)
     {
       // Handle err
@@ -330,6 +330,13 @@ app.post('/api/name', function(request, response, next) {
 
     response.redirect('/profile');
 }); //Takes the name from the POST request and inserts it in the DB under the user's entry
+
+app.post('/api/log_error', function(request, response, next) {
+    logger.error(request.error);
+    if(request.metadata){
+        logger.error(metadata);
+    }
+}); //Takes the access_token from the POST request and asks Plaid to generate a 30 minute public_token so that we can put Plaid into update mode for the item associated with the access_token
 
 //=====POSTS=====
 
