@@ -179,22 +179,22 @@
         getUserKnotterdataSafe().then(function(knotterJSON) {
             console.log(knotterJSON);
             createCategoryInData(knotterJSON).then(function(userIn) {
-                document.getElementById("checkingIn").innerHTML += userIn[0];
-                document.getElementById("savingsIn").innerHTML += userIn[1];
-                document.getElementById("investmentIn").innerHTML += userIn[2];
-                document.getElementById("creditOut").innerHTML += userIn[3];
+                document.getElementById("checkingIn").innerHTML += parseFloat(userIn[0]).toFixed(2);
+                document.getElementById("savingsIn").innerHTML += parseFloat(userIn[1]).toFixed(2);
+                document.getElementById("investmentIn").innerHTML += parseFloat(userIn[2]).toFixed(2);
+                document.getElementById("creditIn").innerHTML += parseFloat(userIn[3]).toFixed(2);
             });
             createCategoryOutData(knotterJSON).then(function(userOut) {
-                document.getElementById("checkingOut").innerHTML += userOut[0];
-                document.getElementById("savingsOut").innerHTML += userOut[1];
-                document.getElementById("investmentOut").innerHTML += userOut[2];
-                document.getElementById("creditOut").innerHTML += userOut[3];
+                document.getElementById("checkingOut").innerHTML += parseFloat(userOut[0]).toFixed(2);
+                document.getElementById("savingsOut").innerHTML += parseFloat(userOut[1]).toFixed(2);
+                document.getElementById("investmentOut").innerHTML += parseFloat(userOut[2]).toFixed(2);
+                document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);
             });
             createCategoryBalanceData(knotterJSON).then(function(userTotal) {
-                document.getElementById("checkingTotal").innerHTML += userTotal[0];
-                document.getElementById("savingsTotal").innerHTML += userTotal[1];
-                document.getElementById("investmentTotal").innerHTML += userTotal[2];
-                document.getElementById("creditTotal").innerHTML += userTotal[3];
+                document.getElementById("checkingTotal").innerHTML += parseFloat(userTotal[0]).toFixed(2);
+                document.getElementById("savingsTotal").innerHTML += parseFloat(userTotal[1]).toFixed(2);
+                document.getElementById("investmentTotal").innerHTML += parseFloat(userTotal[2]).toFixed(2);
+                document.getElementById("creditTotal").innerHTML += parseFloat(userTotal[3]).toFixed(2);
                 drawPieChart(userTotal, "donut1", colors, labels);
                 document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2]));
             });
