@@ -60,7 +60,6 @@ function createCategoryInData(userData){
                 }
             }
         }
-        console.log(parseFloat(categoryData).toFixed(2));
         resolve(parseFloat(categoryData).toFixed(2));
     });
 }
@@ -100,7 +99,6 @@ function createCategoryOutData(userData){
                 }
             }
         }
-        console.log(parseFloat(categoryData).toFixed(2));
         resolve(parseFloat(categoryData).toFixed(2));
     });
 }
@@ -125,7 +123,6 @@ function createAccountInData(userData, accountId){
                 }
             }
         }
-        console.log(accountData);
         resolve(accountData);
     });
 }
@@ -150,7 +147,6 @@ function createAccountOutData(userData, accountId){
                 }
             }
         }
-        console.log(accountData);
         resolve(accountData);
     });
 }
@@ -238,7 +234,6 @@ function createCategoryBalanceData(userData){
                 }
             }
         }
-        console.log(categoryData);
         resolve(categoryData);
     });
 }
@@ -249,7 +244,7 @@ function renderInsCards(userData){
     for (var institution = 0; institution < userData.length; institution++) {
         if(userData[institution].error_code){
             //pass
-            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius" id="' + userData[institution].access_token + '"><div class="banklogo hcenter"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>ERROR </p></div><div class="inout bnknums"><p">ERROR</p><p>ERROR </p></div></div></div>'
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius" id="' + userData[institution].access_token + '"><div class="banklogo hcenter"><img src="assets/bankLogos/error.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>ERROR </p></div><div class="inout bnknums"><p">ERROR</p><p>ERROR </p></div></div></div>'
             linkUpdateMode(userData[institution].access_token);
         }
         else{
