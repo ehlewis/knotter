@@ -249,11 +249,11 @@ function renderInsCards(userData){
     for (var institution = 0; institution < userData.length; institution++) {
         if(userData[institution].error_code){
             //pass
-            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius" id="' + userData[institution].access_token + '"><div class="banklogo hcenter"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>Total: ERROR </p></div><div class="inout bnknums"><p">In: ERROR</p><p>Out: ERROR </p></div></div></div>'
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius" id="' + userData[institution].access_token + '"><div class="banklogo hcenter"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>ERROR </p></div><div class="inout bnknums"><p">ERROR</p><p>ERROR </p></div></div></div>'
             linkUpdateMode(userData[institution].access_token);
         }
         else{
-            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+userData[institution].item.institution_id+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'">Total: </p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'">In: </p><p id="bankOut_'+userData[institution].item.institution_id+'">Out: </p></div></div></div>'
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+userData[institution].item.institution_id+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'"></p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'"></p><p id="bankOut_'+userData[institution].item.institution_id+'"> </p></div></div></div>'
         }
     }
 }
