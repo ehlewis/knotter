@@ -247,7 +247,7 @@ function renderInsCards(userData){
             linkUpdateMode(userData[institution].access_token);
         }
         else{
-            var ins_id_supported = ['ins_1','ins_2','ins_3','ins_4','ins_5','ins_6','ins_7','ins_9','ins_10','ins_11','ins_13','ins_14','ins_16','ins_19','ins_20','ins_21','ins_23','ins_24','ins_27','ins_29'];
+            var ins_id_supported = ['ins_1','ins_2','ins_3','ins_4','ins_5','ins_6','ins_7','ins_9','ins_10','ins_11','ins_13','ins_14','ins_16','ins_19','ins_20','ins_21','ins_23','ins_24','ins_27','ins_28','ins_29'];
             var logo_filename = '';
             if(ins_id_supported.includes(userData[institution].item.institution_id)){
                 logo_filename = userData[institution].item.institution_id;
