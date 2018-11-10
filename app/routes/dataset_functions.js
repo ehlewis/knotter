@@ -293,13 +293,13 @@ module.exports = {
         });
     },
 
+    //Makes an array of requests for item transactions because this call gives us all the data we need and stores it in an array. After all promises for transactions have been completed we for through and give each account in each item a new array for it's associated transactions. We then for through each item and in each item each account and then every account we hit we for through the transaction list and put any transaction whos account_id matches the account_id of the account were currently in and push it onto the array of that accounts transactions. After we get through all of the accounts in an item we delete the transactions in that item and move onto the next item. After we get through we store the data in the cache and resolve the promise.
     plaid_to_knotter_json: function(request, response, num, next) {
         return new Promise(function (resolve, reject) {
             var response_array = [];
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
             for (var i = 0; i < num; i++) {
-                //var a_token = request.user.items[i].access_token; //creates the wrong access token because its outside of the for look
                 myPromises.push(
                         getTransactionsHelper(request.user.items[i].access_token, startDate, endDate).then(function(answer){response_array.push(answer)})
                     );
@@ -415,7 +415,7 @@ module.exports = {
             plaid_client.createPublicToken(request.body.access_token, (err, result) => {
                 // Handle err
                 if(err){
-                    logger.error("error");
+                    logger.error(err);
                     reject(err);
                 }
                 // Use the generated public_token to initialize Plaid Link in update
@@ -447,4 +447,4 @@ function getTransactionsHelper(access_token, startDate, endDate){
             resolve(transactionsResponse);
         })
     });
-}
+}// This helper function is created for this call soley to allow us to attach the account_id to an error message if there is an error so we know which item threw the error. Otherwise it behaves as a standard GET from Plaid.
