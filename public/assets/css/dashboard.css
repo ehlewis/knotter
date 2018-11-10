@@ -61,7 +61,7 @@ svg > g > g:last-child { pointer-events: none }
   margin: 0 10px 20px 10px;
   cursor: pointer;
   border: 1px solid #EEEEEE;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .cardcontainer hr{
