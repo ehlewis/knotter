@@ -202,6 +202,27 @@ function createInstitutionOutData(userData, insId){
     });
 }
 
+// Creates BALANCE data by institution by for'ing through each account and  adding its available balance to the appropriate entry in the running category total.
+function createInstitutionBalanceData(userData){
+    //['Checking','Savings','Investments','Credit']
+    return new Promise(function(resolve, reject) {
+        var categoryData = 0;
+        for (var institution = 0; institution < userData.length; institution++) {
+            if(userData[institution].error_code){
+                //pass
+            }
+            else{
+                for (var account = 0; account < userData[institution].accounts.length; account++) {
+                    if(userData[institution].accounts[account].balances.available){
+                        categoryData += userData[institution].accounts[account].balances.available;
+                    }
+                }
+            }
+        }
+        resolve(categoryData);
+    });
+}
+
 // Creates BALANCE data by CATEGORY by for'ing through each account and matching the account.subtype to a category then adding its available balance to the appropriate entry in the running category total array.
 function createCategoryBalanceData(userData){
     //['Checking','Savings','Investments','Credit']
@@ -255,7 +276,7 @@ function renderInsCards(userData){
             else{
                 logo_filename = 'default';
             }
-            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'"></p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'"></p><p id="bankOut_'+userData[institution].item.institution_id+'"> </p></div></div></div>'
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'"></p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'" style="color:green;"></p><p id="bankOut_'+userData[institution].item.institution_id+'" style="color:red;"> </p></div></div></div>'
         }
     }
 }
