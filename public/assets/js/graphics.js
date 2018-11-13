@@ -38,7 +38,7 @@ function createCategoryInData(userData){
                 for (var account = 0; account < userData[institution].accounts.length; account++) {
                     for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
                         if(userData[institution].accounts[account].transactions[transaction].amount){
-                            if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            if(userData[institution].accounts[account].transactions[transaction].amount < 0){
                                 if(userData[institution].accounts[account].subtype == "checking"){
                                     categoryData[0] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
                                 }
@@ -77,7 +77,7 @@ function createCategoryOutData(userData){
             else{
                 for (var account = 0; account < userData[institution].accounts.length; account++) {
                     for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
-                        if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                        if(userData[institution].accounts[account].transactions[transaction].amount > 0){
                             if(userData[institution].accounts[account].transactions[transaction].amount){
                                 if(userData[institution].accounts[account].subtype == "checking"){
                                         categoryData[0] += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
@@ -116,7 +116,7 @@ function createAccountInData(userData, accountId){
                 for (var account = 0; account < userData[institution].accounts.length; account++) {
                     if(userData[institution].accounts[account].account_id == accountId){
                         for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
-                            if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            if(userData[institution].accounts[account].transactions[transaction].amount < 0){
                                 accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
                             }
                         }
@@ -140,7 +140,7 @@ function createAccountOutData(userData, accountId){
                 for (var account = 0; account < userData[institution].accounts.length; account++) {
                     if(userData[institution].accounts[account].account_id == accountId){
                         for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
-                            if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                            if(userData[institution].accounts[account].transactions[transaction].amount > 0){
                                 accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
                             }
                         }
@@ -165,7 +165,7 @@ function createInstitutionInData(userData, insId){
                 if(userData[institution].item.institution_id == insId){
                     for (var account = 0; account < userData[institution].accounts.length; account++) {
                         for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
-                            if(userData[institution].accounts[account].transactions[transaction].amount > 0){
+                            if(userData[institution].accounts[account].transactions[transaction].amount < 0){
                                 accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
                             }
                         }
@@ -190,7 +190,7 @@ function createInstitutionOutData(userData, insId){
                 if(userData[institution].item.institution_id == insId){
                     for (var account = 0; account < userData[institution].accounts.length; account++) {
                         for (var transaction = 0; transaction < userData[institution].accounts[account].transactions.length; transaction++) {
-                            if(userData[institution].accounts[account].transactions[transaction].amount < 0){
+                            if(userData[institution].accounts[account].transactions[transaction].amount > 0){
                                 accountData += parseFloat(userData[institution].accounts[account].transactions[transaction].amount);
                             }
                         }
