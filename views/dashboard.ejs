@@ -281,6 +281,10 @@
                     // You do not need to repeat the /item/public_token/exchange
                     // process when a user uses Link in update mode.
                     // The Item's access_token has not changed.
+                    $.get("/api/refresh_cache").success(
+                        function(success) {
+                            //getUserDataFromCache()
+                        });
                 },
                 onExit: function(error, metadata) {
                     // The user exited the Link flow.
