@@ -41,22 +41,7 @@
                 <h2> Categorical transactions </h2>
                 <div class="catbtns">
                     <!-- CARD START -->
-                    <div class="cardcontainer fradius">
-                        <div class="category hcenter">
-                            <p> Savings
-                                <p>
-                        </div>
-                        <hr noshade>
-                        <div class="totals">
-                            <div class="bnktotal bnknums">
-                                <p id="savingsTotal">Total: </p>
-                            </div>
-                            <div class="inout bnknums">
-                                <p id="savingsIn">In: </p>
-                                <p id="savingsOut">Out: </p>
-                            </div>
-                        </div>
-                    </div>
+
                     <!-- NEXT CARD -->
                     <div class="cardcontainer fradius">
                         <div class="category hcenter">
@@ -66,11 +51,45 @@
                         <hr noshade>
                         <div class="totals">
                             <div class="bnktotal bnknums">
-                                <p id="checkingTotal">Total: </p>
+                                <p id="checkingTotal">$</p>
                             </div>
                             <div class="inout bnknums">
-                                <p id="checkingIn">In: </p>
-                                <p id="checkingOut">Out: </p>
+                                <p id="checkingIn" style="color:green;"></p>
+                                <p id="checkingOut" style="color:red;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cardcontainer fradius">
+                        <div class="category hcenter">
+                            <p> Credit
+                                <p>
+                        </div>
+                        <hr noshade>
+                        <div class="totals">
+                            <div class="bnktotal bnknums">
+                                <p id="creditTotal">$</p>
+                            </div>
+                            <div class="inout bnknums">
+                                <p id="creditIn" style="color:green;"></p>
+                                <p id="creditOut" style="color:red;"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cardcontainer fradius">
+                        <div class="category hcenter">
+                            <p> Savings
+                                <p>
+                        </div>
+                        <hr noshade>
+                        <div class="totals">
+                            <div class="bnktotal bnknums">
+                                <p id="savingsTotal">$</p>
+                            </div>
+                            <div class="inout bnknums">
+                                <p id="savingsIn" style="color:green;"></p>
+                                <p id="savingsOut" style="color:red;"></p>
                             </div>
                         </div>
                     </div>
@@ -83,11 +102,11 @@
                         <hr noshade>
                         <div class="totals">
                             <div class="bnktotal bnknums">
-                                <p id="investmentTotal">Total: </p>
+                                <p id="investmentTotal">$</p>
                             </div>
                             <div class="inout bnknums">
-                                <p id="investmentIn">In: </p>
-                                <p id="investmentOut">Out: </p>
+                                <p id="investmentIn" style="color:green;"></p>
+                                <p id="investmentOut" style="color:red;"></p>
                             </div>
                         </div>
                     </div>
@@ -116,7 +135,7 @@
                     <!-- NEXT CARD -->
 
                     <!-- NEXT CARD -->
-                    <div id="link-btn" class="cardcontainer fradius">
+                    <div id="link-btn" class="cardcontainer fradius" onclick="handlerOpen()">
                         <p> + </p>
                     </div>
                     <!-- NEXT CARD  -->
@@ -125,20 +144,22 @@
             <!-- INSTITUTIONAL TRANSACTIONS END HERE -->
         </div>
         <div class="breakdown">
+            <h2>Holdings</h2>
             <div class="chart hcenter">
-                <canvas id="donut1" height="250" width="333"></canvas>
+                <canvas id="balanceChart" height="250" width="333"></canvas>
                 <div class="total">
                     <h1 style="color:green;" id="totalBalance">$</h1>
                 </div>
             </div>
+            <h2>Spending</h2>
             <div class="chart hcenter">
-                <canvas id="donut2" height="250" width="333"></canvas>
+                <canvas id="outChart" height="250" width="333"></canvas>
                 <div class="total">
-                    <h1 style="color:red;"> $2,832 </h1>
+                    <h1 style="color:red;" id="totalOut">$</h1>
                 </div>
             </div>
             <div id="lineshw" class="chart hcenter">
-                <canvas id="line" height="250" width="300"></canvas>
+                <canvas id="ad" height="250" width="300"></canvas>
             </div>
         </div>
     </div>
@@ -151,36 +172,53 @@
     </div>
 
     <script>
-        var labels = ['Credit', 'Savings', 'Investments', 'Loans'];
+        var labels = ['Credit', 'Savings', 'Investments', 'Credit'];
         var colors = ['rgb(105, 214, 81)', 'rgb(0, 176, 155)', 'rgb(0, 73, 176)'];
-        //drawIn(aggregateUserIncome);
-        //
-        //drawOut(aggregateUserOutcome);
-        //drawLineDifference(aggregateUserIncome, aggregateUserOutcome, "line");
+        var outColors = ['rgb(224, 47, 47)','rgb(224, 108, 47)','rgb(224, 200, 47)']
+
 
 
         getUserKnotterdataSafe().then(function(knotterJSON) {
             console.log(knotterJSON);
-            createCategoryInData(knotterJSON).then(function(userIn) {
-                document.getElementById("checkingIn").innerHTML += userIn[0];
-                document.getElementById("savingsIn").innerHTML += userIn[1];
-                document.getElementById("investmentIn").innerHTML += userIn[2];
-            });
+            /*createCategoryInData(knotterJSON).then(function(userIn) {
+                document.getElementById("checkingIn").innerHTML += parseFloat(userIn[0]).toFixed(2);
+                document.getElementById("savingsIn").innerHTML += parseFloat(userIn[1]).toFixed(2);
+                document.getElementById("investmentIn").innerHTML += parseFloat(userIn[2]).toFixed(2);
+                document.getElementById("creditIn").innerHTML += parseFloat(userIn[3]).toFixed(2);
+            });*/
             createCategoryOutData(knotterJSON).then(function(userOut) {
-                document.getElementById("checkingOut").innerHTML += userOut[0];
-                document.getElementById("savingsOut").innerHTML += userOut[1];
-                document.getElementById("investmentOut").innerHTML += userOut[2];
+                /*document.getElementById("checkingOut").innerHTML += parseFloat(userOut[0]).toFixed(2);
+                document.getElementById("savingsOut").innerHTML += parseFloat(userOut[1]).toFixed(2);
+                document.getElementById("investmentOut").innerHTML += parseFloat(userOut[2]).toFixed(2);
+                document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);*/
+                drawPieChart(userOut, "outChart", outColors, labels);
+                document.getElementById("totalOut").innerHTML += parseFloat(0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2])).toFixed(0);
             });
             createCategoryBalanceData(knotterJSON).then(function(userTotal) {
-                document.getElementById("checkingTotal").innerHTML += userTotal[0];
-                document.getElementById("savingsTotal").innerHTML += userTotal[1];
-                document.getElementById("investmentTotal").innerHTML += userTotal[2];
-                drawPieChart(userTotal, "donut1", colors, labels);
-                document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2]));
+                document.getElementById("checkingTotal").innerHTML += parseFloat(userTotal[0]).toFixed(2);
+                document.getElementById("savingsTotal").innerHTML += parseFloat(userTotal[1]).toFixed(2);
+                document.getElementById("investmentTotal").innerHTML += parseFloat(userTotal[2]).toFixed(2);
+                document.getElementById("creditTotal").innerHTML += parseFloat(userTotal[3]).toFixed(2);
+                drawPieChart(userTotal, "balanceChart", colors, labels);
+                document.getElementById("totalBalance").innerHTML += parseFloat(0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2])).toFixed(0);
             });
             renderInsCards(knotterJSON);
 
-
+            for (var institution = 0; institution < knotterJSON.length; institution++) {
+                (function(institution) {
+                    if(knotterJSON[institution].item){
+                        /*createInstitutionInData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userIn) {
+                            document.getElementById("bankIn_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userIn);
+                        });
+                        createInstitutionOutData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userOut) {
+                            document.getElementById("bankOut_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userOut);
+                        });*/
+                        createInstitutionBalanceData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userTotal) {
+                            document.getElementById("bankTotal_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userTotal).toFixed(2);
+                        });
+                    }
+                })(institution);
+            }
         });
 
         var handler = Plaid.create({
@@ -204,23 +242,12 @@
                 });
             },
             onExit: function(error, metadata) {
-                /*error = {
-                 display_message: "The credentials were ...",
-                 error_code: "INVALID_CREDENTIALS",
-                 error_message: "the credentials were ...",
-                 error_type: "ITEM_ERROR",
+                if (error) {
+                    $.post('/api/log_error', {
+                        error: error,
+                        metadata: metadata
+                    });
                 }
-                metadata = {
-                 link_session_id: "dc21685c-192e-4969-b4e9-bab890daae31",
-                 institution: {
-                  name: "Wells Fargo",
-                  institution_id: "ins_4"
-                 },
-                 status: "requires_credentials"
-                }
-                Save data from the onExit handler*/
-                console.log(error);
-                console.log(metadata);
                 /*supportHandler.report({
                     error: error,
                     institution: metadata.institution,
@@ -229,10 +256,10 @@
                 });*/
             }
         });
-        $('#link-btn').on('click', function(e) {
+
+        function handlerOpen(){
             handler.open();
-        });
-        handler.onExit
+        }
     </script>
 
 
@@ -244,7 +271,6 @@
         $.post('/api/get_public_token', {
             access_token: access_token_update
         },function(response) {
-            console.log(response);
             var linkHandler = Plaid.create({
                 env: '<%= PLAID_ENV %>',
                 clientName: 'Knotter',
@@ -255,23 +281,25 @@
                     // You do not need to repeat the /item/public_token/exchange
                     // process when a user uses Link in update mode.
                     // The Item's access_token has not changed.
+                    $.get("/api/refresh_cache").success(
+                        function(success) {
+                            //getUserDataFromCache()
+                        });
                 },
-                onExit: function(err, metadata) {
+                onExit: function(error, metadata) {
                     // The user exited the Link flow.
-                    if (err != null) {
-                        // The user encountered a Plaid API error prior
-                        // to exiting.
+                    if (error) {
+                        $.post('/api/log_error', {
+                            error: error,
+                            metadata: metadata
+                        });
                     }
                     // metadata contains the most recent API request ID and the
                     // Link session ID. Storing this information is helpful
                     // for support.
                 }
             });
-            // Trigger the authentication view
 
-            // Link will automatically detect the institution ID
-            // associated with the public token and present the
-            // credential view to your user.
             document.getElementById(access_token_update).onclick = function() {
                 // Link will automatically detect the institution ID
                 // associated with the public token and present the
