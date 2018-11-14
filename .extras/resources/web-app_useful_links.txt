@@ -95,3 +95,25 @@ https://stackoverflow.com/questions/35942754/how-to-save-username-and-password-i
 https://www.digitalocean.com/community/tutorials/how-to-use-certbot-standalone-mode-to-retrieve-let-s-encrypt-ssl-certificates-on-ubuntu-16-04
 
 https://community.letsencrypt.org/t/node-express-server-pem-read-bio-no-start-line/41175/3
+
+https://hackernoon.com/understanding-promises-in-javascript-13d99df067c1
+
+https://stackoverflow.com/questions/43385349/remove-from-array-of-objectid-using-update-mongodb
+
+https://stackoverflow.com/questions/17303833/mongodb-nested-array-query
+
+https://stackoverflow.com/questions/14040562/how-to-search-in-array-of-object-in-mongodb
+
+https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/registration-events/index.html
+
+https://stackoverflow.com/questions/38190193/registering-service-worker-in-a-different-folder
+
+https://blog.cloudboost.io/mongodb-express-angularjs-1-6-and-nodejs-mean-part-2-be11709626fe
+
+https://cipherli.st/
+
+https://webapplog.com/http2-node/
+
+https://stackoverflow.com/questions/35318442/how-to-pass-parameter-to-a-promise-function
+
+https://stackoverflow.com/questions/17244614/passing-variable-to-promise-in-a-loop

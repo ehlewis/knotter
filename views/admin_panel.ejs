@@ -10,6 +10,8 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+    <script src="assets/js/apiCalls.js"></script>
+    <script src="assets/js/graphics.js"></script>
 </head>
 <body>
 <div class="container">
@@ -24,7 +26,7 @@
         <button id="get-cached-institutions-btn" class="btn btn-default btn-sm">Get Cached institutions</button>
         <button id="get-cached-transactions-btn" class="btn btn-default btn-sm">Get Cached Transactions</button>
         <button id="get-cached-items-btn" class="btn btn-default btn-sm">Get Cached Items</button>
-        <button id="create-graph-btn" class="btn btn-default btn-sm">Get Graph Data</button>
+        <button id="get-knotter-data-btn" class="btn btn-default btn-sm">Get Knotter Data</button>
     </div>
 
     <div class="row">
@@ -134,9 +136,8 @@ $('#get-cached-items-btn').on('click', function(e) {
 });
 
 
-
-$('#create-graph-btn').on('click', function(e) {
-      $.get('/api/get_graph_data').success(
+$('#get-knotter-data-btn').on('click', function(e) {
+      $.get('/api/get_knotter_data').success(
       function(success){
           console.log(success)
       }).error(
@@ -144,6 +145,17 @@ $('#create-graph-btn').on('click', function(e) {
             console.log(error)
         });
 });
+
+
+getUserKnotterdataSafe().then(function(knotterJSON){
+    console.log(knotterJSON);
+    createCategoryInData(knotterJSON);
+    createCategoryOutData(knotterJSON);
+    createInstitutionInData(knotterJSON,"ins_3");
+});
+
+
+
 
 </script>
 

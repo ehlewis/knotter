@@ -4,8 +4,14 @@ var logger = require('../config/logger');
 var BPromise = require('bluebird');
 var myPromises = [];
 
+// NOTE:
+//All cache_user_X functions work in the following way with X being the Plaid endpoint
+////Returns a Promise to the calling function to tell it that it will be resolved and to not use the data until it has been. This function gets passed a variable NUM which is equal to the number of items linked to the user entry in the DB. It then sends out NUM requests to Plaid to the getX endpoint, with each request also being a Promise which will be resolved that gets pushed onto myPromises[], iterating through the array of items stored in the DB under the user's entry to get data for each of the user's institutions. When it gets a response it pushes the response onto the array response_array[] and then resolves that reponse's promise from the promise array myPromises[]. Once the myPromises[] array is empty the function stores the response_array[] array in the Redis server and gives it a TTL. Finally, it resolves the promise that it sent to the function caller to tell the caller that the data has been cached in the Redis server and can now be accessed.
+
+
 
 module.exports = {
+    //Exchanges a public token for an access token and an item_id from Plaid when a user links a new account and then stores it in the DB by initializing the array named items[] under the user entry and storing the tokens; otherwise by pushing the tokens into the array if the user has previously linked an institution and thus the array is initialized
     get_access_token: function(request, response, next) {
         PUBLIC_TOKEN = request.body.public_token;
         plaid_client.exchangePublicToken(PUBLIC_TOKEN, function(error, tokenResponse) {
@@ -84,6 +90,7 @@ module.exports = {
         });
     },
 
+    //Fetches the cached Plaid Institution data from Redis, converts it from a string back into an object, and sends it back to the caller.
     get_cached_user_institutions: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "institutions", function(err, reply) {
             // reply is null when the key is missing
@@ -135,6 +142,7 @@ module.exports = {
         });
     },
 
+    //Fetches the cached Plaid Account data from Redis, converts it from a string back into an object, and sends it back to the caller.
     get_cached_user_accounts: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "accounts", function(err, reply) {
             // reply is null when the key is missing
@@ -215,7 +223,7 @@ module.exports = {
         });
     },
 
-    //I dont want to have to do this I want this to be stored as an array or object and I dont want to have to reconstruct it
+    //Fetches the cached Plaid Institution data from Redis, converts it from a string back into an object, and sends it back to the caller.
     get_cached_items: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "item", function(err, reply) {
             // reply is null when the key is missing
@@ -235,7 +243,6 @@ module.exports = {
         });
     },
 
-    //Saves transactions in cache
     cache_transactions: function(request, response, num, next) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
         return new Promise(function (resolve, reject) {
@@ -249,8 +256,8 @@ module.exports = {
                         offset: 0,
                     }, function(error, transactionsResponse) {
                         if (error != null) {
-                            logger.error(request.user._id + error);
-                            response_array.push(request.user._id + error);
+                            logger.error(error);
+                            response_array.push(error);
                             return;
                         }
                         response_array.push(transactionsResponse);
@@ -267,6 +274,7 @@ module.exports = {
         });
     },
 
+    //Fetches the cached Plaid Institution data from Redis, converts it from a string back into an object, and sends it back to the caller.
     get_cached_transactions: function(request, response, next) {
         redis_client.get(request.user._id.toString() + "transactions", function(err, reply) {
             // reply is null when the key is missing
@@ -285,6 +293,77 @@ module.exports = {
         });
     },
 
+    //Makes an array of requests for item transactions because this call gives us all the data we need and stores it in an array. After all promises for transactions have been completed we for through and give each account in each item a new array for it's associated transactions. We then for through each item and in each item each account and then every account we hit we for through the transaction list and put any transaction whos account_id matches the account_id of the account were currently in and push it onto the array of that accounts transactions. After we get through all of the accounts in an item we delete the transactions in that item and move onto the next item. After we get through we store the data in the cache and resolve the promise.
+    plaid_to_knotter_json: function(request, response, num, next) {
+        return new Promise(function (resolve, reject) {
+            var response_array = [];
+            var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
+            var endDate = moment().format('YYYY-MM-DD');
+            for (var i = 0; i < num; i++) {
+                myPromises.push(
+                        getTransactionsHelper(request.user.items[i].access_token, startDate, endDate).then(function(answer){response_array.push(answer)})
+                    );
+            }
+            BPromise.all(myPromises).then(function() {
+
+                plaidData = JSON.parse(JSON.stringify(response_array));
+                var knotterJSON = plaidData;
+
+                for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
+                    if(knotterJSON[institutionCounter].accounts){
+                        for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                            knotterJSON[institutionCounter].accounts[accountCounter].transactions = new Array();
+                        }
+                    }
+                    else{
+                        //pass
+                    }
+                }
+                for (var institutionCounter = 0; institutionCounter < knotterJSON.length; institutionCounter++) {
+                    if(knotterJSON[institutionCounter].accounts){
+                        for (var accountCounter = 0; accountCounter < knotterJSON[institutionCounter].accounts.length; accountCounter++) {
+                            for (var transactionCounter = 0; transactionCounter < knotterJSON[institutionCounter].transactions.length; transactionCounter++) {
+                                if (knotterJSON[institutionCounter].accounts[accountCounter].account_id == knotterJSON[institutionCounter].transactions[transactionCounter].account_id){
+                                    knotterJSON[institutionCounter].accounts[accountCounter].transactions.push(knotterJSON[institutionCounter].transactions[transactionCounter]);
+                                }
+                            }
+                        }
+                        delete knotterJSON[institutionCounter].transactions;
+                    }
+                    else{
+                        //pass
+                    }
+                }
+
+                redis_client.set(request.user._id.toString() + "knotterdata", JSON.stringify(knotterJSON), redis.print);
+                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+
+                resolve();
+            });
+        });
+    },
+
+    get_knotter_data: function(request, response, next) {
+        redis_client.get(request.user._id.toString() + "knotterdata", function(err, reply) {
+            // reply is null when the key is missing
+            if (err != null) {
+                logger.error(request.user._id + " error" + err);
+            }
+            if (reply == '') {
+                logger.debug(request.user._id + " no data stored");
+                return;
+            } else {
+                logger.silly(request.user._id + " Pulled cached knotterdata");
+                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+
+                response.json(JSON.parse(reply));
+
+            }
+        });
+
+
+    },
+
     get_institution_by_id: function(request, response, ins_id, next) {
         plaid_client.getInstitutionById(ins_id, function(err, instRes) {
             if (err != null) {
@@ -299,5 +378,73 @@ module.exports = {
                 });
             }
         });
+    },
+
+    remove_item: function(request, response, next) {
+        return new Promise(function (resolve, reject) {
+            for (var item = 0; item < request.user.items.length; item++) {
+                if(request.user.items[item].item_id == request.body.item_id){
+                    plaid_client.removeItem(request.user.items[item].access_token, (err, result) => {
+                        // Handle err
+                        // The Item has been removed and the
+                        // access token is now invalid
+                        if(err){
+                            logger.error(err);
+                        }
+                        else{
+                            collection.updateOne({
+                                '_id': request.user._id
+                            }, {
+                                $pull: {
+                                    'items': {'item_id': request.body.item_id}
+                                }
+                            });
+
+                            logger.debug(request.user._id + " removed item: " + request.body.item_id);
+                        }
+                        const isRemoved = result.removed;
+                        resolve(isRemoved);
+                    });
+                }
+            }
+        });
+    },
+
+    createTempPublicToken: function(request, response, next){
+        return new Promise(function (resolve, reject) {
+            plaid_client.createPublicToken(request.body.access_token, (err, result) => {
+                // Handle err
+                if(err){
+                    logger.error(err);
+                    reject(err);
+                }
+                // Use the generated public_token to initialize Plaid Link in update
+                // mode for a user's Item so that they can provide updated credentials
+                // or MFA information
+                else{
+                    const publicToken = result.public_token;
+                    resolve(publicToken);
+                }
+                // Initialize Link with the token parameter
+                // set to the generated public_token for the Item
+
+            });
+        });
     }
 };
+
+function getTransactionsHelper(access_token, startDate, endDate){
+    return new Promise(function (resolve, reject) {
+        plaid_client.getTransactions(access_token, startDate, endDate, {
+            count: 250,
+            offset: 0,
+        }, function(error, transactionsResponse) {
+            if (error) {
+                logger.error(error);
+                error.access_token = access_token;
+                resolve(error);
+            }
+            resolve(transactionsResponse);
+        })
+    });
+}// This helper function is created for this call soley to allow us to attach the account_id to an error message if there is an error so we know which item threw the error. Otherwise it behaves as a standard GET from Plaid.

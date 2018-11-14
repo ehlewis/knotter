@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+}
+
+html{
+  /* background: linear-gradient(to bottom right, #00b09b, #96d03d);  69d651*/
+  height: 100%;
+}
+
+body{
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+    padding-bottom: var(--footer-height);
+    position: relative;
+    min-height: 100%;
+}
+
+:root{
+  --topbar-height: 75px;
+  --footer-height: 75px;
+  --nwidth: 1000px;
+}
+
+#tag{
+  font-size: 8pt;
+  height: 0;
+}
+
+.top{
+  top: 0;
+}
+
+.bottom{
+  bottom: 0;
+}
+
+.left{
+  float: left;
+  left: 0;
+}
+
+.right{
+  float: right;
+  right: 0;
+}
+
+.hcenter{
+  margin: auto;
+}
+
+.vcenter{
+  position: absolute;
+  top: 50%;
+}
+
+.topbar{
+  height: var(--topbar-height);
+  position: relative;
+  padding: 0 10px 0 10px;
+}
+
+.nwidth{
+  max-width: var(--nwidth);
+}
+
+.maxwidth{
+  width: 100%;
+}
+
+.maxheight{
+  height: 100%;
+}
+
+.txtcenter{
+  text-align: center;
+}
+
+.txtleft{
+  text-align: left;
+}
+
+.txtright{
+  text-align: right;
+}
+
+.fradius{
+  border-radius: 4px;
+}
+
+.footer{
+  position: absolute;
+  bottom: 0;
+}
+
+.footerlnks{
+  line-height: var(--footer-height);
+  text-align: center;
+}
+
+.footerlnks a{
+  text-decoration: none;
+  color: grey;
+  font-size: 8pt;
+  padding: 0 10px 0 10px;
+}
+
+
+@media only screen and (max-width:1020px) {
+  /* For tablets: */
+
+
+}
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+
+}

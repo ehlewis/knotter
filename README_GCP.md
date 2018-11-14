@@ -53,11 +53,11 @@ sudo pkill nginx
 ```
 then run certbot
 ```
-sudo ./certbot-auto certonly --standalone --email ehlewis@me.com -d knotter.co
+sudo ./certbot-auto certonly --standalone --email ehlewis@me.com -d knotter.co -d www.knotter.co
 ```
 or
 ```
-sudo certbot certonly --standalone --preferred-challenges http -d knotter.co
+sudo certbot certonly --standalone --preferred-challenges http -d knotter.co -d www.knotter.co
 ```
 And restart nginx
 
