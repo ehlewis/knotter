@@ -192,7 +192,7 @@
                 document.getElementById("investmentOut").innerHTML += parseFloat(userOut[2]).toFixed(2);
                 document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);*/
                 drawPieChart(userOut, "outChart", outColors, labels);
-                document.getElementById("totalOut").innerHTML += parseFloat(0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2])).toFixed(2);
+                document.getElementById("totalOut").innerHTML += parseFloat(0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2])).toFixed(0);
             });
             createCategoryBalanceData(knotterJSON).then(function(userTotal) {
                 document.getElementById("checkingTotal").innerHTML += parseFloat(userTotal[0]).toFixed(2);
@@ -200,7 +200,7 @@
                 document.getElementById("investmentTotal").innerHTML += parseFloat(userTotal[2]).toFixed(2);
                 document.getElementById("creditTotal").innerHTML += parseFloat(userTotal[3]).toFixed(2);
                 drawPieChart(userTotal, "balanceChart", colors, labels);
-                document.getElementById("totalBalance").innerHTML += parseFloat(0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2])).toFixed(2);
+                document.getElementById("totalBalance").innerHTML += parseFloat(0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2])).toFixed(0);
             });
             renderInsCards(knotterJSON);
 
