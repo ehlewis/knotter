@@ -54,8 +54,8 @@
                                 <p id="checkingTotal">$</p>
                             </div>
                             <div class="inout bnknums">
-                                <p id="checkingIn" style="color:green;">$</p>
-                                <p id="checkingOut" style="color:red;">$</p>
+                                <p id="checkingIn" style="color:green;"></p>
+                                <p id="checkingOut" style="color:red;"></p>
                             </div>
                         </div>
                     </div>
@@ -71,8 +71,8 @@
                                 <p id="creditTotal">$</p>
                             </div>
                             <div class="inout bnknums">
-                                <p id="creditIn" style="color:green;">$</p>
-                                <p id="creditOut" style="color:red;">$</p>
+                                <p id="creditIn" style="color:green;"></p>
+                                <p id="creditOut" style="color:red;"></p>
                             </div>
                         </div>
                     </div>
@@ -88,8 +88,8 @@
                                 <p id="savingsTotal">$</p>
                             </div>
                             <div class="inout bnknums">
-                                <p id="savingsIn" style="color:green;">$</p>
-                                <p id="savingsOut" style="color:red;">$</p>
+                                <p id="savingsIn" style="color:green;"></p>
+                                <p id="savingsOut" style="color:red;"></p>
                             </div>
                         </div>
                     </div>
@@ -105,8 +105,8 @@
                                 <p id="investmentTotal">$</p>
                             </div>
                             <div class="inout bnknums">
-                                <p id="investmentIn" style="color:green;">$</p>
-                                <p id="investmentOut" style="color:red;">$</p>
+                                <p id="investmentIn" style="color:green;"></p>
+                                <p id="investmentOut" style="color:red;"></p>
                             </div>
                         </div>
                     </div>
@@ -180,17 +180,17 @@
 
         getUserKnotterdataSafe().then(function(knotterJSON) {
             console.log(knotterJSON);
-            createCategoryInData(knotterJSON).then(function(userIn) {
+            /*createCategoryInData(knotterJSON).then(function(userIn) {
                 document.getElementById("checkingIn").innerHTML += parseFloat(userIn[0]).toFixed(2);
                 document.getElementById("savingsIn").innerHTML += parseFloat(userIn[1]).toFixed(2);
                 document.getElementById("investmentIn").innerHTML += parseFloat(userIn[2]).toFixed(2);
                 document.getElementById("creditIn").innerHTML += parseFloat(userIn[3]).toFixed(2);
-            });
+            });*/
             createCategoryOutData(knotterJSON).then(function(userOut) {
-                document.getElementById("checkingOut").innerHTML += parseFloat(userOut[0]).toFixed(2);
+                /*document.getElementById("checkingOut").innerHTML += parseFloat(userOut[0]).toFixed(2);
                 document.getElementById("savingsOut").innerHTML += parseFloat(userOut[1]).toFixed(2);
                 document.getElementById("investmentOut").innerHTML += parseFloat(userOut[2]).toFixed(2);
-                document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);
+                document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);*/
                 drawPieChart(userOut, "outChart", outColors, labels);
                 document.getElementById("totalOut").innerHTML += (0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2]));
             });
@@ -207,14 +207,14 @@
             for (var institution = 0; institution < knotterJSON.length; institution++) {
                 (function(institution) {
                     if(knotterJSON[institution].item){
-                        createInstitutionInData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userIn) {
+                        /*createInstitutionInData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userIn) {
                             document.getElementById("bankIn_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userIn);
                         });
                         createInstitutionOutData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userOut) {
                             document.getElementById("bankOut_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userOut);
-                        });
+                        });*/
                         createInstitutionBalanceData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userTotal) {
-                            document.getElementById("bankTotal_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userTotal);
+                            document.getElementById("bankTotal_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userTotal).toFixed(2);
                         });
                     }
                 })(institution);
