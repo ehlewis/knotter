@@ -192,7 +192,7 @@
                 document.getElementById("investmentOut").innerHTML += parseFloat(userOut[2]).toFixed(2);
                 document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);*/
                 drawPieChart(userOut, "outChart", outColors, labels);
-                document.getElementById("totalOut").innerHTML += (0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2]));
+                document.getElementById("totalOut").innerHTML += parseFloat(0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2])).toFixed(2);
             });
             createCategoryBalanceData(knotterJSON).then(function(userTotal) {
                 document.getElementById("checkingTotal").innerHTML += parseFloat(userTotal[0]).toFixed(2);
