@@ -203,7 +203,7 @@ function createInstitutionOutData(userData, insId){
 }
 
 // Creates BALANCE data by institution by for'ing through each account and  adding its available balance to the appropriate entry in the running category total.
-function createInstitutionBalanceData(userData){
+function createInstitutionBalanceData(userData, insId){
     //['Checking','Savings','Investments','Credit']
     return new Promise(function(resolve, reject) {
         var categoryData = 0;
@@ -212,9 +212,11 @@ function createInstitutionBalanceData(userData){
                 //pass
             }
             else{
-                for (var account = 0; account < userData[institution].accounts.length; account++) {
-                    if(userData[institution].accounts[account].balances.available){
-                        categoryData += userData[institution].accounts[account].balances.available;
+                if(userData[institution].item.institution_id == insId){
+                    for (var account = 0; account < userData[institution].accounts.length; account++) {
+                        if(userData[institution].accounts[account].balances.available){
+                            categoryData += userData[institution].accounts[account].balances.available;
+                        }
                     }
                 }
             }
