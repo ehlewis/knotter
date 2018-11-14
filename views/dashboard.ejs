@@ -200,7 +200,7 @@
                 document.getElementById("investmentTotal").innerHTML += parseFloat(userTotal[2]).toFixed(2);
                 document.getElementById("creditTotal").innerHTML += parseFloat(userTotal[3]).toFixed(2);
                 drawPieChart(userTotal, "balanceChart", colors, labels);
-                document.getElementById("totalBalance").innerHTML += (0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2]));
+                document.getElementById("totalBalance").innerHTML += parseFloat(0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2])).toFixed(2);
             });
             renderInsCards(knotterJSON);
 
