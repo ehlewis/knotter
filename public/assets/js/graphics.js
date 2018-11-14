@@ -278,7 +278,7 @@ function renderInsCards(userData){
             else{
                 logo_filename = 'default';
             }
-            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p id="bankTotal_'+userData[institution].item.institution_id+'"></p></div><div class="inout bnknums"><p id="bankIn_'+userData[institution].item.institution_id+'" style="color:green;"></p><p id="bankOut_'+userData[institution].item.institution_id+'" style="color:red;"> </p></div></div></div>'
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="bnktotal"><p id="bankTotal_'+userData[institution].item.institution_id+'"></p></div></div>'
         }
     }
 }
