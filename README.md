@@ -9,8 +9,9 @@ npm install -g n   # Install n globally
 n 8.14.1          # Install and use v0.10.33
 ```
 Then this will globally switch our node version to the version specified (8.14.1, latest 8.x.x version and LTS)
+
 ## Install dependencies
-From inside /link
+(From inside /link)
 ```
 npm install
 ```
@@ -20,13 +21,11 @@ npm install
 mongod --bind_ip 127.0.0.1
 ```
 
-
 ## Start the Redis Cache
-from the web-app server file
+(From inside /link)
 ```
 redis-server redis.conf
 ```
-
 
 ## Start the web server
 ```
@@ -34,15 +33,3 @@ sudo SERVICE_CONNECTION="local-sandbox" node knotter.js
 ```
 
 #### Go to 127.0.0.1
-
-## Extras
-
-### Debugging
-```
-sudo DEBUG=* node knotter.js
-```
-
-### Health Check
-```
-curl -Ik https://127.0.0.1/api/health_check
-```

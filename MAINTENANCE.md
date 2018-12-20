@@ -1,3 +1,16 @@
+# Node
+
+## Debugging
+```
+sudo DEBUG=* node knotter.js
+```
+
+## Health Check
+From any terminal
+```
+curl -Ik https://127.0.0.1/api/health_check
+```
+
 # Mongo DB
 
 ## Access the mongodb cli
