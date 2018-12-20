@@ -28,6 +28,10 @@ var logger = require('./app/config/logger');
 /*global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production'], 'local-sandbox');
 logger.info("Starting with " + SERVICE_CONNECTION);*/
 logger.info("Running on Node " + process.version);
+if(process.version != "v8.14.1"){
+    logger.error('Incorrect Node version\nExiting...');
+    process.exit();
+}
 //Set up environment variables
 var fs = require("fs");
 var envvar = require('envvar');
