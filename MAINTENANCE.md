@@ -51,3 +51,8 @@ redis-cli
 ```
 keys *
 ```
+
+### Clear keys
+```
+flushall
+```

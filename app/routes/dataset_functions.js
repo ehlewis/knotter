@@ -83,7 +83,7 @@ module.exports = {
                 // do whatever you need...
                 logger.silly(request.user._id + " institutions " + response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "institutions", JSON.stringify(response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "institutions", 1200);
+                redis_client.expire(request.user._id.toString() + "institutions", 900);
                 //next();
                 resolve();
             });
@@ -102,7 +102,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " institutions " + JSON.parse(reply));
-                redis_client.expire(request.user._id.toString() + "institutions", 1200);
+                redis_client.expire(request.user._id.toString() + "institutions", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -135,7 +135,7 @@ module.exports = {
                 // do whatever you need...
                 logger.silly(request.user._id + response_array.length + " institutions out of " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "accounts", 1200);
+                redis_client.expire(request.user._id.toString() + "accounts", 900);
                 //next();
                 resolve();
             });
@@ -154,7 +154,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " accounts " + JSON.parse(reply));
-                redis_client.expire(request.user._id.toString() + "accounts", 1200);
+                redis_client.expire(request.user._id.toString() + "accounts", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -216,7 +216,7 @@ module.exports = {
                 // do whatever you need...
                 logger.silly(request.user._id + " item " + item_response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "item", 1200);
+                redis_client.expire(request.user._id.toString() + "item", 900);
                 //next();
                 resolve();
             });
@@ -236,7 +236,7 @@ module.exports = {
             } else {
                 //console.log(reply);
                 logger.silly(request.user._id + " item " + JSON.parse(reply));
-                redis_client.expire(request.user._id.toString() + "item", 1200);
+                redis_client.expire(request.user._id.toString() + "item", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -267,7 +267,7 @@ module.exports = {
             BPromise.all(myPromises).then(function() {
                 logger.silly(request.user._id + "  transactions " + response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "transactions", JSON.stringify(response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "transactions", 1200);
+                redis_client.expire(request.user._id.toString() + "transactions", 900);
                 //next();
                 resolve();
             });
@@ -286,7 +286,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " Pulled cached transactions");
-                redis_client.expire(request.user._id.toString() + "transactions", 1200);
+                redis_client.expire(request.user._id.toString() + "transactions", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -336,7 +336,7 @@ module.exports = {
                 }
 
                 redis_client.set(request.user._id.toString() + "knotterdata", JSON.stringify(knotterJSON), redis.print);
-                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+                redis_client.expire(request.user._id.toString() + "knotterdata", 900);
 
                 resolve();
             });
@@ -354,7 +354,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " Pulled cached knotterdata");
-                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+                redis_client.expire(request.user._id.toString() + "knotterdata", 900);
 
                 response.json(JSON.parse(reply));
 

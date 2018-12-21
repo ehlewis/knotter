@@ -133,7 +133,7 @@ app.use(session({
         }),
     secret: 'thisissupersecret',
     cookie: {
-        maxAge: 3600000 //1 hour cookie
+        maxAge: 300000 //5 minute cookie in ms
     },
     resave: true,
     saveUninitialized: true
