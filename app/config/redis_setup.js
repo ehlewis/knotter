@@ -17,8 +17,7 @@ if (process.env.SERVICE_CONNECTION === "production"){
 module.exports = function() {
     global.redis_client = redis.createClient({
         host: service_host,
-        port: service_port,
-        password: 'thispasswordissuperlongandshouldbereallyreallyhardtofigureoutespeciallysinceitsinplaintext'
+        port: service_port
     });
     redis_client.ping(function (err, result) {
         if (result == "PONG"){
