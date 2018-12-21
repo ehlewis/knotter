@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Knotter</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
+    <link rel="stylesheet" type="text/css" href= "assets/css/boilerplate.css">
+    <link rel="stylesheet" type="text/css" href= "assets/css/dashboard.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#69d651">
+</head>
+
+<body>
+  <div class="topbar nwidth hcenter">
+    <a href="/"><img src="assets/graphics/knotter_brand_green.png" class="left vcenter" alt="Knotter" style="height:50px; margin:-25px 0 0 10px;"></a>
+    <!-- <a href="/workinprogress" class="button2 button vcenter right" style="margin:-16px 10px 0 0; ">Knotter Pro</a> -->
+  </div>
+<div class="container1 hcenter">
+
+
+  <div class="maxwidth">
+    <div class="footer hcenter nwidth">
+      <a href="/workinprogress"> Contact Us </a>
+      <a href="/workinprogress"> Leave Feedback </a>
+      <a href="/workinprogress"> FAQ </a>
+    </div>
+  </div>
+  <div class="container1 nwidth hcenter">
+      <div class="detailbtns hcenter">
+          <div class="cats">
+              <h2>Linked Accounts</h2>
+              <div class="catbtns" id="INS_CARDS">
+                  <!-- CARD START -->
+                  <!--<div class="cardcontainer fradius">
+                      <div class="banklogo hcenter">
+                          <img src="assets/bankLogos/BoA.svg" class="logosvg">
+                      </div>
+                      <hr noshade>
+                      <div class="totals">
+                          <div class="bnktotal bnknums">
+                              <p id="bankTotal">Total: </p>
+                          </div>
+                          <div class="inout bnknums">
+                              <p id="bankIn">In: </p>
+                              <p id="bankOut">Out: </p>
+                          </div>
+                      </div>
+                  </div>-->
+                  <!-- NEXT CARD -->
+
+                  <!-- NEXT CARD -->
+                  <div id="link-btn" class="cardcontainer fradius" onclick="handlerOpen()">
+                      <p> + </p>
+                  </div>
+                  <!-- NEXT CARD  -->
+              </div>
+          </div>
+          <!-- INSTITUTIONAL TRANSACTIONS END HERE -->
+      </div>
+
+
+
+
+</div>
+
+
+<script src="assets/js/inactivity_timer.js"></script>
+<script src="assets/js/graphics.js"></script>
+<script src="assets/js/apiCalls.js"></script>
+<script>getUserKnotterdataSafe().then(function(knotterJSON){
+    console.log(knotterJSON);
+    renderLinkedInsCards(knotterJSON);
+});</script>
+
+</body>
+</html>

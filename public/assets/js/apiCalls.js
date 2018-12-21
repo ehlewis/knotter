@@ -133,3 +133,12 @@ function getUser() {
         return data;
     });
 }
+
+function getInsIdToItemNo() {
+    //Gets users transactions and handles if the cache is empty by refreshing it
+    return new Promise(function(resolve, reject) {
+        $.getJSON("/api/InsIdToItemNo", function(data) {
+
+        });
+    });
+}

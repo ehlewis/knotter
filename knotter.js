@@ -192,7 +192,7 @@ app.get('/admin', isLoggedIn, function(request, response, next) {
     });
 });
 
-app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
+app.get('/accounts', isLoggedIn, function(request, response, next) {
     response.render('accounts.ejs', {
         user: request.user,
         PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
@@ -217,7 +217,7 @@ app.get('/profile', isLoggedIn, function(request, response) {
 });
 
 //=====API GETS=====
-app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear redis cache ***
+app.get('/api/logout', isLoggedIn, function(request, response) {
     redis_client.del(request.user._id.toString() + "accounts");
     redis_client.del(request.user._id.toString() + "item");
     redis_client.del(request.user._id.toString() + "transactions");
@@ -284,8 +284,7 @@ app.get('/api/health_check', function(request, response, next) {
 }); //Returns status code 200 if the server is alive
 
 app.get('/api/sandbox_reset_login', function(request, response, next) {
-    plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response)
-    {
+    plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response){
       // Handle err
       // create a public_token for the Item
       console.log(reset_login_response);
@@ -295,9 +294,11 @@ app.get('/api/sandbox_reset_login', function(request, response, next) {
         response.sendStatus(200);
 
     });
+});
 
+app.get('/api/InsIdToItemNo', function(request, response, next) {
 
-}); //Returns status code 200 if the server is alive
+}
 
 
 //=====API Post=====

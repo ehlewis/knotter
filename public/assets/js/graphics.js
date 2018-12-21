@@ -283,8 +283,29 @@ function renderInsCards(userData){
     }
 }
 
+function renderLinkedInsCards(userData){
+    for (var institution = 0; institution < userData.length; institution++) {
+        if(userData[institution].error_code){
+            //pass
+            document.getElementById("INS_CARDS").innerHTML = '<div class="cardcontainer fradius" id="' + userData[institution].access_token + '"><div class="banklogo hcenter"><img src="assets/bankLogos/error.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>ERROR </p></div><div class="inout bnknums"><p">ERROR</p><p>ERROR </p></div></div></div>'
+            linkUpdateMode(userData[institution].access_token);
+        }
+        else{
+            var ins_id_supported = ['ins_1','ins_2','ins_3','ins_4','ins_5','ins_6','ins_7','ins_9','ins_10','ins_11','ins_13','ins_14','ins_16','ins_19','ins_20','ins_21','ins_23','ins_24','ins_27','ins_28','ins_29'];
+            var logo_filename = '';
+            if(ins_id_supported.includes(userData[institution].item.institution_id)){
+                logo_filename = userData[institution].item.institution_id;
+            }
+            else{
+                logo_filename = 'default';
+            }
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>' + userData[institution].item.institution_id + '</p></div></div></div>'
+        }
+    }
+}
+
 function populatePage(){
-    getUserKnotterdataSafe().then(function(knotterJSON) {
+    getUserKnotterdataSafe().then(function(knotterJSON){
         console.log(knotterJSON);
         /*createCategoryInData(knotterJSON).then(function(userIn) {
             document.getElementById("checkingIn").innerHTML += parseFloat(userIn[0]).toFixed(2);
