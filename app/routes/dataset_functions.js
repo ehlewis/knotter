@@ -57,12 +57,12 @@ module.exports = {
         });
     },
 
-    cache_user_institutions: async function(request, response, num, next) {
+    cache_user_institutions: async function(request, response, next) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         return new Promise(function (resolve, reject) {
         var response_array = [];
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(plaid_client.getAuth(request.user.items[i].access_token, function(error, authResponse) { //this is a callback
                     if (error != null) {
                         var msg = 'Unable to pull accounts from the Plaid API.';
@@ -109,12 +109,12 @@ module.exports = {
         });
     },
 
-    cache_user_accounts: async function(request, response, num, next) {
+    cache_user_accounts: async function(request, response, next) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         return new Promise(function (resolve, reject) {
             var response_array = [];
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(plaid_client.getAccounts(request.user.items[i].access_token, function(error, authResponse) { //this is a callback
                     if (error != null) {
                         var msg = 'Unable to pull accounts from the Plaid API.';
@@ -193,13 +193,13 @@ module.exports = {
     },
 
     //Gets item but does NOT convert inst_id into anything useful right now
-    cache_items: function(request, response, next, plaid_client, num) {
+    cache_items: function(request, response, next, plaid_client) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         return new Promise(function (resolve, reject) {
             var item_response_array = [];
             var institution_response_array = [];
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(
                     plaid_client.getItem(request.user.items[i].access_token, function(error, itemResponse) {
                         if (error != null) {
@@ -243,13 +243,13 @@ module.exports = {
         });
     },
 
-    cache_transactions: function(request, response, num, next) {
+    cache_transactions: function(request, response, next) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
         return new Promise(function (resolve, reject) {
             var response_array = [];
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(
                     plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
                         count: 250,
@@ -294,12 +294,12 @@ module.exports = {
     },
 
     //Makes an array of requests for item transactions because this call gives us all the data we need and stores it in an array. After all promises for transactions have been completed we for through and give each account in each item a new array for it's associated transactions. We then for through each item and in each item each account and then every account we hit we for through the transaction list and put any transaction whos account_id matches the account_id of the account were currently in and push it onto the array of that accounts transactions. After we get through all of the accounts in an item we delete the transactions in that item and move onto the next item. After we get through we store the data in the cache and resolve the promise.
-    plaid_to_knotter_json: function(request, response, num, next) {
+    plaid_to_knotter_json: function(request, response, next) {
         return new Promise(function (resolve, reject) {
             var response_array = [];
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(
                         getTransactionsHelper(request.user.items[i].access_token, startDate, endDate).then(function(answer){response_array.push(answer)})
                     );
