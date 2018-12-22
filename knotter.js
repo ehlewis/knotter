@@ -336,6 +336,14 @@ app.post('/api/name', function(request, response, next) {
     response.redirect('/profile');
 }); //Takes the name from the POST request and inserts it in the DB under the user's entry
 
+app.post('/api/removeItem', function(request, response, next) {
+    dataset_functions.remove_item(request, response, next).then(function(isRemoved){
+        response.json({
+            isRemoved:isRemoved
+        });
+    });
+});
+
 app.post('/api/log_error', function(request, response, next) {
     logger.error(request.error);
     if(request.metadata){
