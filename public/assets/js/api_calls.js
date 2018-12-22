@@ -133,12 +133,23 @@ function getUser() {
         return data;
     });
 }
-
-function getInsIdToItemNo() {
+function remove_item(item_id) {
     //Gets users transactions and handles if the cache is empty by refreshing it
     return new Promise(function(resolve, reject) {
-        $.getJSON("/api/InsIdToItemNo", function(data) {
+        $.ajax({
+            url: "/api/remove_item",
+            method: "POST", //First change type to method here
 
+            data: {
+                item_id: item_id, // Second add quotes on the value.
+            },
+            success: function(response) {
+
+            },
+            error: function(error) {
+                console.log("ERROR");
+                console.log(error);
+            }
         });
     });
 }

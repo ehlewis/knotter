@@ -299,8 +299,7 @@ function renderLinkedInsCards(userData){
             else{
                 logo_filename = 'default';
             }
-            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>' + userData[institution].item.item_id + '</p></div></div></div>'
-            document.getElementById("button_scripts").innerHTML += 'alert("AAAAA")';
+            document.getElementById("INS_CARDS").innerHTML += '<div class="cardcontainer fradius" id=' + userData[institution].item.item_id + ' onclick="test(\'' + userData[institution].item.item_id  +'\')"><div class="banklogo hcenter"><img src="assets/bankLogos/'+logo_filename+'.svg" class="logosvg"></div><hr noshade><div class="totals"><div class="bnktotal bnknums"><p>' + userData[institution].item.item_id + '</p></div></div></div>'
         }
     }
 }

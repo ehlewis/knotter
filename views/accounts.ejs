@@ -71,6 +71,7 @@
 <script src="assets/js/inactivity_timer.js"></script>
 <script src="assets/js/graphics.js"></script>
 <script src="assets/js/api_calls.js"></script>
+<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 <script>getUserKnotterdataSafe().then(function(knotterJSON){
     console.log(knotterJSON);
     renderLinkedInsCards(knotterJSON);
@@ -78,6 +79,95 @@
 
 <script id="button_scripts">
 
+</script>
+<script>
+    function test(pass){
+        alert(pass);
+    }
+
+    var handler = Plaid.create({        apiVersion: 'v2',
+        clientName: 'Knotter',
+        env: '<%= PLAID_ENV %>',
+        product: ['transactions'],
+        key: '<%= PLAID_PUBLIC_KEY %>',
+        onSuccess: function(public_token) {
+            $.post('/get_access_token', {
+                public_token: public_token
+            }, function() {
+                $('#container').fadeOut('fast', function() {
+                    $('#intro').hide();
+                    $('#app, #steps').fadeIn('slow');
+                });
+                $.get("/api/refresh_cache").success(
+                    function(success) {
+                        populatePage();
+                    });
+            });
+        },
+        onExit: function(error, metadata) {
+            if (error) {
+                $.post('/api/log_error', {
+                    error: error,
+                    metadata: metadata
+                });
+            }
+            /*supportHandler.report({
+                error: error,
+                institution: metadata.institution,
+                link_session_id: metadata.link_session_id,
+                status: metadata.status,
+            });*/
+        }
+    });
+
+    function handlerOpen(){
+        handler.open();
+    }
+
+//For whatever reason, this HAS to be here
+function linkUpdateMode(access_token_update){
+    //Find the access_token associated with the ITEM_ID
+    //console.log("update: " + access_token_update);
+    $.post('/api/get_public_token', {
+        access_token: access_token_update
+    },function(response) {
+        var linkHandler = Plaid.create({
+            env: '<%= PLAID_ENV %>',
+            clientName: 'Knotter',
+            key: '<%= PLAID_PUBLIC_KEY %>',
+            product: ['transactions'],
+            token: response.publicToken,
+            onSuccess: function(public_token, metadata) {
+                // You do not need to repeat the /item/public_token/exchange
+                // process when a user uses Link in update mode.
+                // The Item's access_token has not changed.
+                $.get("/api/refresh_cache").success(
+                    function(success) {
+                        //getUserDataFromCache()
+                    });
+            },
+            onExit: function(error, metadata) {
+                // The user exited the Link flow.
+                if (error) {
+                    $.post('/api/log_error', {
+                        error: error,
+                        metadata: metadata
+                    });
+                }
+                // metadata contains the most recent API request ID and the
+                // Link session ID. Storing this information is helpful
+                // for support.
+            }
+        });
+
+        document.getElementById(access_token_update).onclick = function() {
+            // Link will automatically detect the institution ID
+            // associated with the public token and present the
+            // credential view to your user.
+            linkHandler.open();
+        };
+    });
+}
 </script>
 
 </body>
