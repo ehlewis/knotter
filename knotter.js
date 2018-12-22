@@ -284,10 +284,10 @@ app.get('/api/health_check', function(request, response, next) {
 }); //Returns status code 200 if the server is alive
 
 app.get('/api/sandbox_reset_login', function(request, response, next) {
-    plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response){
-      // Handle err
-      // create a public_token for the Item
-      console.log(reset_login_response);
+    plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response) {
+        // Handle err
+        // create a public_token for the Item
+        console.log(reset_login_response);
         // Handle err
         // Use the generated public_token to
         // initialize Link in update mode
@@ -306,7 +306,9 @@ app.get('/api/InsIdToItemNo', function(request, response, next) {
 app.post('/api/remove_item', function(request, response, next) {
     dataset_functions.remove_item(request, response, next).then(function(isRemoved){
         cache_functions.refresh_knotterdata_cache(request, response, next);
-        response.sendStatus(200);
+        response.json({
+            isRemoved:isRemoved
+        });
     });
 }); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
 
@@ -335,14 +337,6 @@ app.post('/api/name', function(request, response, next) {
 
     response.redirect('/profile');
 }); //Takes the name from the POST request and inserts it in the DB under the user's entry
-
-app.post('/api/removeItem', function(request, response, next) {
-    dataset_functions.remove_item(request, response, next).then(function(isRemoved){
-        response.json({
-            isRemoved:isRemoved
-        });
-    });
-});
 
 app.post('/api/log_error', function(request, response, next) {
     logger.error(request.error);
