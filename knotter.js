@@ -298,14 +298,13 @@ app.get('/api/sandbox_reset_login', function(request, response, next) {
 
 app.get('/api/InsIdToItemNo', function(request, response, next) {
 
-}
+});
 
 
 //=====API Post=====
 
 app.post('/api/remove_item', function(request, response, next) {
     dataset_functions.remove_item(request, response, next).then(function(isRemoved){
-        cache_functions.refresh_knotterdata_cache(request, response, next);
         response.json({
             isRemoved:isRemoved
         });

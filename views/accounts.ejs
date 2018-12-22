@@ -81,8 +81,16 @@
 
 </script>
 <script>
-    function test(pass){
-        alert(pass);
+    function test(item_id){
+        if (confirm("Remove this institution?")){
+            remove_item(item_id).then(function(){
+                refreshCache();
+                getUserKnotterdataSafe().then(function(knotterJSON){
+                    console.log(knotterJSON);
+                    renderLinkedInsCards(knotterJSON);
+                });
+            });
+        }
     }
 
     var handler = Plaid.create({        apiVersion: 'v2',

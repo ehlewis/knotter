@@ -133,6 +133,22 @@ function getUser() {
         return data;
     });
 }
+function refreshCache() {
+    return new Promise(function(resolve, reject) {
+        $.get('/api/refresh_cache').success(function(success) {
+            if (success != null) {
+                resolve(success);
+            } else {
+                reject();
+            }
+        }).error(
+            function(error) {
+                console.log(error);
+                reject(error);
+            });
+    });
+}
+
 function remove_item(item_id) {
     //Gets users transactions and handles if the cache is empty by refreshing it
     return new Promise(function(resolve, reject) {
@@ -144,6 +160,7 @@ function remove_item(item_id) {
                 item_id: item_id, // Second add quotes on the value.
             },
             success: function(response) {
+                console.log(response);
 
             },
             error: function(error) {
