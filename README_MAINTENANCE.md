@@ -9,6 +9,8 @@ sudo DEBUG=* node knotter.js
 From any terminal
 ```
 curl -Ik https://127.0.0.1/api/health_check
+curl -Ik https://knotter.co/api/health_check
+
 ```
 
 # Mongo DB
@@ -28,6 +30,12 @@ db.users.find().pretty()
 ```
 db.users.updateMany({}, {$rename: {"from":"to"}})
 ```
+
+### Find user with attribute
+```
+db.users.findOne({items: {$elemMatch: {item_id:'BGGGoMG396SKWdXW1m1ntJ8xm3LzvwfwGnDaX'}}})
+```
+Returns the user entry with the given item_id
 
 ### Remove an entry
 ```show dbs
