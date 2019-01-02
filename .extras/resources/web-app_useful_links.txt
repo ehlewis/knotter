@@ -117,3 +117,5 @@ https://webapplog.com/http2-node/
 https://stackoverflow.com/questions/35318442/how-to-pass-parameter-to-a-promise-function
 
 https://stackoverflow.com/questions/17244614/passing-variable-to-promise-in-a-loop
+
+https://github.com/jaredhanson/passport/issues/208

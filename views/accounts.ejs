@@ -83,7 +83,7 @@
 <script>
     function test(item_id){
         if (confirm("Remove this institution?")){
-            remove_item(item_id).then(function(){
+            remove_item(item_id).then(function(success){
                 refreshCache();
                 getUserKnotterdataSafe().then(function(knotterJSON){
                     console.log(knotterJSON);
@@ -108,7 +108,10 @@
                 });
                 $.get("/api/refresh_cache").success(
                     function(success) {
-                        populatePage();
+                        getUserKnotterdataSafe().then(function(knotterJSON){
+                            console.log(knotterJSON);
+                            renderLinkedInsCards(knotterJSON);
+                        });
                     });
             });
         },

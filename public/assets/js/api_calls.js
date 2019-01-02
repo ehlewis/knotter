@@ -161,11 +161,12 @@ function remove_item(item_id) {
             },
             success: function(response) {
                 console.log(response);
-
+                resolve(response);
             },
             error: function(error) {
                 console.log("ERROR");
                 console.log(error);
+                reject(error);
             }
         });
     });

@@ -1,6 +1,6 @@
 var moment = require('moment');
 var logger = require('../config/logger');
-//var cache = require("./cache_functions.js");
+//var cache_functions = require("./cache_functions.js");
 var BPromise = require('bluebird');
 var myPromises = [];
 
@@ -379,38 +379,43 @@ module.exports = {
             }
         });
     },
-
-    remove_item: function(request, response, next) {
-        return new Promise(function (resolve, reject) {
+remove_item: function(request, response, next) {
+        return new Promise(function(resolve, reject) {
             for (var item = 0; item < request.user.items.length; item++) {
-                if(request.user.items[item].item_id == request.body.item_id){
+                if (request.user.items[item].item_id == request.body.item_id) {
                     plaid_client.removeItem(request.user.items[item].access_token, (err, result) => {
                         // Handle err
                         // The Item has been removed and the
                         // access token is now invalid
-                        if(err){
+                        if (err) {
                             logger.error(err);
-                        }
-                        else{
+                        } else {
                             collection.updateOne({
                                 '_id': request.user._id
                             }, {
                                 $pull: {
-                                    'items': {'item_id': request.body.item_id}
+                                    'items': {
+                                        'item_id': request.body.item_id
+                                    }
                                 }
                             });
 
                             logger.debug(request.user._id + " removed item: " + request.body.item_id);
                         }
                         const isRemoved = result.removed;
-                        resolve(isRemoved);
+                        request.login(request.user, function(err) {
+                            if (err) {
+                                resolve(False);
+                            }
+                            resolve(isRemoved);
+                        });
                     });
                 }
             }
         });
     },
 
-    createTempPublicToken: function(request, response, next){
+    createTempPublicToken: function(request, response, next) {
         return new Promise(function (resolve, reject) {
             plaid_client.createPublicToken(request.body.access_token, (err, result) => {
                 // Handle err
