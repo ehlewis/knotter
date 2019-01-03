@@ -308,6 +308,8 @@ app.post('/api/remove_item', function(request, response, next) {
         response.json({
             isRemoved:isRemoved
         });
+    }).catch(function(error) {
+        logger.error(error);
     });
 }); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
 
@@ -317,6 +319,8 @@ app.post('/api/get_public_token', function(request, response, next) {
         response.json({
             publicToken:newToken
         });
+    }).catch(function(error) {
+        logger.error(error);
     });
 }); //Takes the access_token from the POST request and asks Plaid to generate a 30 minute public_token so that we can put Plaid into update mode for the item associated with the access_token
 

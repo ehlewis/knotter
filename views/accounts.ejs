@@ -72,10 +72,14 @@
 <script src="assets/js/graphics.js"></script>
 <script src="assets/js/api_calls.js"></script>
 <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-<script>getUserKnotterdataSafe().then(function(knotterJSON){
+<script>
+getUserKnotterdataSafe().then(function(knotterJSON){
     console.log(knotterJSON);
     renderLinkedInsCards(knotterJSON);
-});</script>
+}).catch(function(error){
+    log_error(error);
+});
+</script>
 
 <script id="button_scripts">
 
@@ -88,7 +92,11 @@
                 getUserKnotterdataSafe().then(function(knotterJSON){
                     console.log(knotterJSON);
                     renderLinkedInsCards(knotterJSON);
+                }).catch(function(error){
+                    log_error(error);
                 });
+            }).catch(function(error){
+                log_error(error);
             });
         }
     }
@@ -111,6 +119,8 @@
                         getUserKnotterdataSafe().then(function(knotterJSON){
                             console.log(knotterJSON);
                             renderLinkedInsCards(knotterJSON);
+                        }).catch(function(error){
+                            log_error(error);
                         });
                     });
             });

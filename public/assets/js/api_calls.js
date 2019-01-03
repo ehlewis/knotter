@@ -22,13 +22,17 @@ function getUserTransactionsSafe() {
                                     }
                                 }).error(
                                 function(error) {
-                                    console.log(error)
+                                    console.log(error);
+                                    log_error(error);
                                 });
+                        }).error(function(error){
+                            console.log(error);
+                            log_error(error);
                         });
                     }
-                }).error(
-                    function(error) {
+                }).error(function(error) {
                         console.log(error);
+                        log_error(error);
                         return error;
                     });
             } else {
@@ -62,10 +66,13 @@ function getUserKnotterdataSafe() {
                                     } else {
                                         console.log("Error: Could not get transactions after cache refresh");
                                     }
-                                }).error(
-                                function(error) {
-                                    console.log(error)
+                                }).error(function(error) {
+                                    console.log(error);
+                                    log_error(eror);
                                 });
+                        }).error(function(error) {
+                            console.log(error);
+                            log_error(eror);
                         });
                     }
                 }).error(
@@ -94,6 +101,7 @@ function getUserAccounts() {
         }).error(
             function(error) {
                 console.log(error);
+                log_error(error);
                 reject(error);
             });
 
@@ -116,6 +124,7 @@ function getUserTransactions() {
                 }).error(
                     function(error) {
                         console.log(error);
+                        log_error(error);
                         reject(error);
                     });
             } else {
@@ -144,6 +153,7 @@ function refreshCache() {
         }).error(
             function(error) {
                 console.log(error);
+                log_error(error);
                 reject(error);
             });
     });
@@ -164,10 +174,15 @@ function remove_item(item_id) {
                 resolve(response);
             },
             error: function(error) {
-                console.log("ERROR");
                 console.log(error);
                 reject(error);
             }
         });
+    });
+}
+
+function log_error(error){
+    $.post('/api/log_error', {
+        error: error,
     });
 }

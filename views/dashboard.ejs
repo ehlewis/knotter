@@ -194,9 +194,10 @@
                         $('#intro').hide();
                         $('#app, #steps').fadeIn('slow');
                     });
-                    $.get("/api/refresh_cache").success(
-                        function(success) {
+                    $.get("/api/refresh_cache").success(function(success) {
                             populatePage();
+                        }).error(function(error){
+                            log_error(error);
                         });
                 });
             },
@@ -240,9 +241,10 @@
                     // You do not need to repeat the /item/public_token/exchange
                     // process when a user uses Link in update mode.
                     // The Item's access_token has not changed.
-                    $.get("/api/refresh_cache").success(
-                        function(success) {
+                    $.get("/api/refresh_cache").success(function(success) {
                             //getUserDataFromCache()
+                        }).error(function(error){
+                            log_error(error);
                         });
                 },
                 onExit: function(error, metadata) {

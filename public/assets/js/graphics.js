@@ -327,6 +327,9 @@ function populatePage(){
                 document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);*/
                 drawPieChart(userOut, "outChart", outColors, labels);
                 document.getElementById("totalOut").innerHTML = parseFloat(0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2])).toFixed(0);
+            }).catch(function(error) {
+                console.log(error);
+                log_error(eror);
             });
             createCategoryBalanceData(knotterJSON).then(function(userTotal) {
                 document.getElementById("checkingTotal").innerHTML = parseFloat(userTotal[0]).toFixed(2);
@@ -335,6 +338,9 @@ function populatePage(){
                 document.getElementById("creditTotal").innerHTML = parseFloat(userTotal[3]).toFixed(2);
                 drawPieChart(userTotal, "balanceChart", colors, labels);
                 document.getElementById("totalBalance").innerHTML = parseFloat(0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2])).toFixed(0);
+            }).catch(function(error) {
+                console.log(error);
+                log_error(eror);
             });
             renderInsCards(knotterJSON);
 
@@ -349,6 +355,9 @@ function populatePage(){
                         });*/
                         createInstitutionBalanceData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userTotal) {
                             document.getElementById("bankTotal_"+knotterJSON[institution].item.institution_id+"").innerHTML = parseFloat(userTotal).toFixed(2);
+                        }).catch(function(error) {
+                            console.log(error);
+                            log_error(eror);
                         });
                     }
                 })(institution);
@@ -357,6 +366,9 @@ function populatePage(){
         else{
             console.log("No data");
         }
+    }).catch(function(error) {
+        console.log(error);
+        log_error(eror);
     });
 }
 
