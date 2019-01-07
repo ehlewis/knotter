@@ -176,6 +176,14 @@ app.get('/landing', function(request, response, next) {
     response.render('landing.ejs', {});
 });
 
+app.get('/about', function(request, response, next) {
+    response.render('about.ejs', {});
+});
+
+app.get('/help', function(request, response, next) {
+    response.render('help.ejs', {});
+});
+
 app.get('/dashboard', isLoggedIn, function(request, response, next) {
     response.render('dashboard.ejs', {
         user: request.user, // get the user out of session and pass to template
@@ -296,11 +304,6 @@ app.get('/api/sandbox_reset_login', function(request, response, next) {
     });
 });
 
-app.get('/api/InsIdToItemNo', function(request, response, next) {
-
-});
-
-
 //=====API Post=====
 
 app.post('/api/remove_item', function(request, response, next) {
@@ -310,6 +313,11 @@ app.post('/api/remove_item', function(request, response, next) {
         });
     }).catch(function(error) {
         logger.error(error);
+        response.json({
+            isRemoved:false,
+            error:true,
+            error_msg:error
+        });
     });
 }); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
 
@@ -321,6 +329,10 @@ app.post('/api/get_public_token', function(request, response, next) {
         });
     }).catch(function(error) {
         logger.error(error);
+        response.json({
+            error:true,
+            error_msg:error
+        });
     });
 }); //Takes the access_token from the POST request and asks Plaid to generate a 30 minute public_token so that we can put Plaid into update mode for the item associated with the access_token
 
