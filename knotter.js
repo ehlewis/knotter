@@ -28,7 +28,7 @@ var logger = require('./app/config/logger');
 /*global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production'], 'local-sandbox');
 logger.info("Starting with " + SERVICE_CONNECTION);*/
 logger.info("Running on Node " + process.version);
-if(process.version != "v8.14.1"){
+if((process.version).substring(0, 2) !== "v8"){
     logger.error('Incorrect Node version\nExiting...');
     process.exit();
 }
