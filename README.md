@@ -22,7 +22,7 @@ mongod --bind_ip 127.0.0.1
 ```
 
 ## Start the Redis Cache
-(From inside /link)
+(From inside /knotter)
 ```
 redis-server redis.conf
 ```

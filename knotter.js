@@ -24,9 +24,6 @@ var colors = require('colors');
 var logger = require('./app/config/logger');
 
 
-//Check our ennvars so we know what to connect to
-/*global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production'], 'local-sandbox');
-logger.info("Starting with " + SERVICE_CONNECTION);*/
 logger.info("Running on Node " + process.version);
 if((process.version).substring(0, 2) !== "v8"){
     logger.error('Incorrect Node version\nExiting...');
@@ -42,39 +39,12 @@ if (dotenv.error) {
 logger.info("Loaded env file!");
 logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
 
-if(process.env.SERVICE_CONNECTION === "local-sandbox"){
-    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
-    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
-    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
-    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
 
-    var SSL_PORT = 443;
-    var HTTP_PORT = 80;
+global.PLAID_SECRET = process.env.PLAID_SECRET;
+global.PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
+global.PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
+global.PLAID_ENV = process.env.PLAID_ENV;
 
-}
-else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
-    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
-    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
-    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
-    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
-
-    var SSL_PORT = 8443;
-    var HTTP_PORT = 8080;
-
-}
-else if(process.env.SERVICE_CONNECTION === "remote-dev"){
-    global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
-    global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
-    global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
-    global.PLAID_ENV = process.env.DEV_PLAID_ENV;
-
-    var SSL_PORT = 8443;
-    var HTTP_PORT = 8080;
-}
-else{
-    logger.error("Not a valid service connection mode");
-    throw new Error();
-}
 
 //Set up our services (mongo and redis)
 var mongo_setup = require('./app/config/mongo_setup')();
@@ -431,7 +401,7 @@ app.get('*', function(request, response) {
 
 // =====launch=====
 
-const server = spdy.createServer(spdyOptions, app).listen(SSL_PORT, function() {
+const server = spdy.createServer(spdyOptions, app).listen(process.env.SSL_PORT, function() {
     logger.info('HTTPS server started on port 443');
 });
 
@@ -441,6 +411,6 @@ http.createServer(function(request, response) {
         "Location": "https://" + request.headers['host'] + request.url
     });
     response.end();
-}).listen(HTTP_PORT, function() {
+}).listen(process.env.HTTP_PORT, function() {
     logger.info('HTTP server started on port 80');
 });
