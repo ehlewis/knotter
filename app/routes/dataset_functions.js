@@ -1,6 +1,5 @@
 var moment = require('moment');
 var logger = require('../config/logger');
-//var cache = require("./cache_functions.js");
 var BPromise = require('bluebird');
 var myPromises = [];
 
@@ -57,12 +56,12 @@ module.exports = {
         });
     },
 
-    cache_user_institutions: async function(request, response, num, next) {
+    cache_user_institutions: async function(request, response, next) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         return new Promise(function (resolve, reject) {
         var response_array = [];
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(plaid_client.getAuth(request.user.items[i].access_token, function(error, authResponse) { //this is a callback
                     if (error != null) {
                         var msg = 'Unable to pull accounts from the Plaid API.';
@@ -83,7 +82,7 @@ module.exports = {
                 // do whatever you need...
                 logger.silly(request.user._id + " institutions " + response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "institutions", JSON.stringify(response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "institutions", 1200);
+                redis_client.expire(request.user._id.toString() + "institutions", 900);
                 //next();
                 resolve();
             });
@@ -102,19 +101,19 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " institutions " + JSON.parse(reply));
-                redis_client.expire(request.user._id.toString() + "institutions", 1200);
+                redis_client.expire(request.user._id.toString() + "institutions", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
         });
     },
 
-    cache_user_accounts: async function(request, response, num, next) {
+    cache_user_accounts: async function(request, response, next) {
         // Retrieve high-level account information and account and routing numbers
         // for each account associated with the Item.
         return new Promise(function (resolve, reject) {
             var response_array = [];
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(plaid_client.getAccounts(request.user.items[i].access_token, function(error, authResponse) { //this is a callback
                     if (error != null) {
                         var msg = 'Unable to pull accounts from the Plaid API.';
@@ -135,7 +134,7 @@ module.exports = {
                 // do whatever you need...
                 logger.silly(request.user._id + response_array.length + " institutions out of " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "accounts", JSON.stringify(response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "accounts", 1200);
+                redis_client.expire(request.user._id.toString() + "accounts", 900);
                 //next();
                 resolve();
             });
@@ -154,7 +153,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " accounts " + JSON.parse(reply));
-                redis_client.expire(request.user._id.toString() + "accounts", 1200);
+                redis_client.expire(request.user._id.toString() + "accounts", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -193,13 +192,13 @@ module.exports = {
     },
 
     //Gets item but does NOT convert inst_id into anything useful right now
-    cache_items: function(request, response, next, plaid_client, num) {
+    cache_items: function(request, response, next, plaid_client) {
         // Pull the Item - this includes information about available products,
         // billed products, webhook information, and more.
         return new Promise(function (resolve, reject) {
             var item_response_array = [];
             var institution_response_array = [];
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(
                     plaid_client.getItem(request.user.items[i].access_token, function(error, itemResponse) {
                         if (error != null) {
@@ -216,7 +215,7 @@ module.exports = {
                 // do whatever you need...
                 logger.silly(request.user._id + " item " + item_response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "item", JSON.stringify(item_response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "item", 1200);
+                redis_client.expire(request.user._id.toString() + "item", 900);
                 //next();
                 resolve();
             });
@@ -236,20 +235,20 @@ module.exports = {
             } else {
                 //console.log(reply);
                 logger.silly(request.user._id + " item " + JSON.parse(reply));
-                redis_client.expire(request.user._id.toString() + "item", 1200);
+                redis_client.expire(request.user._id.toString() + "item", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
         });
     },
 
-    cache_transactions: function(request, response, num, next) {
+    cache_transactions: function(request, response, next) {
         // Pull transactions for the Item for the last 30 days and store them in the cache
         return new Promise(function (resolve, reject) {
             var response_array = [];
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(
                     plaid_client.getTransactions(request.user.items[i].access_token, startDate, endDate, {
                         count: 250,
@@ -267,7 +266,7 @@ module.exports = {
             BPromise.all(myPromises).then(function() {
                 logger.silly(request.user._id + "  transactions " + response_array.length + " out of length " + request.user.items.length);
                 redis_client.set(request.user._id.toString() + "transactions", JSON.stringify(response_array), redis.print);
-                redis_client.expire(request.user._id.toString() + "transactions", 1200);
+                redis_client.expire(request.user._id.toString() + "transactions", 900);
                 //next();
                 resolve();
             });
@@ -286,7 +285,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " Pulled cached transactions");
-                redis_client.expire(request.user._id.toString() + "transactions", 1200);
+                redis_client.expire(request.user._id.toString() + "transactions", 900);
                 response.json(JSON.parse(reply));
                 return;
             }
@@ -294,12 +293,12 @@ module.exports = {
     },
 
     //Makes an array of requests for item transactions because this call gives us all the data we need and stores it in an array. After all promises for transactions have been completed we for through and give each account in each item a new array for it's associated transactions. We then for through each item and in each item each account and then every account we hit we for through the transaction list and put any transaction whos account_id matches the account_id of the account were currently in and push it onto the array of that accounts transactions. After we get through all of the accounts in an item we delete the transactions in that item and move onto the next item. After we get through we store the data in the cache and resolve the promise.
-    plaid_to_knotter_json: function(request, response, num, next) {
+    plaid_to_knotter_json: function(request, response, next) {
         return new Promise(function (resolve, reject) {
             var response_array = [];
             var startDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
             var endDate = moment().format('YYYY-MM-DD');
-            for (var i = 0; i < num; i++) {
+            for (var i = 0; i < request.user.items.length; i++) {
                 myPromises.push(
                         getTransactionsHelper(request.user.items[i].access_token, startDate, endDate).then(function(answer){response_array.push(answer)})
                     );
@@ -336,7 +335,7 @@ module.exports = {
                 }
 
                 redis_client.set(request.user._id.toString() + "knotterdata", JSON.stringify(knotterJSON), redis.print);
-                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+                redis_client.expire(request.user._id.toString() + "knotterdata", 900);
 
                 resolve();
             });
@@ -354,7 +353,7 @@ module.exports = {
                 return;
             } else {
                 logger.silly(request.user._id + " Pulled cached knotterdata");
-                redis_client.expire(request.user._id.toString() + "knotterdata", 1200);
+                redis_client.expire(request.user._id.toString() + "knotterdata", 900);
 
                 response.json(JSON.parse(reply));
 
@@ -379,38 +378,43 @@ module.exports = {
             }
         });
     },
-
     remove_item: function(request, response, next) {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject) {
             for (var item = 0; item < request.user.items.length; item++) {
-                if(request.user.items[item].item_id == request.body.item_id){
+                if (request.user.items[item].item_id == request.body.item_id) {
                     plaid_client.removeItem(request.user.items[item].access_token, (err, result) => {
                         // Handle err
                         // The Item has been removed and the
                         // access token is now invalid
-                        if(err){
+                        if (err) {
                             logger.error(err);
-                        }
-                        else{
+                        } else {
                             collection.updateOne({
                                 '_id': request.user._id
                             }, {
                                 $pull: {
-                                    'items': {'item_id': request.body.item_id}
+                                    'items': {
+                                        'item_id': request.body.item_id
+                                    }
                                 }
                             });
 
                             logger.debug(request.user._id + " removed item: " + request.body.item_id);
                         }
                         const isRemoved = result.removed;
-                        resolve(isRemoved);
+                        request.login(request.user, function(err) {
+                            if (err) {
+                                resolve(False);
+                            }
+                            resolve(isRemoved);
+                        });
                     });
                 }
             }
         });
     },
 
-    createTempPublicToken: function(request, response, next){
+    createTempPublicToken: function(request, response, next) {
         return new Promise(function (resolve, reject) {
             plaid_client.createPublicToken(request.body.access_token, (err, result) => {
                 // Handle err

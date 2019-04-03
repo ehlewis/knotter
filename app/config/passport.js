@@ -111,12 +111,6 @@ module.exports = function(passport) {
                 if (!user.validPassword(password))
                     return done(null, false, request.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
-                //We are going to load user data to our cache here
-                //cache_functions.foo(request, response, next, client);
-                //no were not
-
-                //
-                //cache_functions.refresh_cache_on_login(user, done);
                 // all is well, return successful user
                 return done(null, user);
             });

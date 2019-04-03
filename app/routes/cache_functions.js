@@ -27,8 +27,7 @@ module.exports = {
 async function cache_user_knotter_data(request, response, next) {
     return new Promise(function (resolve, reject) {
         var myPromises = [];
-        num = request.user.items.length; //get num items to iterate through
-        myPromises.push(dataset_functions.plaid_to_knotter_json(request, response, num, function(){
+        myPromises.push(dataset_functions.plaid_to_knotter_json(request, response, function(){
             return;
         }));
 
@@ -43,15 +42,13 @@ async function cache_user_knotter_data(request, response, next) {
 async function cache_all_user_plaid_data(request, response, next) {
     return new Promise(function (resolve, reject) {
         var myPromises = [];
-        num = request.user.items.length; //get num items to iterate through
-        myPromises.push(dataset_functions.cache_user_institutions(request, response, num, function(){
+        myPromises.push(dataset_functions.cache_user_institutions(request, response, function(){
             return;
         }));
-        myPromises.push(dataset_functions.cache_user_accounts(request, response, num, function(){
+        myPromises.push(dataset_functions.cache_user_accounts(request, response, function(){
             return;
         }));
-        //myPromises.push(dataset_functions.cache_items(request, response, next, num));
-        myPromises.push(dataset_functions.cache_transactions(request, response, num, function(){
+        myPromises.push(dataset_functions.cache_transactions(request, response, function(){
             return;
         }));
 

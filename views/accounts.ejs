@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Knotter</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="assets/graphics/knotter_icon_white_on_green.png">
+    <link rel="stylesheet" type="text/css" href= "assets/css/boilerplate.css">
+    <link rel="stylesheet" type="text/css" href= "assets/css/dashboard.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#69d651">
+</head>
+
+<body>
+  <div class="topbar nwidth hcenter">
+    <a href="/"><img src="assets/graphics/knotter_brand_green.png" class="left vcenter" alt="Knotter" style="height:50px; margin:-25px 0 0 10px;"></a>
+    <!-- <a href="/workinprogress" class="button2 button vcenter right" style="margin:-16px 10px 0 0; ">Knotter Pro</a> -->
+  </div>
+<div class="container1 hcenter">
+
+
+  <div class="maxwidth">
+    <div class="footer hcenter nwidth">
+      <a href="/workinprogress"> Contact Us </a>
+      <a href="/workinprogress"> Leave Feedback </a>
+      <a href="/workinprogress"> FAQ </a>
+    </div>
+  </div>
+  <div class="container1 nwidth hcenter">
+      <div class="detailbtns hcenter">
+          <div class="cats">
+              <h2>Linked Accounts</h2>
+              <div class="catbtns" id="INS_CARDS">
+                  <!-- CARD START -->
+                  <!--<div class="cardcontainer fradius">
+                      <div class="banklogo hcenter">
+                          <img src="assets/bankLogos/BoA.svg" class="logosvg">
+                      </div>
+                      <hr noshade>
+                      <div class="totals">
+                          <div class="bnktotal bnknums">
+                              <p id="bankTotal">Total: </p>
+                          </div>
+                          <div class="inout bnknums">
+                              <p id="bankIn">In: </p>
+                              <p id="bankOut">Out: </p>
+                          </div>
+                      </div>
+                  </div>-->
+                  <!-- NEXT CARD -->
+
+                  <!-- NEXT CARD -->
+                  <div id="link-btn" class="cardcontainer fradius" onclick="handlerOpen()">
+                      <p> + </p>
+                  </div>
+                  <!-- NEXT CARD  -->
+              </div>
+          </div>
+          <!-- INSTITUTIONAL TRANSACTIONS END HERE -->
+      </div>
+
+
+
+
+</div>
+
+
+<script src="assets/js/inactivity_timer.js"></script>
+<script src="assets/js/graphics.js"></script>
+<script src="assets/js/api_calls.js"></script>
+<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+<script>
+getUserKnotterdataSafe().then(function(knotterJSON){
+    console.log(knotterJSON);
+    renderLinkedInsCards(knotterJSON);
+}).catch(function(error){
+    log_error(error);
+});
+</script>
+
+<script id="button_scripts">
+
+</script>
+<script>
+    function test(item_id){
+        if (confirm("Remove this institution?")){
+            remove_item(item_id).then(function(success){
+                refreshCache();
+                getUserKnotterdataSafe().then(function(knotterJSON){
+                    console.log(knotterJSON);
+                    renderLinkedInsCards(knotterJSON);
+                }).catch(function(error){
+                    log_error(error);
+                });
+            }).catch(function(error){
+                log_error(error);
+            });
+        }
+    }
+
+    var handler = Plaid.create({        apiVersion: 'v2',
+        clientName: 'Knotter',
+        env: '<%= PLAID_ENV %>',
+        product: ['transactions'],
+        key: '<%= PLAID_PUBLIC_KEY %>',
+        onSuccess: function(public_token) {
+            $.post('/get_access_token', {
+                public_token: public_token
+            }, function() {
+                $('#container').fadeOut('fast', function() {
+                    $('#intro').hide();
+                    $('#app, #steps').fadeIn('slow');
+                });
+                $.get("/api/refresh_cache").success(
+                    function(success) {
+                        getUserKnotterdataSafe().then(function(knotterJSON){
+                            console.log(knotterJSON);
+                            renderLinkedInsCards(knotterJSON);
+                        }).catch(function(error){
+                            log_error(error);
+                        });
+                    });
+            });
+        },
+        onExit: function(error, metadata) {
+            if (error) {
+                $.post('/api/log_error', {
+                    error: error,
+                    metadata: metadata
+                });
+            }
+            /*supportHandler.report({
+                error: error,
+                institution: metadata.institution,
+                link_session_id: metadata.link_session_id,
+                status: metadata.status,
+            });*/
+        }
+    });
+
+    function handlerOpen(){
+        handler.open();
+    }
+
+//For whatever reason, this HAS to be here
+function linkUpdateMode(access_token_update){
+    //Find the access_token associated with the ITEM_ID
+    //console.log("update: " + access_token_update);
+    $.post('/api/get_public_token', {
+        access_token: access_token_update
+    },function(response) {
+        var linkHandler = Plaid.create({
+            env: '<%= PLAID_ENV %>',
+            clientName: 'Knotter',
+            key: '<%= PLAID_PUBLIC_KEY %>',
+            product: ['transactions'],
+            token: response.publicToken,
+            onSuccess: function(public_token, metadata) {
+                // You do not need to repeat the /item/public_token/exchange
+                // process when a user uses Link in update mode.
+                // The Item's access_token has not changed.
+                $.get("/api/refresh_cache").success(
+                    function(success) {
+                        //getUserDataFromCache()
+                    });
+            },
+            onExit: function(error, metadata) {
+                // The user exited the Link flow.
+                if (error) {
+                    $.post('/api/log_error', {
+                        error: error,
+                        metadata: metadata
+                    });
+                }
+                // metadata contains the most recent API request ID and the
+                // Link session ID. Storing this information is helpful
+                // for support.
+            }
+        });
+
+        document.getElementById(access_token_update).onclick = function() {
+            // Link will automatically detect the institution ID
+            // associated with the public token and present the
+            // credential view to your user.
+            linkHandler.open();
+        };
+    });
+}
+</script>
+
+</body>
+</html>

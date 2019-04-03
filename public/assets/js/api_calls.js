@@ -22,13 +22,17 @@ function getUserTransactionsSafe() {
                                     }
                                 }).error(
                                 function(error) {
-                                    console.log(error)
+                                    console.log(error);
+                                    log_error(error);
                                 });
+                        }).error(function(error){
+                            console.log(error);
+                            log_error(error);
                         });
                     }
-                }).error(
-                    function(error) {
+                }).error(function(error) {
                         console.log(error);
+                        log_error(error);
                         return error;
                     });
             } else {
@@ -62,10 +66,13 @@ function getUserKnotterdataSafe() {
                                     } else {
                                         console.log("Error: Could not get transactions after cache refresh");
                                     }
-                                }).error(
-                                function(error) {
-                                    console.log(error)
+                                }).error(function(error) {
+                                    console.log(error);
+                                    log_error(eror);
                                 });
+                        }).error(function(error) {
+                            console.log(error);
+                            log_error(eror);
                         });
                     }
                 }).error(
@@ -94,6 +101,7 @@ function getUserAccounts() {
         }).error(
             function(error) {
                 console.log(error);
+                log_error(error);
                 reject(error);
             });
 
@@ -116,6 +124,7 @@ function getUserTransactions() {
                 }).error(
                     function(error) {
                         console.log(error);
+                        log_error(error);
                         reject(error);
                     });
             } else {
@@ -131,5 +140,49 @@ function getUser() {
     $.getJSON("api/user_data", function(data) {
         // Make sure the data contains the username as expected before using it
         return data;
+    });
+}
+function refreshCache() {
+    return new Promise(function(resolve, reject) {
+        $.get('/api/refresh_cache').success(function(success) {
+            if (success != null) {
+                resolve(success);
+            } else {
+                reject();
+            }
+        }).error(
+            function(error) {
+                console.log(error);
+                log_error(error);
+                reject(error);
+            });
+    });
+}
+
+function remove_item(item_id) {
+    //Gets users transactions and handles if the cache is empty by refreshing it
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: "/api/remove_item",
+            method: "POST", //First change type to method here
+
+            data: {
+                item_id: item_id, // Second add quotes on the value.
+            },
+            success: function(response) {
+                console.log(response);
+                resolve(response);
+            },
+            error: function(error) {
+                console.log(error);
+                reject(error);
+            }
+        });
+    });
+}
+
+function log_error(error){
+    $.post('/api/log_error', {
+        error: error,
     });
 }

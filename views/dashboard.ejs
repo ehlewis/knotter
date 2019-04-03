@@ -14,7 +14,7 @@
     <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
     <script src="assets/js/dashboard.js"></script>
     <script src="assets/js/graphics.js"></script>
-    <script src="assets/js/apiCalls.js"></script>
+    <script src="assets/js/api_calls.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#69d651">
 </head>
@@ -178,48 +178,7 @@
 
 
 
-        getUserKnotterdataSafe().then(function(knotterJSON) {
-            console.log(knotterJSON);
-            /*createCategoryInData(knotterJSON).then(function(userIn) {
-                document.getElementById("checkingIn").innerHTML += parseFloat(userIn[0]).toFixed(2);
-                document.getElementById("savingsIn").innerHTML += parseFloat(userIn[1]).toFixed(2);
-                document.getElementById("investmentIn").innerHTML += parseFloat(userIn[2]).toFixed(2);
-                document.getElementById("creditIn").innerHTML += parseFloat(userIn[3]).toFixed(2);
-            });*/
-            createCategoryOutData(knotterJSON).then(function(userOut) {
-                /*document.getElementById("checkingOut").innerHTML += parseFloat(userOut[0]).toFixed(2);
-                document.getElementById("savingsOut").innerHTML += parseFloat(userOut[1]).toFixed(2);
-                document.getElementById("investmentOut").innerHTML += parseFloat(userOut[2]).toFixed(2);
-                document.getElementById("creditOut").innerHTML += parseFloat(userOut[3]).toFixed(2);*/
-                drawPieChart(userOut, "outChart", outColors, labels);
-                document.getElementById("totalOut").innerHTML += parseFloat(0 + Number(userOut[0]) + Number(userOut[1]) + Number(userOut[2])).toFixed(0);
-            });
-            createCategoryBalanceData(knotterJSON).then(function(userTotal) {
-                document.getElementById("checkingTotal").innerHTML += parseFloat(userTotal[0]).toFixed(2);
-                document.getElementById("savingsTotal").innerHTML += parseFloat(userTotal[1]).toFixed(2);
-                document.getElementById("investmentTotal").innerHTML += parseFloat(userTotal[2]).toFixed(2);
-                document.getElementById("creditTotal").innerHTML += parseFloat(userTotal[3]).toFixed(2);
-                drawPieChart(userTotal, "balanceChart", colors, labels);
-                document.getElementById("totalBalance").innerHTML += parseFloat(0 + Number(userTotal[0]) + Number(userTotal[1]) + Number(userTotal[2])).toFixed(0);
-            });
-            renderInsCards(knotterJSON);
-
-            for (var institution = 0; institution < knotterJSON.length; institution++) {
-                (function(institution) {
-                    if(knotterJSON[institution].item){
-                        /*createInstitutionInData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userIn) {
-                            document.getElementById("bankIn_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userIn);
-                        });
-                        createInstitutionOutData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userOut) {
-                            document.getElementById("bankOut_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userOut);
-                        });*/
-                        createInstitutionBalanceData(knotterJSON, knotterJSON[institution].item.institution_id).then(function(userTotal) {
-                            document.getElementById("bankTotal_"+knotterJSON[institution].item.institution_id+"").innerHTML += parseFloat(userTotal).toFixed(2);
-                        });
-                    }
-                })(institution);
-            }
-        });
+        populatePage();
 
         var handler = Plaid.create({
             apiVersion: 'v2',
@@ -235,9 +194,10 @@
                         $('#intro').hide();
                         $('#app, #steps').fadeIn('slow');
                     });
-                    $.get("/api/refresh_cache").success(
-                        function(success) {
-                            //getUserDataFromCache()
+                    $.get("/api/refresh_cache").success(function(success) {
+                            populatePage();
+                        }).error(function(error){
+                            log_error(error);
                         });
                 });
             },
@@ -281,9 +241,10 @@
                     // You do not need to repeat the /item/public_token/exchange
                     // process when a user uses Link in update mode.
                     // The Item's access_token has not changed.
-                    $.get("/api/refresh_cache").success(
-                        function(success) {
+                    $.get("/api/refresh_cache").success(function(success) {
                             //getUserDataFromCache()
+                        }).error(function(error){
+                            log_error(error);
                         });
                 },
                 onExit: function(error, metadata) {

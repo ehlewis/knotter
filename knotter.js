@@ -24,10 +24,11 @@ var colors = require('colors');
 var logger = require('./app/config/logger');
 
 
-//Check our ennvars so we know what to connect to
-/*global.SERVICE_CONNECTION = envvar.oneOf('SERVICE_CONNECTION', ['local-sandbox', 'remote-staging', 'production'], 'local-sandbox');
-logger.info("Starting with " + SERVICE_CONNECTION);*/
-
+logger.info("Running on Node " + process.version);
+if((process.version).substring(0, 2) !== "v8"){
+    logger.error('Incorrect Node version\nExiting...');
+    process.exit();
+}
 //Set up environment variables
 var fs = require("fs");
 var envvar = require('envvar');
@@ -38,39 +39,12 @@ if (dotenv.error) {
 logger.info("Loaded env file!");
 logger.info("Starting in " + process.env.SERVICE_CONNECTION + " mode");
 
-if(process.env.SERVICE_CONNECTION === "local-sandbox"){
-    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
-    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
-    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
-    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
 
-    var SSL_PORT = 443;
-    var HTTP_PORT = 80;
+global.PLAID_SECRET = process.env.PLAID_SECRET;
+global.PLAID_PUBLIC_KEY = process.env.PLAID_PUBLIC_KEY;
+global.PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
+global.PLAID_ENV = process.env.PLAID_ENV;
 
-}
-else if(process.env.SERVICE_CONNECTION === "remote-sandbox"){
-    global.PLAID_SECRET = process.env.SANDBOX_PLAID_SECRET;
-    global.PLAID_PUBLIC_KEY = process.env.SANDBOX_PLAID_PUBLIC_KEY;
-    global.PLAID_CLIENT_ID = process.env.SANDBOX_PLAID_CLIENT_ID;
-    global.PLAID_ENV = process.env.SANDBOX_PLAID_ENV;
-
-    var SSL_PORT = 8443;
-    var HTTP_PORT = 8080;
-
-}
-else if(process.env.SERVICE_CONNECTION === "remote-dev"){
-    global.PLAID_SECRET = process.env.DEV_PLAID_SECRET;
-    global.PLAID_PUBLIC_KEY = process.env.DEV_PLAID_PUBLIC_KEY;
-    global.PLAID_CLIENT_ID = process.env.DEV_PLAID_CLIENT_ID;
-    global.PLAID_ENV = process.env.DEV_PLAID_ENV;
-
-    var SSL_PORT = 8443;
-    var HTTP_PORT = 8080;
-}
-else{
-    logger.error("Not a valid service connection mode");
-    throw new Error();
-}
 
 //Set up our services (mongo and redis)
 var mongo_setup = require('./app/config/mongo_setup')();
@@ -94,15 +68,7 @@ const spdyOptions = {
 };
 
 
-// route middleware to make sure a user is logged in
-function isLoggedIn(request, response, next) {
-    // if user is authenticated in the session, carry on
-    if (request.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    response.redirect('/landing');
-}
+var middleware = require("./app/routes/middleware");
 
 //=====USES=====
 
@@ -129,7 +95,7 @@ app.use(session({
         }),
     secret: 'thisissupersecret',
     cookie: {
-        maxAge: 3600000 //1 hour cookie
+        maxAge: 300000 //5 minute cookie in ms
     },
     resave: true,
     saveUninitialized: true
@@ -162,254 +128,21 @@ app.use(helmet());
 app.use(helmet.noCache());
 
 
-//=====GETS=====
 
-app.get('/', isLoggedIn, function(request, response, next) {
-    response.render('dashboard.ejs', {});
-});
-
-app.get('/landing', function(request, response, next) {
-    response.render('landing.ejs', {});
-});
-
-app.get('/dashboard', isLoggedIn, function(request, response, next) {
-    response.render('dashboard.ejs', {
-        user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
-    });
-});
-
-app.get('/admin', isLoggedIn, function(request, response, next) {
-    response.render('admin_panel.ejs', {
-        user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
-    });
-});
-
-app.get('/accounts.ejs', isLoggedIn, function(request, response, next) {
-    response.render('accounts.ejs', {
-        user: request.user,
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV,
-    });
-});
-
-
-app.get('/workinprogress', function(request, response, next) {
-    response.render('workinprogress.ejs', {});
-});
-
-
-// we will want this protected so you have to be logged in to visit
-// we will use route middleware to verify this (the isLoggedIn function)
-app.get('/profile', isLoggedIn, function(request, response) {
-    response.render('profile.ejs', {
-        user: request.user, // get the user out of session and pass to template
-        PLAID_PUBLIC_KEY: PLAID_PUBLIC_KEY,
-        PLAID_ENV: PLAID_ENV
-    });
-});
-
-//=====API GETS=====
-app.get('/api/logout', isLoggedIn, function(request, response) { //todo clear redis cache ***
-    redis_client.del(request.user._id.toString() + "accounts");
-    redis_client.del(request.user._id.toString() + "item");
-    redis_client.del(request.user._id.toString() + "transactions");
-    redis_client.del(request.user._id.toString() + "knotterdata");
-    request.logout();
-    response.redirect('/');
-}); //Dumps everything in the cache that we store if it exists
-
-app.get('/api/accounts', isLoggedIn, function(request, response, next) {
-    dataset_functions.get_cached_user_institutions(request, response, next);
-}); // Retrieve high-level account information and account and routing numbers for each account associated with the Item.
-
-app.get('/api/user_data', isLoggedIn, function(request, response) {
-    if (request.user === undefined) {
-        // The user is not logged in
-        response.json({});
-    } else {
-        response.json({
-            user: request.user
-            //num_of_accounts: request.user.items.length
-        });
-    }
-}); //Returns the user object to the browser. Used mostly for debugging
-
-app.get('/api/refresh_cache', isLoggedIn, function(request, response, next) {
-    console.debug(request.user._id + " Cached Knotter data refreshing");
-    cache_functions.refresh_knotterdata_cache(request, response, next);
-}); //This dumps (if there is already data) and repopulates the cached data in the custom format that we convert the Plaid data to to make it useable to the frontend
-
-app.get('/api/refresh_plaid_cache', isLoggedIn, function(request, response, next) {
-    console.debug(request.user._id + " Cached Plaid data refreshing");
-    cache_functions.refresh_all_plaid_cache(request, response, next);
-}); //This dumps (if there is already data) and repopulates all the cached data that comes raw from Plaid (Accounts, Institutions, Items, and Transactions
-
-app.get('/api/get_cached_user_accounts', isLoggedIn, function(request, response, next) {
-    dataset_functions.get_cached_user_accounts(request, response, next);
-}); //Fetches the raw array of Plaid Accounts endpoint responses from the cache, null if there is no cache hit
-
-app.get('/api/get_cached_user_institutions', isLoggedIn, function(request, response, next) {
-    dataset_functions.get_cached_user_institutions(request, response, next);
-}); //Fetches the raw array of Plaid Institutions endpoint responses from the cache, null if there is no cache hit
-
-app.get('/api/get_cached_items', isLoggedIn, function(request, response, next) {
-    dataset_functions.get_cached_items(request, response, next);
-}); //Fetches the raw array of Plaid Items endpoint responses from the cache, null if there is no cache hit
-
-app.get('/api/get_cached_transactions', isLoggedIn, function(request, response, next) {
-    dataset_functions.get_cached_transactions(request, response, next);
-}); //Fetches the raw array of Plaid Transactions endpoint responses from the cache, null if there is no cache hit
-
-app.get('/api/get_cached_knotter_data', isLoggedIn, function(request, response, next) {
-    dataset_functions.get_knotter_data(request, response, next);
-}); //Fetches the raw array of Knotterdata in custom format from the cache, null if there is no cache hit
-
-
-app.get('/api/env',  function(request, response) {
-    response.json({
-      env : process.env.SERVICE_CONNECTION
-    });
-}); //Returns the version that we are running in (local-sandbox, remote-sandbox, remote-dev, or remote-productions)
-
-app.get('/api/health_check', function(request, response, next) {
-    response.sendStatus(200);
-}); //Returns status code 200 if the server is alive
-
-app.get('/api/sandbox_reset_login', function(request, response, next) {
-    plaid_client.resetLogin('access-sandbox-46a37c35-d5d7-4878-b741-809a06b25ba8', function(err, reset_login_response)
-    {
-      // Handle err
-      // create a public_token for the Item
-      console.log(reset_login_response);
-        // Handle err
-        // Use the generated public_token to
-        // initialize Link in update mode
-        response.sendStatus(200);
-
-    });
-
-
-}); //Returns status code 200 if the server is alive
-
-
-//=====API Post=====
-
-app.post('/api/remove_item', function(request, response, next) {
-    dataset_functions.remove_item(request, response, next).then(function(isRemoved){
-        cache_functions.refresh_knotterdata_cache(request, response, next);
-        response.sendStatus(200);
-    });
-}); //Takes the item_id from the POST request and removes the item_id|access_token pair that includes the passed item_id DB under the user's entry
-
-
-app.post('/api/get_public_token', function(request, response, next) {
-    dataset_functions.createTempPublicToken(request, response, next).then(function(newToken){
-        response.json({
-            publicToken:newToken
-        });
-    });
-}); //Takes the access_token from the POST request and asks Plaid to generate a 30 minute public_token so that we can put Plaid into update mode for the item associated with the access_token
-
-app.post('/api/name', function(request, response, next) {
-    logger.debug(request.body.name);
-    logger.debug(request.user);
-
-    collection.updateOne({
-        '_id': request.user._id
-    }, {
-        '$set': {
-            'name': request.body.name
-        }
-    });
-
-    logger.debug("inserted username: " + request.body.name + " for user " + request.user._id);
-
-    response.redirect('/profile');
-}); //Takes the name from the POST request and inserts it in the DB under the user's entry
-
-app.post('/api/log_error', function(request, response, next) {
-    logger.error(request.error);
-    if(request.metadata){
-        logger.error(metadata);
-    }
-}); //Takes the access_token from the POST request and asks Plaid to generate a 30 minute public_token so that we can put Plaid into update mode for the item associated with the access_token
-
-//=====POSTS=====
-
-
-//THE FOLLOWING ARE DEPRECIATED
-app.post('/get_access_token', function(request, response, next) {
-    dataset_functions.get_access_token(request, response, next);
-});
-
-app.post('/item', function(request, response, next) {
-    // Pull the Item - this includes information about available products,
-    // billed products, webhook information, and more.
-    dataset_functions.item(request, response, next);
-});
-
-app.post('/transactions', function(request, response, next) {
-    // Pull transactions for the Item for the last 30 days
-    dataset_functions.transactions(request, response, next);
-});
-//THE ABOVE ARE DEPRECIATED
-
-app.post('/signup', function (request, response){
-    passport.authenticate('local-signup', function(err, user, info){
-    if (err){
-        return response.send({ response: "Error" });
-    }
-    if (!user){
-        return response.send({ response: "User exists" });
-    }
-    else {
-        request.login(user, function(err) {
-          if (err){
-              return response.send({ response: "Login failed" });
-              //return next(err);
-          }
-          return response.send({ response: "authd" });
-        });
-
-    }
-    })(request, response);}
-); //Takes the POST data and passes it through the passport.authenticate function defined in ./app/config/passport.js which will pass back a user object representing the user if it does not exist yet in our DB, or no user if the requested email already exists in our DB. If the user does not exist in the DB then it is created and that new user object is passed back and passed to request.login which will log in the user.
-
-
-// process the login form
-app.post('/login', function (request, response){
-    passport.authenticate('local-login', function(err, user, info){
-        if (err){
-            return response.send({ response: "Error" });
-        }
-        if (!user){
-            return response.send({ response: "Login failed" });
-        }
-
-        else {
-            request.login(user, function(err) {
-              if (err){
-                  return response.send({ response: "Login failed" });
-                  //return next(err);
-              }
-              return response.send({ response: "authd" });
-            });
-        }
-    })(request, response);}
-); //Takes the POST data and passes it through the passport.authenticate function defined in ./app/config/passport.js which will pass back a user object representing the user exists in our DB, or no user if the requested email does not exist in our DB. If the user exists in the DB then the user object for that email is passed back and passed to request.login which will log in the user if the password validates.
+require('./app/routes/page_gets')(app);
+require('./app/routes/page_posts')(app);
+require('./app/routes/api_gets')(app);
+require('./app/routes/api_posts')(app);
 
 //404
 app.get('*', function(request, response) {
     response.render('404.ejs');
 }); //If NOTHING hits then we render the 404 page
 
+
 // =====launch=====
 
-const server = spdy.createServer(spdyOptions, app).listen(SSL_PORT, function() {
+const server = spdy.createServer(spdyOptions, app).listen(process.env.SSL_PORT, function() {
     logger.info('HTTPS server started on port 443');
 });
 
@@ -419,6 +152,6 @@ http.createServer(function(request, response) {
         "Location": "https://" + request.headers['host'] + request.url
     });
     response.end();
-}).listen(HTTP_PORT, function() {
+}).listen(process.env.HTTP_PORT, function() {
     logger.info('HTTP server started on port 80');
 });
