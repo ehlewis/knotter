@@ -1,4 +1,6 @@
-# Link
+# Knotter
+
+A personal bank account aggregattor by Evan Lewis and Eli Weinberger
 
 Run the following commands to start the website on localhost in sandbox mode
 
